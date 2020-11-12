@@ -1,11 +1,19 @@
 #include <iostream>
 #include <string>
 
-/// Foo
+/// this is the brief description of the class
+///
+/// 
 class Foo {
+    public:
 
-    /// Say hello
     /// @param message The message to print
+    /// @param sthelse some other message
+    /// @brief testing test test etest
+        /*!
+            \brief Funcs Foo Browser
+            \param c client connection
+        */
     void say_hello(std::string message) const;
 
 };

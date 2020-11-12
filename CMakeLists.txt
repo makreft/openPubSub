@@ -4,6 +4,8 @@ set(CMAKE_CXX_FLAGS_DEBUG "-O3 -Wall")
 
 project(openPubSub VERSION 0.1.0)
 
+add_executable(mainOpenPubSub main.cpp)
+
 include(CTest)
 enable_testing()
 
@@ -26,11 +28,16 @@ endforeach()
 # Set up such that your IDE organizes the files correctly
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCE_FILES})
 
-add_library(cpp_doxygen_sphinx ${SOURCE_FILES})
+add_library(
+            cpp_doxygen_sphinx
+            ${SOURCE_FILES}
+            )
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
 include(CPack)
+# mainOpenPubSub is the executable where we want to link the library openPubSub into
+target_link_libraries(mainOpenPubSub PRIVATE cpp_doxygen_sphinx)
 
 # Doxygen
 
@@ -43,8 +50,8 @@ if (DOXYGEN_FOUND)
     set(DOXYGEN_OUT ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile.out)
 
     # request to configure the file
-    configure_file(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
-    message("Doxygen build started")
+    # configure_file(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
+    # message("Doxygen build started")
 
     # Note: do not put "ALL" - this builds docs together with application EVERY TIME!
     add_custom_target( docs
