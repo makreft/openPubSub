@@ -1,4 +1,6 @@
 .vscode/
+stuff/
+.idea/
 .DS_Store
 build/
 _build/
