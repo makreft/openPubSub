@@ -1,64 +1,27 @@
-cmake_minimum_required(VERSION 3.0.0)
+cmake_minimum_required(VERSION 3.17)
+project(openPubSub)
 
-set(CMAKE_CXX_FLAGS_DEBUG "-O3 -Wall")
+set(CMAKE_CXX_STANDARD 17)
 
-project(openPubSub VERSION 0.1.0)
+include_directories(.)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib)
 
-add_executable(mainOpenPubSub main.cpp)
+# include_directories(/home/marco/install)
+# include_directories(/home/marco/install/open62541)
+include_directories(/home/marco/install/open62541/include)
+link_directories(/home/marco/install/open62541/lib)
+# include_directories(/home/marco/git/openPubSub/open62541/build)
+# set(/home/marco/git/openPubSub/open62541/build/open62541Config.cmake)
+# target_link_libraries(open62541 ${CMAKE_CURRENT_SOURCE_DIR}/../lib/libopen62541.a INTERFACE)
+add_library(open62541 SHARED IMPORTED)
+set_property(TARGET open62541 PROPERTY IMPORTED_LOCATION /home/marco/git/openPubSub/lib/libopen62541.a)
+set_property(TARGET open62541 PROPERTY IMPORTED_LOCATION /home/marco/git/openPubSub/lib/libopen62541.so.1)
+set_property(TARGET open62541 PROPERTY IMPORTED_LOCATION /home/marco/git/openPubSub/lib/libopen62541.so.1.1.2)
 
-include(CTest)
-enable_testing()
+add_executable(openPubSub
+${CMAKE_CURRENT_SOURCE_DIR}/openPubSub.h
+${CMAKE_CURRENT_SOURCE_DIR}/openPubSub.cpp
+${CMAKE_CURRENT_SOURCE_DIR}/main.cpp)
 
-# Source and header dir
-set(PROJECT_SOURCE_DIR "src")
-set(PROJECT_INCLUDE_DIR "include")
-
-# Source files, without extensions or directory names
-# Here assuming each file has both header and impl
-set(SRC_FILES cpp_doxygen_sphinx)
-
-# Create SOURCE_FILES
-foreach(file ${SRC_FILES})
-	list(APPEND SOURCE_FILES
-        ${PROJECT_SOURCE_DIR}/${file}.cpp
-        ${PROJECT_INCLUDE_DIR}/${file}.hpp
-	)
-endforeach()
-
-# Set up such that your IDE organizes the files correctly
-source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCE_FILES})
-
-add_library(
-            cpp_doxygen_sphinx
-            ${SOURCE_FILES}
-            )
-
-set(CPACK_PROJECT_NAME ${PROJECT_NAME})
-set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
-include(CPack)
-# mainOpenPubSub is the executable where we want to link the library openPubSub into
-target_link_libraries(mainOpenPubSub PRIVATE cpp_doxygen_sphinx)
-
-# Doxygen
-
-# look for Doxygen package
-find_package(Doxygen)
-
-if (DOXYGEN_FOUND)
-    # set input and output files
-    set(DOXYGEN_IN ${CMAKE_CURRENT_SOURCE_DIR}/docs_doxygen/Doxyfile.in)
-    set(DOXYGEN_OUT ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile.out)
-
-    # request to configure the file
-    # configure_file(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
-    # message("Doxygen build started")
-
-    # Note: do not put "ALL" - this builds docs together with application EVERY TIME!
-    add_custom_target( docs
-        COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_OUT}
-        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-        COMMENT "Generating API documentation with Doxygen"
-        VERBATIM )
-else (DOXYGEN_FOUND)
-  message("Doxygen need to be installed to generate the doxygen documentation")
-endif (DOXYGEN_FOUND)
+target_link_libraries(openPubSub PUBLIC open62541)
