@@ -1,3 +1,6 @@
+# Goal of this Repo
+the goal is to write a wrapper of open62541 PubSub implementation in C++
+
 # openPubSub initialization
 ```console
 > clone this project
