@@ -27,4 +27,5 @@ Table of Contents
 
     self
     api/index
-    api/cpp_doxygen_sphinx
+    api/openPubSub
+

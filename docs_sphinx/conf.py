@@ -20,13 +20,13 @@ import subprocess, os
 subprocess.call('doxygen Doxyfile.in', shell=True)
 
 # -- Project information -----------------------------------------------------
+
 project = 'openPubSub'
 copyright = '2020, Marco Kreft'
 author = 'Marco Kreft'
 
 # The full version, including alpha/beta/rc tags
 release = '0.1.0'
-
 
 # -- General configuration ---------------------------------------------------
 
@@ -56,7 +56,6 @@ templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 highlight_language = 'c++'
-
 
 # -- Options for HTML output -------------------------------------------------
 
@@ -90,9 +89,8 @@ html_theme_options = {
 html_static_path = ['_static']
 
 # -- Breathe configuration -------------------------------------------------
-
 breathe_projects = {
-	"openPubSub": "_build/xml/"
+    "openPubSub": "_build/xml/"
 }
 breathe_default_project = "openPubSub"
 breathe_default_members = ('members', 'undoc-members')

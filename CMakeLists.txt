@@ -21,8 +21,8 @@ link_directories(/home/marco/install/open62541/lib)
 # set_property(TARGET open62541 PROPERTY IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/lib/libopen62541.so.1)
 
 add_library(openPubSub
-${CMAKE_CURRENT_SOURCE_DIR}/openPubSub.h
-${CMAKE_CURRENT_SOURCE_DIR}/openPubSub.cpp
+        include/openPubSub.h
+        src/openPubSub.cpp
 )
 
 add_executable(test

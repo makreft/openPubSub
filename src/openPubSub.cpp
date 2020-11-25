@@ -1,4 +1,4 @@
-#include "openPubSub.h"
+#include "include/openPubSub.h"
 
 namespace openPubSub
 {

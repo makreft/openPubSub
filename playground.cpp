@@ -1,6 +1,6 @@
 #include <iostream>
 #include <string>
-#include "openPubSub.h"
+#include "include/openPubSub.h"
 #include <memory>
 
 UA_Boolean running = true;
