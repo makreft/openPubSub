@@ -19,7 +19,39 @@ static void stopHandler(int sign) {
  * The PubSub connection example demonstrate the PubSub TransportLayer configuration and
  * the dynamic creation of PubSub Connections on runtime.
  */
-int main(void) {
+
+static void
+updateCurrentTime(UA_Server *server) {
+    UA_DateTime now = UA_DateTime_now();
+    UA_Variant value;
+    UA_Variant_setScalar(&value, &now, &UA_TYPES[UA_TYPES_DATETIME]);
+    UA_NodeId currentNodeId = UA_NODEID_STRING(1, "current-time-value-callback");
+    UA_Server_writeValue(server, currentNodeId, value);
+}
+
+static void
+addCurrentTimeVariable(UA_Server *server) {
+    UA_DateTime now = 0;
+    UA_VariableAttributes attr = UA_VariableAttributes_default;
+    attr.displayName = UA_LOCALIZEDTEXT("en-US", "Current time - value callback");
+    attr.accessLevel = UA_ACCESSLEVELMASK_READ | UA_ACCESSLEVELMASK_WRITE;
+    UA_Variant_setScalar(&attr.value, &now, &UA_TYPES[UA_TYPES_DATETIME]);
+
+    UA_NodeId currentNodeId = UA_NODEID_STRING(1, "current-time-value-callback");
+    UA_QualifiedName currentName = UA_QUALIFIEDNAME(1, "current-time-value-callback");
+    UA_NodeId parentNodeId = UA_NODEID_NUMERIC(0, UA_NS0ID_OBJECTSFOLDER);
+    UA_NodeId parentReferenceNodeId = UA_NODEID_NUMERIC(0, UA_NS0ID_ORGANIZES);
+    UA_NodeId variableTypeNodeId = UA_NODEID_NUMERIC(0, UA_NS0ID_BASEDATAVARIABLETYPE);
+    UA_Server_addVariableNode(server, currentNodeId, parentNodeId,
+                              parentReferenceNodeId, currentName,
+                              variableTypeNodeId, attr, NULL, NULL);
+
+    updateCurrentTime(server);
+}
+
+
+int main(void) 
+{
     signal(SIGINT, stopHandler);
     signal(SIGTERM, stopHandler);
 
@@ -52,7 +84,7 @@ int main(void) {
     connectionConfig.enabled = UA_TRUE;
     /* The address and interface is part of the standard
      * defined UA_NetworkAddressUrlDataType. */
-    UA_NetworkAddressUrlDataType networkAddressUrl = {UA_STRING_NULL , UA_STRING("opc.udp://224.0.0.22:4840/")};
+    UA_NetworkAddressUrlDataType networkAddressUrl = {UA_STRING_NULL , UA_STRING("opc.udp://127.0.0.1:4840/")};
     UA_Variant_setScalar(&connectionConfig.address, &networkAddressUrl, &UA_TYPES[UA_TYPES_NETWORKADDRESSURLDATATYPE]);
     connectionConfig.publisherId.numeric = UA_UInt32_random();
     /* Connection options are given as Key/Value Pairs. The available options are
