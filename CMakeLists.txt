@@ -4,6 +4,12 @@ project(openPubSub)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_PREFIX_PATH "/home/marco/install/")
 
+if (MSVC)
+    add_compile_options(/W4)
+else()
+    add_compile_options(-Wall -Wextra -Wpedantic)
+endif()
+
 include_directories(.)
 # include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 # include_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib)
@@ -25,9 +31,6 @@ add_library(openPubSub
         src/openPubSub.cpp
 )
 
-add_executable(test
-${CMAKE_CURRENT_SOURCE_DIR}/test.cpp)
-
 add_executable(pubsubServer
         # ${CMAKE_CURRENT_SOURCE_DIR}/server_pubsub.h
         ${CMAKE_CURRENT_SOURCE_DIR}/server.cpp)
@@ -41,7 +44,6 @@ add_executable(playground
 message(${CMAKE_THREAD_LIBS_INIT})#pthread library
 
 target_link_libraries(openPubSub PUBLIC open62541)
-target_link_libraries(test PUBLIC open62541)
 target_link_libraries(pubsubServer PUBLIC open62541)
 # target_link_libraries(playground ${CMAKE_THREAD_LIBS_INIT} ${CMAKE_DL_LIBS})
 target_link_libraries(playground PUBLIC openPubSub)

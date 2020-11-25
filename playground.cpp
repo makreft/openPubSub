@@ -14,7 +14,7 @@ int main()
     signal(SIGTERM, stopHandler);
 
 
-    openPubSub::Server(serv);
+    openPubSub::Server serv;
     std::cout << "doin sth..." << "\n";
     UA_StatusCode retVal;
     retVal = UA_Server_run(serv.p_server, &running);
