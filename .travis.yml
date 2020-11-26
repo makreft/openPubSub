@@ -1,22 +1,22 @@
 dist: trusty
 sudo: required
 language: cpp
-compiler: gcc-7
+compiler: gcc-9
 addons:
   apt:
     sources:
       - ubuntu-toolchain-r-test
     packages:
-      - gcc-7
-      - g++-7
+      - gcc-9
+      - g++-9
       - cmake
 # Handle git submodules yourself
 git:
     submodules: false
 # Use sed to replace the SSH URL with the public URL, then initialize submodules
 before_install:
-    - export CC=gcc-7
-    - export CXX=g++-7
+    - export CC=gcc-9
+    - export CXX=g++-9
     - gcc --version
     - g++ --version
     - sed -i 's/git@github.com:/git:\/\/github.com\//' .gitmodules
