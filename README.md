@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/makreft/openPubSub.svg?branch=main)](https://travis-ci.com/makreft/openPubSub)
+
 # Goal of this Repo
 the goal is to write a wrapper of open62541 PubSub implementation in C++
 
