@@ -2,8 +2,29 @@
 
 namespace openPubSub
 {
+
+    Server *p_server;
+
+    static void stopHandler()
+    {
+        p_server->stopServer();
+
+
+    }
+    void init(Server &server)
+    {
+        p_server = &server;
+        signal(SIGINT, reinterpret_cast<__sighandler_t>(stopHandler));
+        signal(SIGTERM, reinterpret_cast<__sighandler_t>(stopHandler));
+    }
+
+    void Server::stopServer() {
+        UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_SERVER, "received ctrl-c");
+        m_running = false;
+    }
      Server::Server()
     {
+        m_running=true;
         p_server = UA_Server_new();
         p_config = UA_Server_getConfig(p_server);
         UA_ServerConfig_setDefault(p_config);
@@ -20,8 +41,9 @@ namespace openPubSub
     }
     Server::~Server()
     {
-        //UA_Server_delete(p_server);
+        UA_Server_delete(p_server);
     }
+
 
     void Server::addPubSubConnection()
     {

@@ -25,17 +25,39 @@ extern "C" {
 //"m_p" means member pointer
 
 namespace openPubSub {
+    struct ua_exception : public std::exception {
+
+        UA_StatusCode code;
+
+        explicit ua_exception(UA_StatusCode returnCode) {
+            code = returnCode;
+        }
+
+        const char * what() const throw() override {
+            return UA_StatusCode_name(code);
+        }
+
+    };
 
     class Server
     {
     public:
+        void stopServer();
+
         explicit Server();
         ~Server();
         UA_Server *p_server;
+        void run()
+        {
+            UA_StatusCode retVal = UA_Server_run(p_server, &m_running);
+            if (retVal != UA_STATUSCODE_GOOD)
+                throw ua_exception(retVal);
+        }
     private:
         UA_Boolean m_running;
 
         UA_ServerConfig *p_config;
+
 
         void addPubSubConnection();
         void addPublishedDataSet();
@@ -53,6 +75,7 @@ namespace openPubSub {
 
         //m_p for member pointer
     };
+    void init(Server &server);
 }
 
 #endif // OPENPUBSUB_H
