@@ -22,6 +22,10 @@ before_install:
 
     # Replace <user> and <token> with your GitHub username and access token respectively
 script:
+  - export CC=gcc-7
+  - export CXX=g++7
+  - gcc --version
+  - g++ --version
   - ls
   - mkdir build && cd build
   - cmake ..
