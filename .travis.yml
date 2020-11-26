@@ -15,8 +15,8 @@ git:
     submodules: false
 # Use sed to replace the SSH URL with the public URL, then initialize submodules
 before_install:
-    - export CC=gcc-7
-    - export CXX=g++7
+    - sudo export CC=gcc-7
+    - sudo export CXX=g++7
     - gcc --version
     - g++ --version
     - sed -i 's/git@github.com:/git:\/\/github.com\//' .gitmodules
