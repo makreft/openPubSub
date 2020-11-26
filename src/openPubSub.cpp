@@ -101,10 +101,5 @@ namespace openPubSub
         UA_Server_addDataSetWriter(p_server, m_writerGroupID, m_publishedDataSetID,
                                    &m_dataSetWriterConfig, &m_dataSetWriterID);
     }
-
-    UA_StatusCode Server::run() {
-
-
-    }
 }
 
