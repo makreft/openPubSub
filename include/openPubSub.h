@@ -30,7 +30,6 @@ namespace openPubSub {
     {
     public:
         explicit Server();
-        UA_StatusCode run();
         ~Server();
         UA_Server *p_server;
     private:

@@ -1,6 +1,15 @@
 dist: trusty
-sudo: true
+sudo: required
 language: cpp
+compiler: gcc
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - gcc-9
+      - g++-9
+      - cmake
 # Handle git submodules yourself
 git:
     submodules: false
