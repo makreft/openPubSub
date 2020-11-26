@@ -13,12 +13,12 @@ before_install:
 
     # Replace <user> and <token> with your GitHub username and access token respectively
 script:
-  -ls
-  -cd open62541/
-  -mkdir build && cd build
-  -cmake ..
-  -cmake -DUA_ENABLE_DISCOVERY=ON -DUA_ENABLE_DISCOVERY_MULTICAST=ON -DUA_ENABLE_HARDENING=ON -DUA_ENABLE_METHODCALLS=ON -DUA_ENABLE_NODEMANAGEMENT=ON -DUA_ENABLE_PARSING=ON -DUA_ENABLE_PUBSUB=ON -DUA_ENABLE_PUBSUB_ETH_UADP=ON -DUA_NAMESPACE_ZERO=FULL ../
-  -make install
-  -cmake .
-  -cmake --build . -- -j2
+  - ls
+  - cd open62541/
+  - mkdir build && cd build
+  - cmake ..
+  - cmake -DUA_ENABLE_DISCOVERY=ON -DUA_ENABLE_DISCOVERY_MULTICAST=ON -DUA_ENABLE_HARDENING=ON -DUA_ENABLE_METHODCALLS=ON -DUA_ENABLE_NODEMANAGEMENT=ON -DUA_ENABLE_PARSING=ON -DUA_ENABLE_PUBSUB=ON -DUA_ENABLE_PUBSUB_ETH_UADP=ON -DUA_NAMESPACE_ZERO=FULL ../
+  - make install
+  - cmake .
+  - cmake --build . -- -j2
 
