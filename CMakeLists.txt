@@ -6,7 +6,8 @@ option(BUILD_TESTS "Turn on build for tests" ON)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_C_STANDARD 99)
-set(CMAKE_PREFIX_PATH "/home/marco/install/")
+# assuming that open62541 has bin installed to $ENV{HOME}/install/
+set(CMAKE_PREFIX_PATH "$ENV{HOME}/install/")
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 # CMAKE_POSITION_INDEPENDENT_CODE is nice to have for mixing libraries
 # executables and so on together. But not really needed.
@@ -18,8 +19,8 @@ else()
 endif()
 
 include_directories(.)
-include_directories(/home/marco/install/open62541/include)
-link_directories(/home/marco/install/open62541/lib)
+include_directories($ENV{HOME}/install/open62541/include)
+link_directories($ENV{HOME}/install/open62541/lib)
 find_library(open62541 REQUIRED)
 
 if (BUILD_TESTS)
