@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.com/makreft/openPubSub.svg?branch=main)](https://travis-ci.com/makreft/openPubSub)
-[![code quality score](https://www.code-inspector.com/project/16691/score/svg)](https://www.code-inspector.com/project/16691/score/svg)
-[![Code Grade](https://www.code-inspector.com/project/16691/status/svg)](https://www.code-inspector.com/project/16691/status/svg)
+[![code quality score](https://www.code-inspector.com/project/16691/score/svg)](https://www.code-inspector.com)
+[![Code Grade](https://www.code-inspector.com/project/16691/status/svg)](https://www.code-inspector.com)
 
 # Goal of this Repo
 the goal is to write a wrapper of open62541 PubSub implementation in C++
