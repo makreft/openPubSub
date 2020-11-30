@@ -1,13 +1,9 @@
 #include <gtest/gtest.h>
+#include "../include/openPubSub.h"
 
-bool f()
+TEST(openPubSubTests, makePubSubServerObject)
 {
-    return false;
-}
-
-TEST(openPubSubTests, DemonstratedGTestMacros)
-{
-    EXPECT_EQ(true, true);
-    const bool result = f();
-    EXPECT_EQ(true, result) << "Hello, World";
+    openPubSub::Server serv;
+    openPubSub::init(serv);
+    serv.run();
 }
