@@ -35,3 +35,5 @@ script:
   - cmake .
   - cmake --build . -- -j2
 
+after_success:
+  -  bash <(curl -s https://codecov.io/bash)
