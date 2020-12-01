@@ -4,7 +4,7 @@
 # Goal of this Repo
 the goal is to write a wrapper of open62541 PubSub implementation in C++
 
-# Documentation
+# Documentation (in development)
 
 You can find a more complete documentation [here](https://makreft.github.io/openPubSub/)
 
