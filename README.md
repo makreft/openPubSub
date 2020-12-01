@@ -60,6 +60,7 @@ int main()
 }
 ```
 
+
 # Building the documentation
 ```console
 > cd docs_sphinx
