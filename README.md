@@ -14,7 +14,6 @@ You can find a more complete documentation [here](https://makreft.github.io/open
 > clone this project
 > git submodule update --init --recursive
 > cd open62541
-> git submodule update --init --recursive
 > mkdir build && cd build
 > cmake ..
 > cmake -DUA_ENABLE_DISCOVERY=ON -DUA_ENABLE_DISCOVERY_MULTICAST=ON -DUA_ENABLE_HARDENING=ON -DUA_ENABLE_METHODCALLS=ON -DUA_ENABLE_NODEMANAGEMENT=ON -DUA_ENABLE_PARSING=ON -DUA_ENABLE_PUBSUB=ON -DUA_ENABLE_PUBSUB_ETH_UADP=ON -DUA_NAMESPACE_ZERO=FULL ../
