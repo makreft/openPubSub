@@ -1,3 +1,4 @@
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/00517f54bfcc42938d11df09cd700ebd)](https://app.codacy.com/gh/makreft/openPubSub?utm_source=github.com&utm_medium=referral&utm_content=makreft/openPubSub&utm_campaign=Badge_Grade)
 [![Build Status](https://travis-ci.com/makreft/openPubSub.svg?branch=main)](https://travis-ci.com/makreft/openPubSub)
 
 # Goal of this Repo
