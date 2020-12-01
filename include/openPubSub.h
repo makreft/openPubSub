@@ -22,48 +22,46 @@ extern "C" {
 
 //using the Hungarian notation:
 //"m_" means member variable
-//"m_p" means member pointer
+//"p_" means pointer
 
-namespace openPubSub {
-    struct ua_exception : public std::exception {
+namespace openPubSub
+{
+    struct ua_exception : public std::exception
+    {
 
         UA_StatusCode code;
 
-        explicit ua_exception(UA_StatusCode returnCode) {
+        explicit ua_exception(UA_StatusCode returnCode)
+        {
             code = returnCode;
         }
 
-        const char * what() const throw() override {
+        const char * what() const throw() override
+        {
             return UA_StatusCode_name(code);
         }
-
     };
 
     class Server
     {
     public:
-        void stopServer();
-
-        explicit Server();
-        ~Server();
         UA_Server *p_server;
-        void run()
-        {
-            UA_StatusCode retVal = UA_Server_run(p_server, &m_running);
-            if (retVal != UA_STATUSCODE_GOOD)
-                throw ua_exception(retVal);
-        }
-    private:
+        UA_ServerConfig *p_config;
         UA_Boolean m_running;
 
-        UA_ServerConfig *p_config;
-
-
+        explicit Server();
+        template<class T>
+        void addPubSubTransportLayer(T TransportLayer);
+        void run();
+        void stopServer();
+        ~Server();
         void addPubSubConnection();
         void addPublishedDataSet();
         void addDataSetField();
         void addWriterGroup();
         void addDataSetWriter();
+
+    private:
         UA_NodeId m_connectionID;
         UA_NodeId m_publishedDataSetID;
         UA_NodeId m_dataSetFieldID;
@@ -72,9 +70,9 @@ namespace openPubSub {
 
         UA_WriterGroupConfig m_writerGroupConfig;
         UA_DataSetWriterConfig m_dataSetWriterConfig;
-
         //m_p for member pointer
     };
+
     void init(Server &server);
 }
 
