@@ -2,15 +2,13 @@
 
 namespace openPubSub
 {
-
     Server *p_server;
 
     static void stopHandler()
     {
         p_server->stopServer();
-
-
     }
+
     void init(Server &server)
     {
         p_server = &server;
@@ -18,32 +16,47 @@ namespace openPubSub
         signal(SIGTERM, reinterpret_cast<__sighandler_t>(stopHandler));
     }
 
-    void Server::stopServer() {
-        UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_SERVER, "received ctrl-c");
-        m_running = false;
-    }
-     Server::Server()
+    Server::Server()
     {
         m_running=true;
         p_server = UA_Server_new();
         p_config = UA_Server_getConfig(p_server);
         UA_ServerConfig_setDefault(p_config);
-        p_config->pubsubTransportLayers = (UA_PubSubTransportLayer *)
-            UA_malloc(sizeof(UA_PubSubTransportLayer));
-        p_config -> pubsubTransportLayers[0] = UA_PubSubTransportLayerUDPMP();
-        p_config -> pubsubTransportLayersSize++;
-
-        addPubSubConnection();
-        addPublishedDataSet();
-        addDataSetField();
-        addWriterGroup();
-        addDataSetWriter();
+        this->addPubSubTransportLayer(UA_PubSubTransportLayerUDPMP());
+        //p_config->pubsubTransportLayers = (UA_PubSubTransportLayer *) \
+        //    UA_malloc(sizeof(UA_PubSubTransportLayer));
+        //p_config -> pubsubTransportLayers[0] = UA_PubSubTransportLayerUDPMP();
+        //p_config -> pubsubTransportLayersSize++;
     }
+
+    template<class T>
+    void Server::addPubSubTransportLayer(const T TransportLayer)
+    {
+        p_config->pubsubTransportLayers = (UA_PubSubTransportLayer *) \
+            UA_malloc(sizeof(UA_PubSubTransportLayer));
+        p_config -> pubsubTransportLayers[0] = TransportLayer;
+        p_config -> pubsubTransportLayersSize++;
+    }
+
     Server::~Server()
     {
         UA_Server_delete(p_server);
     }
 
+
+    void Server::run()
+    {
+        UA_StatusCode retVal = UA_Server_run(p_server, &m_running);
+        if (retVal != UA_STATUSCODE_GOOD)
+            throw ua_exception(retVal);
+    }
+
+
+    void Server::stopServer()
+    {
+        UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_SERVER, "received ctrl-c");
+        m_running = false;
+    }
 
     void Server::addPubSubConnection()
     {
@@ -123,5 +136,5 @@ namespace openPubSub
         UA_Server_addDataSetWriter(p_server, m_writerGroupID, m_publishedDataSetID,
                                    &m_dataSetWriterConfig, &m_dataSetWriterID);
     }
-}
 
+}
