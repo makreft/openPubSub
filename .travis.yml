@@ -34,8 +34,4 @@ script:
   - mkdir build && cd build
   - cmake ..
   - cmake --build . -- -j2
-
-test:
   - ./test/openPubSubTests
-
-after_success:
