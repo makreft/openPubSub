@@ -24,7 +24,7 @@ link_directories($ENV{HOME}/install/open62541/lib)
 find_library(open62541 REQUIRED)
 
 if (BUILD_TESTS)
-    add_subdirectory(googletest)
+    add_subdirectory(external/googletest)
     add_subdirectory(test)
 endif()
 
