@@ -31,7 +31,11 @@ script:
   - cmake -DUA_ENABLE_DISCOVERY=ON -DUA_ENABLE_DISCOVERY_MULTICAST=ON -DUA_ENABLE_HARDENING=ON -DUA_ENABLE_METHODCALLS=ON -DUA_ENABLE_NODEMANAGEMENT=ON -DUA_ENABLE_PARSING=ON -DUA_ENABLE_PUBSUB=ON -DUA_ENABLE_PUBSUB_ETH_UADP=ON -DUA_NAMESPACE_ZERO=FULL ../
   - sudo make install
   - cd ../../../
-  - cmake .
+  - mkdir build && cd build
+  - cmake ..
   - cmake --build . -- -j2
+
+test:
+  - ./test/openPubSubTests
 
 after_success:

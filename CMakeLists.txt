@@ -21,7 +21,7 @@ endif()
 include_directories(.)
 include_directories($ENV{HOME}/install/open62541/include)
 link_directories($ENV{HOME}/install/open62541/lib)
-find_library(open62541 REQUIRED)
+# find_library(open62541 REQUIRED)
 
 if (BUILD_TESTS)
     add_subdirectory(external/googletest)
