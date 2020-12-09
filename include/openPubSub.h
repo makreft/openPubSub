@@ -54,7 +54,6 @@ namespace openPubSub
         /// Member pointer holding the state, if the server is running.
         UA_Boolean mp_running;
 
-        char * stringToCharPtr(std::string string);
         /// @param transportLayer define what kind of transport layer is
         /// supposed to be used by the server. Currently only UDP over UADP is
         /// supported but MQTT should be a better choice and thus will be
@@ -111,7 +110,6 @@ namespace openPubSub
         UA_WriterGroupConfig m_writerGroupConfig;
         UA_DataSetWriterConfig m_dataSetWriterConfig;
         /// the transport uri can be set with setTransportProfileUri()
-        //std::shared_ptr<char *> m_transportUri;
         std::string m_transportUri;
         /// the transport uri can be set with setNetworkAddressUrl()
         std::string m_networkUrl;
