@@ -24,11 +24,11 @@ else()
     add_compile_options( -Wall -Wextra -Wpedantic )
 endif()
 
-find_package( Boost REQUIRED )
+#find_package( Boost REQUIRED )
+#include_directories( ${Boost_INCLUDE_DIRS} )
 
 include_directories( . )
 include_directories( $ENV{HOME}/install/open62541/include )
-include_directories( ${Boost_INCLUDE_DIRS} )
 link_directories( $ENV{HOME}/install/open62541/lib )
 if ( BUILD_TESTS )
     add_subdirectory( external/googletest )

@@ -1,6 +1,5 @@
 #include "include/openPubSub.h"
 #include <iostream>
-#include <boost/scoped_array.hpp>
 
 namespace openPubSub
 {

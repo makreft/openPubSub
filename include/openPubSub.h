@@ -19,7 +19,6 @@ extern "C" {
 #include <stdio.h>
 // C++ standard lib
 #include <string>
-#include <boost/scoped_array.hpp>
 #include <memory>
 #include <cstring>
 //using the Hungarian notation:
