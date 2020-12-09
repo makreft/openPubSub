@@ -40,7 +40,9 @@ set( Headers
     include/openPubSub.h )
 
 set( Sources
-    src/openPubSub.cpp )
+    src/openPubSub.cpp
+    src/tutorial_pubsub_subscribe.c
+    )
 
 add_library( ${This} STATIC ${Sources} ${Headers} )
 
