@@ -19,7 +19,9 @@ extern "C" {
 #include <stdio.h>
 // C++ standard lib
 #include <string>
-
+#include <boost/scoped_array.hpp>
+#include <memory>
+#include <cstring>
 //using the Hungarian notation:
 //"m_" means member variable
 //"p_" means pointer
@@ -45,23 +47,61 @@ namespace openPubSub
     class Server
     {
     public:
-        UA_Server *p_server;
-        UA_ServerConfig *p_config;
-        UA_Boolean m_running;
+        /// Member pointer of the server.
+        UA_Server *mp_server;
+        /// Member pointer of the server config.
+        UA_ServerConfig *mp_config;
+        /// Member pointer holding the state, if the server is running.
+        UA_Boolean mp_running;
 
-        explicit Server();
-        template<class T>
-        void addPubSubTransportLayer(T TransportLayer);
-        void run();
-        void stopServer();
+        char * stringToCharPtr(std::string string);
+        /// @param transportLayer define what kind of transport layer is
+        /// supposed to be used by the server. Currently only UDP over UADP is
+        /// supported but MQTT should be a better choice and thus will be
+        /// implemented in a future version.
+        explicit Server(std::string transportLayer="UDP");
+        /// calls UA_Server_delete and frees the memory allocated on the heap
+        /// for m_transportUri, m_networkUrl.
         ~Server();
-        void addPubSubConnection();
-        void addPublishedDataSet();
-        void addDataSetField();
-        void addWriterGroup();
-        void addDataSetWriter();
+        void stopServer();
+        void addPubSubConnection(std::string nameOfPubSubConnection);
+        /// @param nameOfPublishedDS Name of the Published DataSet.
+        void addPublishedDataSet(std::string nameOfPublishedDS);
+        void addDataSetField(std::string nameOfDSField);
+        void addWriterGroup(std::string nameOfWriterGroup);
+        void addDataSetWriter(std::string nameOfDSWriter);
+
+        /// @param transportLayer divine what kind of transport layer is
+        /// supposed to be used by the server
+        /// @param T
+        /// The method addPubSubTransportLayer is supposed to be used only
+        /// when constructing the openPubSub::Server object
+        template<class T>
+        void addPubSubTransportLayer(const T TransportLayer)
+        {
+            mp_config->pubsubTransportLayers = (UA_PubSubTransportLayer *) \
+                                UA_malloc(sizeof(UA_PubSubTransportLayer));
+            mp_config -> pubsubTransportLayers[0] = TransportLayer;
+            mp_config -> pubsubTransportLayersSize++;
+        }
+        /// @param transportProfileUri the passed std::string will be
+        /// converted to char * on the heap. Memory of m_ will be
+        /// freed in the Server destructor.
+        void setTransportProfileUri(std::string transportProfileUri = \
+                "http://opcfoundation.org/UA-Profile/Transport/pubsub-udp-uadp");
+
+        /// @param networkAddressUrl the passed std::string will be
+        /// converted to char * on the heap. Memory of m_networkUrl will be
+        /// freed in the Server destructor.
+        void setNetworkAddressUrl(std::string networkAddressUrl = \
+                                                   "opc.udp://127.0.0.1:4840/");
+
+        /// Call run() at after everything is configured.
+        void run();
 
     private:
+        void setNameOfPubSubConnection(std::string name);
+        void setNameOfPublishedDataSet(std::string name);
         UA_NodeId m_connectionID;
         UA_NodeId m_publishedDataSetID;
         UA_NodeId m_dataSetFieldID;
@@ -70,7 +110,13 @@ namespace openPubSub
 
         UA_WriterGroupConfig m_writerGroupConfig;
         UA_DataSetWriterConfig m_dataSetWriterConfig;
-        //m_p for member pointer
+        /// the transport uri can be set with setTransportProfileUri()
+        //std::shared_ptr<char *> m_transportUri;
+        std::string m_transportUri;
+        /// the transport uri can be set with setNetworkAddressUrl()
+        std::string m_networkUrl;
+        std::string m_namePubSubConnection;
+        std::string m_namePublishedDS;
     };
 
     void init(Server &server);
