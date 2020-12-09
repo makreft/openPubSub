@@ -98,8 +98,8 @@ namespace openPubSub
         void run();
 
     private:
-        void setNameOfPubSubConnection(std::string name);
-        void setNameOfPublishedDataSet(std::string name);
+        void setNameOfPubSubConnection(std::string namePSC);
+        void setNameOfPublishedDataSet(std::string namePDS);
         UA_NodeId m_connectionID;
         UA_NodeId m_publishedDataSetID;
         UA_NodeId m_dataSetFieldID;

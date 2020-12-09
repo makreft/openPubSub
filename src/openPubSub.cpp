@@ -136,13 +136,9 @@ namespace openPubSub
                                    &m_dataSetWriterConfig, &m_dataSetWriterID);
     }
 
-    void Server::setNameOfPubSubConnection(std::string name)
+    void Server::setNameOfPubSubConnection(std::string namePSC)
     {
-        int size = sizeof(name);
-        boost::scoped_array<char> namePubSubConnection(new char[size]);
-        std::copy(name.begin(), name.end(), namePubSubConnection.get());
-        namePubSubConnection[name.size()] = '\0';
-        m_namePubSubConnection = namePubSubConnection.get();
+        m_namePubSubConnection = namePSC;
     }
     void Server::setTransportProfileUri(std::string transportProfileUri)
     {
