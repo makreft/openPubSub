@@ -1,8 +1,11 @@
 cmake_minimum_required( VERSION 3.9.2 )
+
 set( This openPubSub )
 project( ${This} C CXX )
 
+#CMAKE_EXPORT_COMPILE_COMMANDS=ON recommended for YCM-Plugin
 set( CMAKE_EXPORT_COMPILE_COMMANDS ON )
+
 option( BUILD_TESTS "Turn on build for tests" ON )
 set( BOOST_ROOT $ENV{HOME}/install/boost_1_75_0/ )
 set( BOOST_INCLUDE_DIRS ${BOOST_ROOT}/boost )
@@ -16,14 +19,14 @@ set( CMAKE_POSITION_INDEPENDENT_CODE ON )
 # executables and so on together. But not really needed.
 
 if (MSVC)
-    add_compile_options(/W4)
+    add_compile_options( /W4 )
 else()
-    add_compile_options(-Wall -Wextra -Wpedantic)
+    add_compile_options( -Wall -Wextra -Wpedantic )
 endif()
 
 find_package( Boost REQUIRED )
 
-include_directories(.)
+include_directories( . )
 include_directories( $ENV{HOME}/install/open62541/include )
 include_directories( ${Boost_INCLUDE_DIRS} )
 link_directories( $ENV{HOME}/install/open62541/lib )
@@ -34,22 +37,17 @@ endif()
 
 
 set( Headers
-    include/openPubSub.h
- )
+    include/openPubSub.h )
 
 set( Sources
-    src/openPubSub.cpp
- )
+    src/openPubSub.cpp )
 
-add_library( ${This} STATIC ${Sources} ${Headers}
- )
+add_library( ${This} STATIC ${Sources} ${Headers} )
 
 add_executable( playground
-        ${CMAKE_CURRENT_SOURCE_DIR}/playground.cpp
-        )
+        ${CMAKE_CURRENT_SOURCE_DIR}/playground.cpp )
 add_executable( client
-        ${CMAKE_CURRENT_SOURCE_DIR}/client.cpp
-        )
+        ${CMAKE_CURRENT_SOURCE_DIR}/client.cpp )
 
 target_link_libraries( ${This} PUBLIC open62541 )
 target_link_libraries( playground PUBLIC ${This} )
