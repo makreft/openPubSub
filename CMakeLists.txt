@@ -11,7 +11,7 @@ set( CMAKE_CXX_STANDARD 17 )
 set( CMAKE_C_STANDARD 99 )
 
 # assuming that open62541 has bin installed to $ENV{HOME}/install/
-set( CMAKE_PREFIX_PATH $ENV{HOME}/install/ )
+set( CMAKE_PREFIX_PATH $ENV{HOME}/install/open62541/ )
 
 # CMAKE_POSITION_INDEPENDENT_CODE is nice to have for mixing libraries
 set( CMAKE_POSITION_INDEPENDENT_CODE ON )
@@ -23,10 +23,13 @@ else()
 endif()
 
 
-include_directories( ${CMAKE_PREFIX_PATH}/open62541/include )
-add_library(open62541 SHARED IMPORTED REQUIRED)
-set_target_properties(open62541 PROPERTIES IMPORTED_LOCATION ${CMAKE_PREFIX_PATH}/open62541/lib/libopen62541.so)
-target_include_directories(open62541 INTERFACE ${CMAKE_PREFIX_PATH}/open62541/include)
+include_directories( ${CMAKE_PREFIX_PATH}/include )
+if ($ENV{HOME}=="/home/travis/")
+    find_library( open62541 )
+endif()
+add_library( open62541 SHARED IMPORTED REQUIRED )
+set_target_properties( open62541 PROPERTIES IMPORTED_LOCATION ${CMAKE_PREFIX_PATH}/lib/libopen62541.so )
+target_include_directories( open62541 INTERFACE ${CMAKE_PREFIX_PATH}/include )
 
 if ( BUILD_TESTS )
     add_subdirectory( external/googletest )
