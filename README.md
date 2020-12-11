@@ -9,18 +9,20 @@ the goal is to write a wrapper of open62541 PubSub implementation in C++
 You can find a more complete documentation [here](https://makreft.github.io/openPubSub/)
 
 
-# openPubSub initialization
+# installing open62541 locally
 ```bash
 > clone this project
 > git submodule update --init --recursive
 > cd open62541
-> git submodule update --init --recursive
 > mkdir build && cd build
 > cmake ..
 > cmake -DUA_ENABLE_DISCOVERY=ON -DUA_ENABLE_DISCOVERY_MULTICAST=ON -DUA_ENABLE_HARDENING=ON -DUA_ENABLE_METHODCALLS=ON -DUA_ENABLE_NODEMANAGEMENT=ON -DUA_ENABLE_PARSING=ON -DUA_ENABLE_PUBSUB=ON -DUA_ENABLE_PUBSUB_ETH_UADP=ON -DUA_NAMESPACE_ZERO=FULL ../
 > make install # by default this will install open62541 in your system library.  \
 # Configure install path for best practice. But than also root level CMake has \
 # to be adjusted apropriately.
+# If you use the the following option \
+# -DCMAKE_INSTALL_PREFIX=/home/<user>/install/open62541/ the CMakeLists.txt \
+# provided should work out of the box
 ```
 
 ### Optional if using the cmake gui:

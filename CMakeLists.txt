@@ -1,48 +1,56 @@
-cmake_minimum_required(VERSION 3.9.2)
-set(This openPubSub)
-project(${This} C CXX)
+cmake_minimum_required( VERSION 3.9.2 )
 
-option(BUILD_TESTS "Turn on build for tests" ON)
+project( openPubSub C CXX )
 
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_C_STANDARD 99)
+# if using the YCM-Plugin for vim
+set( CMAKE_EXPORT_COMPILE_COMMANDS OFF )
+
+option( BUILD_TESTS "Turn on build for tests" ON )
+
+set( CMAKE_CXX_STANDARD 17 )
+set( CMAKE_C_STANDARD 99 )
+
 # assuming that open62541 has bin installed to $ENV{HOME}/install/
-set(CMAKE_PREFIX_PATH "$ENV{HOME}/install/")
-set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+set( CMAKE_PREFIX_PATH $ENV{HOME}/install/ )
+
 # CMAKE_POSITION_INDEPENDENT_CODE is nice to have for mixing libraries
-# executables and so on together. But not really needed.
+set( CMAKE_POSITION_INDEPENDENT_CODE ON )
 
 if (MSVC)
-    add_compile_options(/W4)
+    add_compile_options( /W4 )
 else()
-    add_compile_options(-Wall -Wextra -Wpedantic)
-endif()
-
-include_directories(.)
-include_directories($ENV{HOME}/install/open62541/include)
-link_directories($ENV{HOME}/install/open62541/lib)
-# find_library(open62541 REQUIRED)
-
-if (BUILD_TESTS)
-    add_subdirectory(external/googletest)
-    add_subdirectory(test)
+    add_compile_options( -Wall -Wextra -Wpedantic )
 endif()
 
 
-set(Headers
-    include/openPubSub.h
-)
+include_directories( ${CMAKE_PREFIX_PATH}/open62541/include )
+add_library(open62541 SHARED IMPORTED REQUIRED)
+set_target_properties(open62541 PROPERTIES IMPORTED_LOCATION ${CMAKE_PREFIX_PATH}/open62541/lib/libopen62541.so)
+target_include_directories(open62541 INTERFACE ${CMAKE_PREFIX_PATH}/open62541/include)
 
-set(Sources
-    src/openPubSub.cpp
-)
+if ( BUILD_TESTS )
+    add_subdirectory( external/googletest )
+    add_subdirectory( test )
+endif()
 
-add_library(${This} STATIC ${Sources} ${Headers}
-)
 
-add_executable(playground
-        ${CMAKE_CURRENT_SOURCE_DIR}/playground.cpp
-        )
+set( Sources
+    openPubSub/openPubSub.cpp
+    )
 
-target_link_libraries(${This} PUBLIC open62541)
-target_link_libraries(playground PUBLIC ${This})
+add_library( openPubSub STATIC ${Sources} )
+
+add_executable( playground
+        ${CMAKE_CURRENT_SOURCE_DIR}/playground.cpp )
+add_executable( client
+        ${CMAKE_CURRENT_SOURCE_DIR}/client.cpp )
+add_executable( pubsub
+        ${CMAKE_CURRENT_SOURCE_DIR}/pubsub.cpp)
+add_executable( sub
+    ${CMAKE_CURRENT_SOURCE_DIR}/sub.cpp)
+
+target_link_libraries( openPubSub PUBLIC open62541 )
+target_link_libraries( playground PUBLIC openPubSub )
+target_link_libraries( client     PUBLIC openPubSub )
+target_link_libraries( pubsub     PUBLIC openPubSub )
+target_link_libraries( sub        PUBLIC openPubSub )

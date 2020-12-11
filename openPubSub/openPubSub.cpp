@@ -1,4 +1,5 @@
-#include "include/openPubSub.h"
+#include "openPubSub.h"
+#include <iostream>
 
 namespace openPubSub
 {
@@ -16,96 +17,94 @@ namespace openPubSub
         signal(SIGTERM, reinterpret_cast<__sighandler_t>(stopHandler));
     }
 
-    Server::Server()
+    Server::Server(std::string transportLayer)
     {
-        m_running=true;
-        p_server = UA_Server_new();
-        p_config = UA_Server_getConfig(p_server);
-        UA_ServerConfig_setDefault(p_config);
-        this->addPubSubTransportLayer(UA_PubSubTransportLayerUDPMP());
-        //p_config->pubsubTransportLayers = (UA_PubSubTransportLayer *) \
-        //    UA_malloc(sizeof(UA_PubSubTransportLayer));
-        //p_config -> pubsubTransportLayers[0] = UA_PubSubTransportLayerUDPMP();
-        //p_config -> pubsubTransportLayersSize++;
-    }
-
-    template<class T>
-    void Server::addPubSubTransportLayer(const T TransportLayer)
-    {
-        p_config->pubsubTransportLayers = (UA_PubSubTransportLayer *) \
-            UA_malloc(sizeof(UA_PubSubTransportLayer));
-        p_config -> pubsubTransportLayers[0] = TransportLayer;
-        p_config -> pubsubTransportLayersSize++;
+        mp_running=true;
+        mp_server = UA_Server_new();
+        mp_config = UA_Server_getConfig(mp_server);
+        UA_ServerConfig_setDefault(mp_config);
+        setNetworkAddressUrl();
+        setTransportProfileUri();
+        if (transportLayer == "UDP")
+        {
+            this->addPubSubTransportLayer(UA_PubSubTransportLayerUDPMP());
+        }
+        else if (transportLayer == "MQTT")
+        {
+            //TODO: implement MQTT
+            this->addPubSubTransportLayer(UA_PubSubTransportLayerUDPMP());
+        }
     }
 
     Server::~Server()
     {
-        UA_Server_delete(p_server);
+        UA_Server_delete(mp_server);
     }
-
 
     void Server::run()
     {
-        UA_StatusCode retVal = UA_Server_run(p_server, &m_running);
+        UA_StatusCode retVal = UA_Server_run(mp_server, &mp_running);
         if (retVal != UA_STATUSCODE_GOOD)
             throw ua_exception(retVal);
     }
 
-
     void Server::stopServer()
     {
         UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_SERVER, "received ctrl-c");
-        m_running = false;
+        mp_running = false;
     }
 
-    void Server::addPubSubConnection()
+    void Server::addPubSubConnection(std::string nameOfPubSubConnection)
     {
+        setNameOfPubSubConnection(nameOfPubSubConnection);
         UA_PubSubConnectionConfig connectionConfig;
         memset(&connectionConfig, 0, sizeof(connectionConfig));
-        connectionConfig.name = UA_STRING("UADP Connection 1");
-        connectionConfig.transportProfileUri = UA_STRING(
-            "http://opcfoundation.org/UA-Profile/Transport/pubsub-udp-uadp");
+        connectionConfig.name = UA_STRING(strdup(m_namePubSubConnection.c_str()));
+        connectionConfig.transportProfileUri = UA_STRING(strdup(m_transportUri.c_str()));
         UA_NetworkAddressUrlDataType networkAddressUrl =
-            {UA_STRING_NULL , UA_STRING("opc.udp://127.0.0.1:4840/")};
+            {UA_STRING_NULL , UA_STRING(strdup(m_networkUrl.c_str()))};
         connectionConfig.enabled = UA_TRUE;
         UA_Variant_setScalar(&connectionConfig.address, &networkAddressUrl,
                              &UA_TYPES[UA_TYPES_NETWORKADDRESSURLDATATYPE]);
         connectionConfig.publisherId.numeric = 2234;
-        UA_Server_addPubSubConnection(p_server, &connectionConfig,
+        UA_Server_addPubSubConnection(mp_server, &connectionConfig,
                                       &m_connectionID);
     }
 
-    void Server::addPublishedDataSet() {
+    void Server::addPublishedDataSet(std::string nameOfPublishedDS)
+    {
+        setNameOfPublishedDataSet(nameOfPublishedDS);
         UA_PublishedDataSetConfig publishedDataSetConfig;
         memset(&publishedDataSetConfig, 0, sizeof(UA_PublishedDataSetConfig));
         publishedDataSetConfig.publishedDataSetType =
-            UA_PUBSUB_DATASET_PUBLISHEDITEMS;
-        publishedDataSetConfig.name = UA_STRING("Demo PDS");
-        UA_Server_addPublishedDataSet(p_server, &publishedDataSetConfig,
+                                            UA_PUBSUB_DATASET_PUBLISHEDITEMS;
+        publishedDataSetConfig.name = UA_STRING(strdup(m_namePublishedDS.c_str()));
+        UA_Server_addPublishedDataSet(mp_server, &publishedDataSetConfig,
                                       &m_publishedDataSetID);
     }
 
-    void Server::addDataSetField()
+    void Server::addDataSetField(std::string nameOfDSField)
     {
         UA_DataSetFieldConfig dataSetFieldConfig;
         memset(&dataSetFieldConfig, 0, sizeof(UA_DataSetFieldConfig));
         dataSetFieldConfig.dataSetFieldType = UA_PUBSUB_DATASETFIELD_VARIABLE;
         dataSetFieldConfig.field.variable.fieldNameAlias =
-            UA_STRING("Server localtime");
+            UA_STRING(strdup(nameOfDSField.c_str()));
         dataSetFieldConfig.field.variable.promotedField = UA_FALSE;
         dataSetFieldConfig.field.variable.publishParameters.publishedVariable =
             UA_NODEID_NUMERIC(0, UA_NS0ID_SERVERSTATUSTYPE_CURRENTTIME);
         dataSetFieldConfig.field.variable.publishParameters.attributeId =
             UA_ATTRIBUTEID_VALUE;
-        UA_Server_addDataSetField(p_server, m_publishedDataSetID,
+        UA_Server_addDataSetField(mp_server, m_publishedDataSetID,
                                   &dataSetFieldConfig,
                                   &m_dataSetFieldID);
     }
 
-    void Server::addWriterGroup()
+    void Server::addWriterGroup(std::string nameOfWriterGroup)
     {
+        //setNameOfWriterGroup();
         memset(&m_writerGroupConfig, 0, sizeof(UA_WriterGroupConfig));
-        m_writerGroupConfig.name = UA_STRING("Demo WriterGroup");
+        m_writerGroupConfig.name = UA_STRING(strdup(nameOfWriterGroup.c_str()));
         m_writerGroupConfig.publishingInterval = 100;
         m_writerGroupConfig.enabled = UA_FALSE;
         m_writerGroupConfig.writerGroupId = 100;
@@ -121,20 +120,36 @@ namespace openPubSub
             ( UA_UadpNetworkMessageContentMask )  UA_UADPNETWORKMESSAGECONTENTMASK_WRITERGROUPID |
             ( UA_UadpNetworkMessageContentMask )  UA_UADPNETWORKMESSAGECONTENTMASK_PAYLOADHEADER );
         m_writerGroupConfig.messageSettings.content.decoded.data = writerGroupMessage;
-        UA_Server_addWriterGroup(p_server, m_connectionID,
+        UA_Server_addWriterGroup(mp_server, m_connectionID,
                                  &m_writerGroupConfig, &m_writerGroupID);
-        UA_Server_setWriterGroupOperational(p_server, m_writerGroupID);
+        UA_Server_setWriterGroupOperational(mp_server, m_writerGroupID);
         UA_UadpWriterGroupMessageDataType_delete(writerGroupMessage);
     }
 
-    void Server::addDataSetWriter()
+    void Server::addDataSetWriter(std::string nameOfDSWriter)
     {
         memset(&m_dataSetWriterConfig, 0, sizeof(UA_DataSetWriterConfig));
-        m_dataSetWriterConfig.name = UA_STRING("Demo DataSetWriter");
+        m_dataSetWriterConfig.name = UA_STRING(strdup(nameOfDSWriter.c_str()));
         m_dataSetWriterConfig.dataSetWriterId = 62541;
         m_dataSetWriterConfig.keyFrameCount = 10;
-        UA_Server_addDataSetWriter(p_server, m_writerGroupID, m_publishedDataSetID,
+        UA_Server_addDataSetWriter(mp_server, m_writerGroupID, m_publishedDataSetID,
                                    &m_dataSetWriterConfig, &m_dataSetWriterID);
     }
 
+    void Server::setNameOfPubSubConnection(std::string namePSC)
+    {
+        m_namePubSubConnection = namePSC;
+    }
+    void Server::setTransportProfileUri(std::string transportProfileUri)
+    {
+        m_transportUri = transportProfileUri;
+    }
+    void Server::setNetworkAddressUrl(std::string networkAddressUrl)
+    {
+        m_networkUrl = networkAddressUrl;
+    }
+    void Server::setNameOfPublishedDataSet(std::string namePDS)
+    {
+        m_namePublishedDS = namePDS;
+    }
 }
