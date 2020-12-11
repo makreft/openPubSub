@@ -23,15 +23,9 @@ else()
 endif()
 
 
-include_directories( ${CMAKE_PREFIX_PATH}/include )
-if ($ENV{HOME}=="/home/travis/")
-    include_directories( $ENV{HOME}/install/open62541/include )
-    link_directories( $ENV{HOME}/install/open62541/lib )
-else()
-    add_library( open62541 SHARED IMPORTED REQUIRED )
-    set_target_properties( open62541 PROPERTIES IMPORTED_LOCATION ${CMAKE_PREFIX_PATH}/lib/libopen62541.so )
-    target_include_directories( open62541 INTERFACE ${CMAKE_PREFIX_PATH}/include )
-endif()
+add_library( open62541 SHARED IMPORTED REQUIRED )
+set_target_properties( open62541 PROPERTIES IMPORTED_LOCATION ${CMAKE_PREFIX_PATH}/lib/libopen62541.so )
+target_include_directories( open62541 INTERFACE ${CMAKE_PREFIX_PATH}/include )
 
 if ( BUILD_TESTS )
     add_subdirectory( external/googletest )
