@@ -16,12 +16,15 @@ You can find a more complete documentation [here](https://makreft.github.io/open
 > cd open62541
 > mkdir build && cd build
 > cmake ..
-> cmake -DUA_ENABLE_DISCOVERY=ON -DUA_ENABLE_DISCOVERY_MULTICAST=ON -DUA_ENABLE_HARDENING=ON -DUA_ENABLE_METHODCALLS=ON -DUA_ENABLE_NODEMANAGEMENT=ON -DUA_ENABLE_PARSING=ON -DUA_ENABLE_PUBSUB=ON -DUA_ENABLE_PUBSUB_ETH_UADP=ON -DUA_NAMESPACE_ZERO=FULL ../
+> cmake -DCMAKE_INSTALL_PREFIX=$HOME/install/open62541 -DUA_ENABLE_DISCOVERY=ON \
+-DUA_ENABLE_DISCOVERY_MULTICAST=ON -DUA_ENABLE_HARDENING=ON -DUA_ENABLE_METHODCALLS=ON \
+-DUA_ENABLE_NODEMANAGEMENT=ON -DUA_ENABLE_PARSING=ON -DUA_ENABLE_PUBSUB=ON \
+-DUA_ENABLE_PUBSUB_ETH_UADP=ON -DUA_NAMESPACE_ZERO=FULL ../
 > make install # by default this will install open62541 in your system library.  \
 # Configure install path for best practice. But than also root level CMake has \
 # to be adjusted apropriately.
 # If you use the the following option \
-# -DCMAKE_INSTALL_PREFIX=/home/<user>/install/open62541/ the CMakeLists.txt \
+# -DCMAKE_INSTALL_PREFIX=$HOME/install/open62541/ the CMakeLists.txt \
 # provided should work out of the box
 ```
 

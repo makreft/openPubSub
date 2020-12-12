@@ -17,9 +17,9 @@ namespace openPubSub
         signal(SIGTERM, reinterpret_cast<__sighandler_t>(stopHandler));
     }
 
-    Server::Server(std::string transportLayer)
+    Server::Server(const std::string transportLayer)
+    :mp_running(true)
     {
-        mp_running=true;
         mp_server = UA_Server_new();
         mp_config = UA_Server_getConfig(mp_server);
         UA_ServerConfig_setDefault(mp_config);

@@ -34,8 +34,7 @@ endif()
 
 
 set( Sources
-    openPubSub/openPubSub.cpp
-    )
+    openPubSub/openPubSub.cpp )
 
 add_library( openPubSub STATIC ${Sources} )
 
