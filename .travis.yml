@@ -37,5 +37,5 @@ script:
   - cd ../../../
   - mkdir build; cd build
   - cmake ..
-  - make
-  # - ./test/openPubSubTests
+  - make -j2
+  - ./test/openPubSubTests
