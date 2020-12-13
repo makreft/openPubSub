@@ -11,7 +11,7 @@ You can find a more complete documentation [here](https://makreft.github.io/open
 
 # installing open62541 locally
 ```bash
-> clone https://github.com/makreft/openPubSub.git
+> git clone https://github.com/makreft/openPubSub.git
 > cd openPubSub
 > git submodule update --init --recursive
 > cd external/open62541
