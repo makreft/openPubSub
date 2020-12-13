@@ -11,10 +11,11 @@ You can find a more complete documentation [here](https://makreft.github.io/open
 
 # installing open62541 locally
 ```bash
-> clone this project
+> clone https://github.com/makreft/openPubSub.git
+> cd openPubSub
 > git submodule update --init --recursive
-> cd open62541
-> mkdir build && cd build
+> cd external/open62541
+> mkdir build; cd build
 > cmake ..
 > cmake -DCMAKE_INSTALL_PREFIX=$HOME/install/open62541 -DUA_BUILD_TOOLS=ON \
         -DUA_ENABLE_DISCOVERY_MULTICAST=ON -DUA_ENABLE_HARDENING=ON \
