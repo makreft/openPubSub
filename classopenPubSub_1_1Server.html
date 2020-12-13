@@ -73,6 +73,8 @@ $(function() {
 <div class="title">openPubSub::Server Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p><code>#include &lt;openPubSub.h&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -124,7 +126,14 @@ UA_Boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href
 <tr class="memdesc:a42db7f7cabc287773e2a2d4963fdb250"><td class="mdescLeft">&#160;</td><td class="mdescRight">Member pointer holding the state, if the server is running. <br /></td></tr>
 <tr class="separator:a42db7f7cabc287773e2a2d4963fdb250"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>The <a class="el" href="classopenPubSub_1_1Server.html">Server</a> expects that all configurations are done during initialization. As soon as the <a class="el" href="classopenPubSub_1_1Server.html#a40f7704fa24578228be68aafee6a20e3" title="Call run() at after everything is configured.">run()</a> method is called, the server cannot be modified. Steps for configuration (taken from the open62541 documentation):</p><ol type="1">
+<li>Create a <a class="el" href="classopenPubSub_1_1Server.html">Server</a> configuration with default settings as starting point</li>
+<li>Modify the configuration, e.g. by adding a server certificate.</li>
+<li>Instantiate a server with it.</li>
+<li>After shutdown of the server, clean up the configuration (free memory) </li>
+</ol>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a589d8067709b3be317b7c5622412b799"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a589d8067709b3be317b7c5622412b799">&#9670;&nbsp;</a></span>Server()</h2>
 
@@ -227,7 +236,7 @@ template&lt;class T &gt; </div>
 </div><div class="memdoc">
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">transportLayer</td><td>divine what kind of transport layer is supposed to be used by the server </td></tr>
+    <tr><td class="paramname">transportLayer</td><td>define what kind of transport layer is supposed to be used by the server </td></tr>
     <tr><td class="paramname">T</td><td>The method addPubSubTransportLayer is supposed to be used only when constructing the <a class="el" href="classopenPubSub_1_1Server.html">openPubSub::Server</a> object </td></tr>
   </table>
   </dd>

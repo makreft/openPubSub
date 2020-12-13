@@ -159,7 +159,14 @@
 <dd><dl class="cpp class">
 <dt id="_CPPv4N10openPubSub6ServerE">
 <span id="_CPPv3N10openPubSub6ServerE"></span><span id="_CPPv2N10openPubSub6ServerE"></span><span id="openPubSub::Server"></span><span class="target" id="classopenPubSub_1_1Server"></span><em class="property">class </em><code class="sig-name descname">Server</code><a class="headerlink" href="#_CPPv4N10openPubSub6ServerE" title="Permalink to this definition">¶</a><br /></dt>
-<dd><div class="breathe-sectiondef docutils container">
+<dd><em>#include &lt;openPubSub.h&gt;</em><p>The <a class="reference internal" href="#classopenPubSub_1_1Server"><span class="std std-ref">Server</span></a> expects that all configurations are done during initialization. As soon as the <a class="reference internal" href="#classopenPubSub_1_1Server_1a40f7704fa24578228be68aafee6a20e3"><span class="std std-ref">run()</span></a> method is called, the server cannot be modified. Steps for configuration (taken from the open62541 documentation):<ol class="lowerroman simple">
+<li><p>Create a <a class="reference internal" href="#classopenPubSub_1_1Server"><span class="std std-ref">Server</span></a> configuration with default settings as starting point</p></li>
+<li><p>Modify the configuration, e.g. by adding a server certificate.</p></li>
+<li><p>Instantiate a server with it.</p></li>
+<li><p>After shutdown of the server, clean up the configuration (free memory) </p></li>
+</ol>
+</p>
+<div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
 <dl class="cpp function">
 <dt id="_CPPv4N10openPubSub6Server6ServerENSt6stringE">
@@ -221,7 +228,7 @@
 <span id="_CPPv3I0EN10openPubSub6Server23addPubSubTransportLayerEK1T"></span><span id="_CPPv2I0EN10openPubSub6Server23addPubSubTransportLayerEK1T"></span>template&lt;class <code class="sig-name descname">T</code>&gt;<br /><span class="target" id="classopenPubSub_1_1Server_1af969fc1f000b6e1a38843f42ad27c8c1"></span>void <code class="sig-name descname">addPubSubTransportLayer</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4I0EN10openPubSub6Server23addPubSubTransportLayerEvK1T" title="openPubSub::Server::addPubSubTransportLayer::T">T</a> <em>TransportLayer</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN10openPubSub6Server23addPubSubTransportLayerEvK1T" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p><dl class="simple">
 <dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">transportLayer</span></code>: divine what kind of transport layer is supposed to be used by the server </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">transportLayer</span></code>: define what kind of transport layer is supposed to be used by the server </p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">T</span></code>: The method addPubSubTransportLayer is supposed to be used only when constructing the <a class="reference internal" href="#classopenPubSub_1_1Server"><span class="std std-ref">openPubSub::Server</span></a> object </p></li>
 </ul>
 </dd>
