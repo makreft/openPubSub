@@ -43,6 +43,13 @@ namespace openPubSub
         }
     };
 
+    /// The Server expects that all configurations are done during initialization.
+    /// As soon as the run() method is called, the server cannot be modified.
+    /// Steps for configuration (taken from the open62541 documentation):
+    /// 1. Create a Server configuration with default settings as starting point
+    /// 2. Modify the configuration, e.g. by adding a server certificate.
+    /// 3. Instantiate a server with it.
+    /// 4. After shutdown of the server, clean up the configuration (free memory)
     class Server
     {
     public:
@@ -53,7 +60,8 @@ namespace openPubSub
         /// Member pointer holding the state, if the server is running.
         UA_Boolean mp_running;
 
-        /// @param transportLayer define what kind of transport layer is
+        /// @param transportLayer
+        /// define what kind of transport layer is
         /// supposed to be used by the server. Currently only UDP over UADP is
         /// supported but MQTT should be a better choice and thus will be
         /// implemented in a future version.
@@ -63,13 +71,15 @@ namespace openPubSub
         ~Server();
         void stopServer();
         void addPubSubConnection(std::string nameOfPubSubConnection);
-        /// @param nameOfPublishedDS Name of the Published DataSet.
+        /// @param nameOfPublishedDS
+        /// Name of the Published DataSet.
         void addPublishedDataSet(std::string nameOfPublishedDS);
         void addDataSetField(std::string nameOfDSField);
         void addWriterGroup(std::string nameOfWriterGroup);
         void addDataSetWriter(std::string nameOfDSWriter);
 
-        /// @param transportLayer divine what kind of transport layer is
+        /// @param transportLayer
+        /// define what kind of transport layer is
         /// supposed to be used by the server
         /// @param T
         /// The method addPubSubTransportLayer is supposed to be used only

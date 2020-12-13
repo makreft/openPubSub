@@ -6,6 +6,7 @@ set(Sources
     openPubSubTests.cpp
 )
 
+find_library(openPubSub REQUIRED)
 
 add_executable(${This} ${Sources})
 target_link_libraries(${This} PUBLIC
