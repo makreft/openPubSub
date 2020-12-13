@@ -9,7 +9,9 @@ the goal is to write a wrapper of open62541 PubSub implementation in C++
 You can find a more complete documentation [here](https://makreft.github.io/openPubSub/)
 
 
-# installing open62541 locally
+# Installing open62541
+Note: copy pasting of the following will result in installing open62541 to the
+path /home/user/install/open62541.
 ```bash
 > git clone https://github.com/makreft/openPubSub.git
 > cd openPubSub
@@ -62,12 +64,17 @@ You can find a more complete documentation [here](https://makreft.github.io/open
   * UA_LOGLEVEL=300
   * UA_MULTITHREADING=0
   * UA_NAMESPACE_ZERO=FULL
- 
-# dependencies
-* G++_VERSION >= g++-7
-* open62541 v.1.1
 
-# example
+## Issues with the install
+* at the moment I am not able to use encryption since this results in an
+error: "error while loading shared libraries: libmbedx509.so.1: cannot open
+  shared object file: No such file or directory"
+ 
+# Dependencies
+* G++_VERSION >= g++-7
+* open62541 v.1.1.3
+
+# Example
 ```cpp
 #include "include/openPubSub.h"
 
