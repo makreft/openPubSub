@@ -104,13 +104,13 @@ namespace openPubSub
         /// @param transportProfileUri the passed std::string will be
         /// converted to char * on the heap. Memory of m_ will be
         /// freed in the Server destructor.
-        void setTransportProfileUri(std::string transportProfileUri = \
+        void setTransportProfileUri(const std::string &transportProfileUri = \
                 "http://opcfoundation.org/UA-Profile/Transport/pubsub-udp-uadp");
 
         /// @param networkAddressUrl the passed std::string will be
         /// converted to char * on the heap. Memory of m_networkUrl will be
         /// freed in the Server destructor.
-        void setNetworkAddressUrl(std::string networkAddressUrl = \
+        void setNetworkAddressUrl(const std::string &networkAddressUrl = \
                 "opc.udp://127.0.0.1:4840/");
 
         /// Call run() at after everything is configured.

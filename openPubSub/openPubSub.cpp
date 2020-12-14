@@ -133,12 +133,12 @@ namespace openPubSub
                                    &m_dataSetWriterID);
     }
 
-    void Server::setTransportProfileUri(std::string transportProfileUri)
+    void Server::setTransportProfileUri(const std::string &transportProfileUri)
     {
         m_transportUri = transportProfileUri;
     }
 
-    void Server::setNetworkAddressUrl(std::string networkAddressUrl)
+    void Server::setNetworkAddressUrl(const std::string &networkAddressUrl)
     {
         m_networkUrl = networkAddressUrl;
     }
