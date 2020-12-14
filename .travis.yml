@@ -37,5 +37,5 @@ script:
   - cd build
   - ls ..
   - cmake ..
-  - make -j2
+  - cmake --build . -- -j2
   - ./test/openPubSubTests
