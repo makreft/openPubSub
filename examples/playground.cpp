@@ -1,4 +1,4 @@
-#include "openPubSub/openPubSub.h"
+#include "../openPubSub/openPubSub.h"
 #include <open62541/plugin/log_stdout.h>
 #include <open62541/types.h>
 

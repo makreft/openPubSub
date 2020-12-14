@@ -24,7 +24,7 @@ int main(void) {
 
     if(retval == UA_STATUSCODE_GOOD &&
        UA_Variant_hasScalarType(&value, &UA_TYPES[UA_TYPES_DATETIME])) {
-        UA_DateTime raw_date = *(UA_DateTime *) value.data;
+        UA_DateTime raw_date = *(UA_DateTime *)value.data;
         UA_DateTimeStruct dts = UA_DateTime_toStruct(raw_date);
         UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND, "date is: %u-%u-%u %u:%u:%u.%03u\n",
                     dts.day, dts.month, dts.year, dts.hour, dts.min, dts.sec, dts.milliSec);
