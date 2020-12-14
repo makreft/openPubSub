@@ -39,16 +39,20 @@ set( Sources
 add_library( openPubSub STATIC ${Sources} )
 
 add_executable( playground
-        ${CMAKE_CURRENT_SOURCE_DIR}/playground.cpp )
+    examples/playground.cpp)
 add_executable( client
-        ${CMAKE_CURRENT_SOURCE_DIR}/client.cpp )
+    examples/client.cpp)
 add_executable( pubsub
-        ${CMAKE_CURRENT_SOURCE_DIR}/pubsub.cpp)
+    examples/pubsub.cpp)
 add_executable( sub
-    ${CMAKE_CURRENT_SOURCE_DIR}/sub.cpp)
+    examples/sub.cpp)
+add_executable(helloWorld
+    examples/helloWorld.cpp
+)
 
 target_link_libraries( openPubSub PUBLIC open62541 )
 target_link_libraries( playground PUBLIC openPubSub )
 target_link_libraries( client     PUBLIC openPubSub )
 target_link_libraries( pubsub     PUBLIC openPubSub )
 target_link_libraries( sub        PUBLIC openPubSub )
+target_link_libraries( helloWorld PUBLIC open62541 )
