@@ -10,8 +10,6 @@ extern "C" {
 #include <open62541/plugin/log.h>
 #include <open62541/plugin/log_stdout.h>
 #include <open62541/server_pubsub.h>
-#include <open62541/types_generated.h>
-#include <open62541/types.h>
 #if defined (__cplusplus)
 }
 #endif
@@ -20,39 +18,40 @@ extern "C" {
 // C++ standard lib
 #include <memory>
 #include <cstring>
+#include "util.h"
 
 namespace openPubSub
 {
-    struct string
-    {
-        string();
-        ~string();
-
-        string(const char *str);
-        explicit string(const std::string &str);
-        explicit string(const ::UA_String *str);
-
-        ::UA_String *String;
-        explicit operator std::string() const;
-        bool operator==(const string &rhs) const;
-        bool operator!=(const string &rhs) const;
-    };
-
-    struct ua_exception : public std::exception
-    {
-
-        UA_StatusCode code;
-
-        explicit ua_exception(UA_StatusCode returnCode)
-        {
-            code = returnCode;
-        }
-
-        const char * what() const throw() override
-        {
-            return UA_StatusCode_name(code);
-        }
-    };
+//    struct string
+//    {
+//        string();
+//        ~string();
+//
+//        string(const char *str);
+//        explicit string(const std::string &str);
+//        explicit string(const ::UA_String *str);
+//
+//        ::UA_String *String;
+//        explicit operator std::string() const;
+//        bool operator==(const string &rhs) const;
+//        bool operator!=(const string &rhs) const;
+//    };
+//
+//    struct ua_exception : public std::exception
+//    {
+//
+//        UA_StatusCode code;
+//
+//        explicit ua_exception(UA_StatusCode returnCode)
+//        {
+//            code = returnCode;
+//        }
+//
+//        const char * what() const throw() override
+//        {
+//            return UA_StatusCode_name(code);
+//        }
+//    };
 
     /// The Server expects that all configurations are done during initialization.
     /// As soon as the run() method is called, the server cannot be modified.
@@ -129,6 +128,12 @@ namespace openPubSub
         std::string m_networkUrl;
     };
     void init(Server &server);
+
+    class Client
+    {
+    private:
+    public:
+    };
 }
 
 #endif // OPENPUBSUB_H

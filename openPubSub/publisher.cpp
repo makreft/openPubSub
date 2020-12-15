@@ -1,7 +1,8 @@
-#include "openPubSub.h"
+#include "publisher.h"
 
 namespace openPubSub
 {
+
     Server *p_server;
 
     static void stopHandler()
@@ -143,40 +144,4 @@ namespace openPubSub
         m_networkUrl = networkAddressUrl;
     }
 
-//openPubSub::string definitions from here
-    string::string()
-    {
-        String = UA_String_new();
-        UA_String_init(String);
-    }
-    string::string(const char *str)
-        : string()
-    {
-        *String = UA_STRING_ALLOC(str);
-    }
-    string::string(const std::string &str)
-        : string(str.c_str())
-    {    }
-    string::string(const ::UA_String *str)
-        : string()
-    {
-        UA_String_copy(str, String);
-    }
-    string::~string() {
-        UA_String_deleteMembers(String);
-        UA_String_delete(String);
-    }
-    string::operator std::string() const {
-        if (String->data == nullptr)
-            return std::string();
-        else
-            return std::string(String->data, String->data + String->length);
-    }
-    bool string::operator==(const string &rhs) const
-    {
-        return UA_String_equal(String, rhs.String);
-    }
-    bool string::operator!=(const string &rhs) const {
-        return !(rhs == *this);
-    }
 }

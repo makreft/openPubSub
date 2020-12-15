@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "../openPubSub/openPubSub.h"
+#include "../openPubSub/publisher.h"
 #include <thread>
 #include <open62541/types.h>
 
