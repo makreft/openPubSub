@@ -35,5 +35,6 @@ script:
   - mkdir build
   - cd build
   - cmake ..
+  - cat /home/travis/build/makreft/openPubSub/build/CMakeFiles/CMakeOutput.log
   - cmake --build . -- -j2
   - ./test/openPubSubTests
