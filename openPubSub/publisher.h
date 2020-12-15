@@ -33,7 +33,6 @@ namespace openPubSub
     {
     private:
         /// @param m_running is the Server running?.
-        UA_Boolean m_running;
 
         UA_NodeId m_connectionID;
         UA_NodeId m_publishedDataSetID;
@@ -47,6 +46,7 @@ namespace openPubSub
         std::string m_transportUri;
         std::string m_networkUrl;
     public:
+        // should mp_server and mp_config be private?
         /// Member pointer of the server.
         UA_Server *mp_server;
         /// Member pointer of the server config.

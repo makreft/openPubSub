@@ -51,7 +51,7 @@ add_executable(helloWorld
 
 target_link_libraries( openPubSub PUBLIC open62541 )
 target_link_libraries( playground PUBLIC openPubSub )
-target_link_libraries( client     PUBLIC subscriber )
+target_link_libraries( client     PUBLIC openPubSub )
 target_link_libraries( pubsub     PUBLIC openPubSub )
 target_link_libraries( sub        PUBLIC openPubSub )
 target_link_libraries( helloWorld PUBLIC open62541 )

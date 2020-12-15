@@ -31,7 +31,11 @@ namespace openPubSub
         explicit string(const ::UA_String *str);
         ~string();
 
-        ::UA_String *String;
+        ///@param value it might not seem obvious why we chose value to hold
+        ///the string. But when thinking about a use case of it, it seems more
+        ///pleasant to write: string str.value, instead of: string str.String or
+        ///even worse: string str.ua_string.
+        ::UA_String *value;
 
         explicit operator std::string() const;
         bool operator==(const string &rhs) const;
