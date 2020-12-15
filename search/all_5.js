@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['_7eserver_11',['~Server',['../classopenPubSub_1_1Server.html#a0b95c1c00b64392192271f5888582027',1,'openPubSub::Server']]]
+  ['ua_5fexception_11',['ua_exception',['../classopenPubSub_1_1ua__exception.html',1,'openPubSub']]]
 ];

@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['ua_5fexception_14',['ua_exception',['../structopenPubSub_1_1ua__exception.html',1,'openPubSub']]]
+  ['server_14',['Server',['../classopenPubSub_1_1Server.html',1,'openPubSub']]],
+  ['string_15',['string',['../structopenPubSub_1_1string.html',1,'openPubSub']]]
 ];
