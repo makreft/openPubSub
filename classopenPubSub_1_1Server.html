@@ -110,6 +110,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>addDataSetWriter</b> 
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classopenPubSub_1_1Server.html#a40f7704fa24578228be68aafee6a20e3">run</a> ()</td></tr>
 <tr class="memdesc:a40f7704fa24578228be68aafee6a20e3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Call <a class="el" href="classopenPubSub_1_1Server.html#a40f7704fa24578228be68aafee6a20e3" title="Call run() at after everything is configured.">run()</a> at after everything is configured. <br /></td></tr>
 <tr class="separator:a40f7704fa24578228be68aafee6a20e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1164a33e4c0bfb376ee612a72f3e71ea"><td class="memItemLeft" align="right" valign="top"><a id="a1164a33e4c0bfb376ee612a72f3e71ea"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>isRunning</b> ()</td></tr>
+<tr class="separator:a1164a33e4c0bfb376ee612a72f3e71ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -121,10 +124,6 @@ UA_Server *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 UA_ServerConfig *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classopenPubSub_1_1Server.html#a1a69f188e4da1c3d393631e220560d0e">mp_config</a></td></tr>
 <tr class="memdesc:a1a69f188e4da1c3d393631e220560d0e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Member pointer of the server config. <br /></td></tr>
 <tr class="separator:a1a69f188e4da1c3d393631e220560d0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a42db7f7cabc287773e2a2d4963fdb250"><td class="memItemLeft" align="right" valign="top"><a id="a42db7f7cabc287773e2a2d4963fdb250"></a>
-UA_Boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classopenPubSub_1_1Server.html#a42db7f7cabc287773e2a2d4963fdb250">mp_running</a></td></tr>
-<tr class="memdesc:a42db7f7cabc287773e2a2d4963fdb250"><td class="mdescLeft">&#160;</td><td class="mdescRight">Member pointer holding the state, if the server is running. <br /></td></tr>
-<tr class="separator:a42db7f7cabc287773e2a2d4963fdb250"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The <a class="el" href="classopenPubSub_1_1Server.html">Server</a> expects that all configurations are done during initialization. As soon as the <a class="el" href="classopenPubSub_1_1Server.html#a40f7704fa24578228be68aafee6a20e3" title="Call run() at after everything is configured.">run()</a> method is called, the server cannot be modified. Steps for configuration (taken from the open62541 documentation):</p><ol type="1">
