@@ -1,7 +1,8 @@
-#include "openPubSub.h"
+#include "publisher.h"
 
 namespace openPubSub
 {
+
     Server *p_server;
 
     static void stopHandler()
@@ -17,7 +18,7 @@ namespace openPubSub
     }
 
     Server::Server(string transportLayer)
-    :mp_running(true)
+    :m_running(true)
     {
         mp_server = UA_Server_new();
         mp_config = UA_Server_getConfig(mp_server);
@@ -42,7 +43,7 @@ namespace openPubSub
 
     void Server::run()
     {
-        UA_StatusCode retVal = UA_Server_run(mp_server, &mp_running);
+        UA_StatusCode retVal = UA_Server_run(mp_server, &m_running);
         if (retVal != UA_STATUSCODE_GOOD)
             throw ua_exception(retVal);
     }
@@ -50,7 +51,7 @@ namespace openPubSub
     void Server::stopServer()
     {
         UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_SERVER, "received ctrl-c");
-        mp_running = false;
+        m_running = false;
     }
 
     void Server::addPubSubConnection(string nameOfPubSubConnection)
@@ -133,50 +134,22 @@ namespace openPubSub
                                    &m_dataSetWriterID);
     }
 
-    void Server::setTransportProfileUri(std::string transportProfileUri)
+    void Server::setTransportProfileUri(const std::string &transportProfileUri)
     {
         m_transportUri = transportProfileUri;
     }
 
-    void Server::setNetworkAddressUrl(std::string networkAddressUrl)
+    void Server::setNetworkAddressUrl(const std::string &networkAddressUrl)
     {
         m_networkUrl = networkAddressUrl;
     }
 
-//openPubSub::string definitions from here
-    string::string()
+    bool Server::isRunning()
     {
-        String = UA_String_new();
-        UA_String_init(String);
-    }
-    string::string(const char *str)
-        : string()
-    {
-        *String = UA_STRING_ALLOC(str);
-    }
-    string::string(const std::string &str)
-        : string(str.c_str())
-    {    }
-    string::string(const ::UA_String *str)
-        : string()
-    {
-        UA_String_copy(str, String);
-    }
-    string::~string() {
-        UA_String_deleteMembers(String);
-        UA_String_delete(String);
-    }
-    string::operator std::string() const {
-        if (String->data == nullptr)
-            return std::string();
+        if (m_running)
+            return true;
         else
-            return std::string(String->data, String->data + String->length);
+            return false;
     }
-    bool string::operator==(const string &rhs) const
-    {
-        return UA_String_equal(String, rhs.String);
-    }
-    bool string::operator!=(const string &rhs) const {
-        return !(rhs == *this);
-    }
+
 }

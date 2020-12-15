@@ -11,7 +11,7 @@ set( CMAKE_CXX_STANDARD 17 )
 set( CMAKE_C_STANDARD 99 )
 
 # assuming that open62541 has bin installed to $ENV{HOME}/install/
-set( CMAKE_PREFIX_PATH $ENV{HOME}/install/open62541/ )
+set( CMAKE_PREFIX_PATH $ENV{HOME}/install/open62541 )
 
 # CMAKE_POSITION_INDEPENDENT_CODE is nice to have for mixing libraries
 set( CMAKE_POSITION_INDEPENDENT_CODE ON )
@@ -32,9 +32,8 @@ if ( BUILD_TESTS )
     add_subdirectory( test )
 endif()
 
-
 set( Sources
-    openPubSub/openPubSub.cpp )
+    openPubSub/publisher.cpp openPubSub/util.h openPubSub/util.cpp openPubSub/subscriber.cpp)
 
 add_library( openPubSub STATIC ${Sources} )
 
@@ -48,11 +47,11 @@ add_executable( sub
     examples/sub.cpp)
 add_executable(helloWorld
     examples/helloWorld.cpp
-)
+    )
 
 target_link_libraries( openPubSub PUBLIC open62541 )
 target_link_libraries( playground PUBLIC openPubSub )
-target_link_libraries( client     PUBLIC openPubSub )
+target_link_libraries( client     PUBLIC subscriber )
 target_link_libraries( pubsub     PUBLIC openPubSub )
 target_link_libraries( sub        PUBLIC openPubSub )
 target_link_libraries( helloWorld PUBLIC open62541 )

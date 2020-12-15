@@ -1,12 +1,9 @@
-#include "../openPubSub/openPubSub.h"
-#include <open62541/plugin/log_stdout.h>
-#include <open62541/types.h>
+#include "../openPubSub/publisher.h"
 
 
 int main()
 {
     openPubSub::string test = "test";
-
     openPubSub::Server serv("UDP");
     openPubSub::init(serv);
     serv.addPubSubConnection("my PubSub Connection");
