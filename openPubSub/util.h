@@ -1,7 +1,6 @@
 #include <string>
 #include <open62541/types_generated.h>
 #include <open62541/types.h>
-
 #ifndef OPENPUBSUB_UTIL_H
 #define OPENPUBSUB_UTIL_H
 

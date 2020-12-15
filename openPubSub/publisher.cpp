@@ -18,7 +18,7 @@ namespace openPubSub
     }
 
     Server::Server(string transportLayer)
-    :mp_running(true)
+    :m_running(true)
     {
         mp_server = UA_Server_new();
         mp_config = UA_Server_getConfig(mp_server);
@@ -43,7 +43,7 @@ namespace openPubSub
 
     void Server::run()
     {
-        UA_StatusCode retVal = UA_Server_run(mp_server, &mp_running);
+        UA_StatusCode retVal = UA_Server_run(mp_server, &m_running);
         if (retVal != UA_STATUSCODE_GOOD)
             throw ua_exception(retVal);
     }
@@ -51,7 +51,7 @@ namespace openPubSub
     void Server::stopServer()
     {
         UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_SERVER, "received ctrl-c");
-        mp_running = false;
+        m_running = false;
     }
 
     void Server::addPubSubConnection(string nameOfPubSubConnection)
@@ -142,6 +142,14 @@ namespace openPubSub
     void Server::setNetworkAddressUrl(const std::string &networkAddressUrl)
     {
         m_networkUrl = networkAddressUrl;
+    }
+
+    bool Server::isRunning()
+    {
+        if (m_running)
+            return true;
+        else
+            return false;
     }
 
 }

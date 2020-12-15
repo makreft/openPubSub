@@ -2,6 +2,7 @@
 #include <string>
 #include <open62541/types_generated_handling.h>
 
+
     openPubSub::string::string()
     {
         String = UA_String_new();

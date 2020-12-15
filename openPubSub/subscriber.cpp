@@ -1,4 +1,12 @@
-//
-// Created by marco on 15.12.20.
-//
+#include "subscriber.h"
 
+openPubSub::Client::Client()
+:m_running(true){}
+
+bool openPubSub::Client::isRunning()
+{
+    if (m_running)
+        return true;
+    else
+        return false;
+}

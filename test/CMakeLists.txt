@@ -3,8 +3,8 @@ cmake_minimum_required(VERSION 3.9.2)
 set(This openPubSubTests)
 
 set(Sources
-    openPubSubTests.cpp
-)
+    publisherTests.cpp
+    subscriberTests.cpp)
 
 find_library(openPubSub REQUIRED)
 
