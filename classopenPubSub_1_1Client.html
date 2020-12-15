@@ -67,6 +67,7 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="classopenPubSub_1_1Client-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">openPubSub::Client Class Reference</div>  </div>
@@ -78,10 +79,27 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a0e6a4f07d59d78333ab3f81381ef7f5f"><td class="memItemLeft" align="right" valign="top"><a id="a0e6a4f07d59d78333ab3f81381ef7f5f"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>isRunning</b> ()</td></tr>
 <tr class="separator:a0e6a4f07d59d78333ab3f81381ef7f5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3c0f6418548a0532e2cfbd377e8544f2"><td class="memItemLeft" align="right" valign="top"><a id="a3c0f6418548a0532e2cfbd377e8544f2"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>stopClient</b> ()</td></tr>
+<tr class="separator:a3c0f6418548a0532e2cfbd377e8544f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac5e90a63db2b485b25ae3575b25c3082"><td class="memItemLeft" align="right" valign="top"><a id="ac5e90a63db2b485b25ae3575b25c3082"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>configPSConnection</b> (const string &amp;nameOfConnection=&quot;0815-Connection&quot;, const string &amp;url=&quot;opc.udp://127.0.0.1:4840/&quot;)</td></tr>
+<tr class="separator:ac5e90a63db2b485b25ae3575b25c3082"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac7e817c729950f6ee05c4e9cd080e87d"><td class="memItemLeft" align="right" valign="top"><a id="ac7e817c729950f6ee05c4e9cd080e87d"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>addPubSubTransportLayer</b> (UA_PubSubTransportLayer transportLayer)</td></tr>
+<tr class="separator:ac7e817c729950f6ee05c4e9cd080e87d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5fecee03df31cc15f340c14700b4929a"><td class="memItemLeft" align="right" valign="top"><a id="a5fecee03df31cc15f340c14700b4929a"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setTransportLayer</b> ()</td></tr>
+<tr class="separator:a5fecee03df31cc15f340c14700b4929a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a3048a11eefcbe8be099f0220c7d1d5b1"><td class="memItemLeft" align="right" valign="top"><a id="a3048a11eefcbe8be099f0220c7d1d5b1"></a>
+static UA_StatusCode&#160;</td><td class="memItemRight" valign="bottom"><b>subscriberListens</b> (UA_PubSubChannel *psc)</td></tr>
+<tr class="separator:a3048a11eefcbe8be099f0220c7d1d5b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<hr/>The documentation for this class was generated from the following files:<ul>
+<hr/>The documentation for this class was generated from the following file:<ul>
 <li>/Users/runner/work/openPubSub/openPubSub/openPubSub/subscriber.h</li>
-<li>/Users/runner/work/openPubSub/openPubSub/openPubSub/subscriber.cpp</li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
