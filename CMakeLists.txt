@@ -33,25 +33,30 @@ if ( BUILD_TESTS )
 endif()
 
 set( Sources
-    openPubSub/publisher.cpp openPubSub/util.h openPubSub/util.cpp openPubSub/subscriber.cpp)
+    openPubSub/server.cpp openPubSub/util.cpp openPubSub/client.cpp)
 
 add_library( openPubSub STATIC ${Sources} )
 
-add_executable( playground
-    examples/playground.cpp)
-add_executable( client
-    examples/client.cpp)
+add_executable( tutorial_connection
+    examples/tutorial_pubsub_connection.c )
+add_executable( server_playground
+    examples/server_playground.cpp)
+add_executable( client_playground
+    examples/client_playground.cpp)
+add_executable( client_playgroundII
+    examples/client_playgroundII.cpp)
 add_executable( pubsub
-    examples/pubsub.cpp)
+    examples/pubsub.cpp )
 add_executable( sub
-    examples/sub.cpp)
+    examples/sub.cpp )
 add_executable(helloWorld
-    examples/helloWorld.cpp
-    )
+    examples/helloWorld.cpp )
 
-target_link_libraries( openPubSub PUBLIC open62541 )
-target_link_libraries( playground PUBLIC openPubSub )
-target_link_libraries( client     PUBLIC openPubSub )
-target_link_libraries( pubsub     PUBLIC openPubSub )
-target_link_libraries( sub        PUBLIC openPubSub )
-target_link_libraries( helloWorld PUBLIC open62541 )
+target_link_libraries( tutorial_connection  PUBLIC open62541 )
+target_link_libraries( openPubSub           PUBLIC open62541 )
+target_link_libraries( server_playground    PUBLIC openPubSub )
+target_link_libraries( client_playground    PUBLIC openPubSub )
+target_link_libraries( client_playgroundII  PUBLIC openPubSub )
+target_link_libraries( pubsub               PUBLIC openPubSub )
+target_link_libraries( sub                  PUBLIC openPubSub )
+target_link_libraries( helloWorld           PUBLIC open62541 )

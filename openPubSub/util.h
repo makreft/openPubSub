@@ -1,12 +1,23 @@
-#include <string>
-#include <open62541/types_generated.h>
-#include <open62541/types.h>
 #ifndef OPENPUBSUB_UTIL_H
 #define OPENPUBSUB_UTIL_H
 
+#include <string>
+#include <open62541/types_generated.h>
+#include <open62541/types.h>
+
+
+    struct initialize
+    {
+        void stop();
+        void init();
+    protected:
+        static void stopHandler();
+        UA_Boolean _running;
+        initialize() = default;
+    };
+
 namespace openPubSub
 {
-
     class ua_exception : public std::exception
     {
     public:
@@ -41,7 +52,6 @@ namespace openPubSub
         bool operator==(const string &rhs) const;
         bool operator!=(const string &rhs) const;
     };
-
 }
 
 

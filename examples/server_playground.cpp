@@ -1,11 +1,11 @@
-#include "../openPubSub/publisher.h"
+#include "../openPubSub/server.h"
 
 
 int main()
 {
     openPubSub::string test = "test";
     openPubSub::Server serv("UDP");
-    openPubSub::init(serv);
+    serv.init();
     serv.addPubSubConnection("my PubSub Connection");
     serv.addPublishedDataSet("My PDS");
     serv.addDataSetField("test");

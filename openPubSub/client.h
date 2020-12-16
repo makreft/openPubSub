@@ -1,30 +1,37 @@
-#ifndef OPENPUBSUB_SUBSCRIBERTESTS_H
-#define OPENPUBSUB_SUBSCRIBERTESTS_H
-//#include <open62541/server.h>
-#include "util.h"
+#ifndef OPENPUBSUB_CLIENT_H
+#define OPENPUBSUB_CLIENT_H
+
+#include <open62541/client.h>
+#include <open62541/client_config_default.h>
+#include <open62541/client_highlevel.h>
+#include <open62541/client_subscriptions.h>
 #include <open62541/plugin/log_stdout.h>
 #include <open62541/plugin/pubsub.h>
+#include <open62541/plugin/pubsub_ethernet.h>
 #include <open62541/plugin/pubsub_udp.h>
-#include <open62541/client.h>
+
+// openPubSub
+#include "util.h"
 
 namespace openPubSub
 {
 
-class Client
+class Client : public initialize
 {
 private:
 
-    UA_Client *mp_client;
-    UA_ClientConfig mp_config;
     UA_PubSubConnectionConfig mp_pubSubConfig;
     UA_NetworkAddressDataType mp_networkAddressURL;
     UA_PubSubChannel *mp_pubSubChannel;
+    UA_Boolean _running;
 
 public:
 
     // should mp_client and mp_config be private?
+    UA_Client *mp_client;
+    UA_ClientConfig mp_config;
 
-    Client();
+    explicit Client();
     ~Client();
     bool isRunning();
 
@@ -52,6 +59,32 @@ public:
         mp_pubSubChannel->regist(mp_pubSubChannel, NULL, NULL);
     }
 
+    /* Provides default values for a new subscription.
+     * RequestedPublishingInterval:  500.0 [ms]
+     * RequestedLifetimeCount: 10000
+     * RequestedMaxKeepAliveCount: 10
+     * MaxNotificationsPerPublish: 0 (unlimited)
+     * PublishingEnabled: true
+     * Priority: 0 */
+    static UA_INLINE UA_CreateSubscriptionRequest
+    UA_CreateSubscriptionRequest_default(void) {
+        UA_CreateSubscriptionRequest request;
+        UA_CreateSubscriptionRequest_init(&request);
+
+        request.requestedPublishingInterval = 500.0;
+        request.requestedLifetimeCount = 10000;
+        request.requestedMaxKeepAliveCount = 10;
+        request.maxNotificationsPerPublish = 0;
+        request.publishingEnabled = true;
+        request.priority = 0;
+        return request;
+    }
+    UA_CreateSubscriptionResponse
+    UA_Client_Subscriptions_create(UA_Client *client,
+                                   const UA_CreateSubscriptionRequest request,
+                                   void *subscriptionContext,
+                                   UA_Client_StatusChangeNotificationCallback statusChangeCallback,
+                                   UA_Client_DeleteSubscriptionCallback deleteCallback);
 
     static UA_StatusCode subscriberListens(UA_PubSubChannel *psc) {
         UA_ByteString buffer;
@@ -79,7 +112,4 @@ public:
 };
 
 }
-
-
-
-#endif //OPENPUBSUB_SUBSCRIBERTESTS_H
+#endif // OPENPUBSUB_CLIENT_H

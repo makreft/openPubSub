@@ -1,23 +1,24 @@
-#ifndef OPENPUBSUB_H
-#define OPENPUBSUB_H
-#if defined (__cplusplus)
-extern "C" {
-#endif
-#include <open62541/server.h>
-#include <open62541/server_config_default.h>
-#include <open62541/plugin/pubsub.h>
-#include <open62541/plugin/pubsub_udp.h>
+#ifndef OPENPUBSUB_SERVER_H
+#define OPENPUBSUB_SERVER_H
+
+// open62541
 #include <open62541/plugin/log.h>
 #include <open62541/plugin/log_stdout.h>
+#include <open62541/plugin/pubsub.h>
+#include <open62541/plugin/pubsub_udp.h>
+#include <open62541/server.h>
+#include <open62541/server_config_default.h>
 #include <open62541/server_pubsub.h>
-#if defined (__cplusplus)
-}
-#endif
+
+// C standard lib
 #include <signal.h>
 #include <stdio.h>
+
 // C++ standard lib
-#include <memory>
 #include <cstring>
+#include <memory>
+
+// openPubSub
 #include "util.h"
 
 namespace openPubSub
@@ -29,7 +30,7 @@ namespace openPubSub
     /// 2. Modify the configuration, e.g. by adding a server certificate.
     /// 3. Instantiate a server with it.
     /// 4. After shutdown of the server, clean up the configuration (free memory)
-    class Server
+    class Server : public initialize
     {
     private:
         /// @param m_running is the Server running?.
@@ -60,7 +61,6 @@ namespace openPubSub
         /// calls UA_Server_delete and frees the memory allocated on the heap
         /// for m_transportUri, m_networkUrl.
         ~Server();
-        void stopServer();
         void addPubSubConnection(string nameOfPubSubConnection);
         /// @param nameOfPublishedDS
         /// Name of the Published DataSet.
@@ -94,13 +94,11 @@ namespace openPubSub
         void setNetworkAddressUrl(const std::string &networkAddressUrl = \
                 "opc.udp://127.0.0.1:4840/");
 
-        /// Call run() at after everything is configured.
+        /// Call run() after everything is configured.
         void run();
         bool isRunning();
 
     };
-    void init(Server &server);
-
 }
 
-#endif // OPENPUBSUB_H
+#endif // OPENPUBSUB_SERVER_H

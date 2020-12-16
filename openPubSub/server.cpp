@@ -1,23 +1,7 @@
-#include "publisher.h"
+#include "server.h"
 
 namespace openPubSub
 {
-
-    Server *_server;
-    UA_Boolean _running;
-
-    static void stopHandler()
-    {
-        _server->stopServer();
-    }
-
-    void init(Server &server)
-    {
-        _server = &server;
-        signal(SIGINT, reinterpret_cast<__sighandler_t>(stopHandler));
-        signal(SIGTERM, reinterpret_cast<__sighandler_t>(stopHandler));
-    }
-
     Server::Server(string transportLayer)
     {
         _running=UA_TRUE;
@@ -36,25 +20,16 @@ namespace openPubSub
             this->addPubSubTransportLayer(UA_PubSubTransportLayerUDPMP());
         }
     }
-
     Server::~Server()
     {
         UA_Server_delete(mp_server);
     }
-
     void Server::run()
     {
         UA_StatusCode retVal = UA_Server_run(mp_server, &_running);
         if (retVal != UA_STATUSCODE_GOOD)
             throw ua_exception(retVal);
     }
-
-    void Server::stopServer()
-    {
-        UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_SERVER, "received ctrl-c");
-        _running = false;
-    }
-
     void Server::addPubSubConnection(string nameOfPubSubConnection)
     {
         UA_PubSubConnectionConfig connectionConfig;
@@ -71,7 +46,6 @@ namespace openPubSub
         UA_Server_addPubSubConnection(mp_server, &connectionConfig,
                                       &m_connectionID);
     }
-
     void Server::addPublishedDataSet(string nameOfPublishedDS)
     {
         UA_PublishedDataSetConfig publishedDataSetConfig;
@@ -82,7 +56,6 @@ namespace openPubSub
         UA_Server_addPublishedDataSet(mp_server, &publishedDataSetConfig,
                                       &m_publishedDataSetID);
     }
-
     void Server::addDataSetField(string nameOfDSField)
     {
         UA_DataSetFieldConfig dataSetFieldConfig;
@@ -98,7 +71,6 @@ namespace openPubSub
                                   &dataSetFieldConfig,
                                   &m_dataSetFieldID);
     }
-
     void Server::addWriterGroup(string nameOfWriterGroup)
     {
         memset(&m_writerGroupConfig, 0, sizeof(UA_WriterGroupConfig));
@@ -123,7 +95,6 @@ namespace openPubSub
         UA_Server_setWriterGroupOperational(mp_server, m_writerGroupID);
         UA_UadpWriterGroupMessageDataType_delete(writerGroupMessage);
     }
-
     void Server::addDataSetWriter(string nameOfDSWriter)
     {
         memset(&m_dataSetWriterConfig, 0, sizeof(UA_DataSetWriterConfig));
@@ -134,17 +105,14 @@ namespace openPubSub
                                    m_publishedDataSetID, &m_dataSetWriterConfig,
                                    &m_dataSetWriterID);
     }
-
     void Server::setTransportProfileUri(const std::string &transportProfileUri)
     {
         m_transportUri = transportProfileUri;
     }
-
     void Server::setNetworkAddressUrl(const std::string &networkAddressUrl)
     {
         m_networkUrl = networkAddressUrl;
     }
-
     bool Server::isRunning()
     {
         if (_running)
@@ -152,5 +120,4 @@ namespace openPubSub
         else
             return false;
     }
-
 }

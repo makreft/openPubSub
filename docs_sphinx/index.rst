@@ -25,6 +25,6 @@ Table of Contents
     :maxdepth: 3
 
 
-    openPubSub/subscriber
     openPubSub/publisher
+    openPubSub/subscriber
 
