@@ -5,17 +5,6 @@
 #include <open62541/types_generated.h>
 #include <open62541/types.h>
 
-
-    struct initialize
-    {
-        void stop();
-        void init();
-    protected:
-        static void stopHandler();
-        UA_Boolean _running;
-        initialize() = default;
-    };
-
 namespace openPubSub
 {
     class ua_exception : public std::exception
@@ -53,6 +42,5 @@ namespace openPubSub
         bool operator!=(const string &rhs) const;
     };
 }
-
 
 #endif //OPENPUBSUB_UTIL_H

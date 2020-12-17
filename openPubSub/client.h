@@ -16,7 +16,7 @@
 namespace openPubSub
 {
 
-class Client : public initialize
+class Client
 {
 private:
 

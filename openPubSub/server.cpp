@@ -2,6 +2,25 @@
 
 namespace openPubSub
 {
+    Server *_server;
+    UA_Boolean _running;
+
+    static void stopHandler()
+    {
+        _server->stopServer();
+    }
+
+    void init(Server &server)
+    {
+        _server = &server;
+        signal(SIGINT, reinterpret_cast<__sighandler_t>(stopHandler));
+        signal(SIGTERM, reinterpret_cast<__sighandler_t>(stopHandler));
+    }
+    void Server::stopServer()
+    {
+        UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_SERVER, "received ctrl-c");
+        _running = false;
+    }
     Server::Server(string transportLayer)
     {
         _running=UA_TRUE;

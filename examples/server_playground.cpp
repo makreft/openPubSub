@@ -1,11 +1,13 @@
 #include "../openPubSub/server.h"
-
+#include <vector>
 
 int main()
 {
-    openPubSub::string test = "test";
+    openPubSub::string teststr = "test";
     openPubSub::Server serv("UDP");
-    serv.init();
+    openPubSub::init(serv);
+    std::vector<openPubSub::Server> test;
+
     serv.addPubSubConnection("my PubSub Connection");
     serv.addPublishedDataSet("My PDS");
     serv.addDataSetField("test");

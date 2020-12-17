@@ -30,10 +30,9 @@ namespace openPubSub
     /// 2. Modify the configuration, e.g. by adding a server certificate.
     /// 3. Instantiate a server with it.
     /// 4. After shutdown of the server, clean up the configuration (free memory)
-    class Server : public initialize
+    class Server
     {
     private:
-        /// @param m_running is the Server running?.
 
         UA_NodeId m_connectionID;
         UA_NodeId m_publishedDataSetID;
@@ -61,6 +60,7 @@ namespace openPubSub
         /// calls UA_Server_delete and frees the memory allocated on the heap
         /// for m_transportUri, m_networkUrl.
         ~Server();
+        void stopServer();
         void addPubSubConnection(string nameOfPubSubConnection);
         /// @param nameOfPublishedDS
         /// Name of the Published DataSet.
@@ -97,8 +97,8 @@ namespace openPubSub
         /// Call run() after everything is configured.
         void run();
         bool isRunning();
-
     };
+    void init(Server &server);
 }
 
 #endif // OPENPUBSUB_SERVER_H
