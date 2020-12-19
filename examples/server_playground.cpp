@@ -5,7 +5,8 @@ int main()
 {
     openPubSub::string teststr = "test";
     openPubSub::Server serv("UDP");
-    openPubSub::init(serv);
+    openPubSub::initServer(serv);
+    //obs::init<obs::Server> server;
     std::vector<openPubSub::Server> test;
 
     serv.addPubSubConnection("my PubSub Connection");
@@ -19,5 +20,10 @@ int main()
     serv.addPubSubConnection("my other connection");
     serv.addPublishedDataSet("My other PDS");
     serv.addDataSetField("My DSF");
+    //====================
+    //cyclisch bind data to topic
+    //serv.publish("mytopic", nodePub);
+    ////=====
+    //serv.subscribe("mytopic", nodeSub)
     serv.run();
 }

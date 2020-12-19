@@ -1,5 +1,4 @@
 #include "../openPubSub/client.h"
-#include "../openPubSub/server.h"
 #include <iostream>
 //#include <iostream>
 //
@@ -124,9 +123,8 @@ stateCallback(UA_Client *client, UA_SecureChannelState channelState,
 int
 main(void) {
     openPubSub::Client client;
-    client.init();
+    openPubSub::initClient(client);
     std::cout << "debbugging";
-    client.stop();
     //signal(SIGINT, stopHandler); /* catches ctrl-c */
 
     //UA_Client *client = UA_Client_new();

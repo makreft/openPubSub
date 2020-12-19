@@ -2,15 +2,17 @@
 
 namespace openPubSub
 {
-    Server *_server;
-    UA_Boolean _running;
+    namespace {
+        Server *_server;
+        UA_Boolean _running;
+    }
 
     static void stopHandler()
     {
         _server->stopServer();
     }
 
-    void init(Server &server)
+    void initServer(Server &server)
     {
         _server = &server;
         signal(SIGINT, reinterpret_cast<__sighandler_t>(stopHandler));

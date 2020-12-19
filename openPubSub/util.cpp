@@ -9,18 +9,18 @@ openPubSub::string::string()
 }
 
 openPubSub::string::string(const char *str)
-    : string()
+: string()
 {
     *value = UA_STRING_ALLOC(str);
 }
 
 openPubSub::string::string(const std::string &str)
-    : string(str.c_str())
+: string(str.c_str())
 {
 }
 
 openPubSub::string::string(const ::UA_String *str)
-    : string()
+: string()
 {
     UA_String_copy(str, value);
 }

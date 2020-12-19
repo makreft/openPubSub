@@ -18,9 +18,10 @@
 #include <cstring>
 #include <memory>
 
-// openPubSub
+// ops
 #include "util.h"
 
+// ops = openPubSub?
 namespace openPubSub
 {
     /// The Server expects that all configurations are done during initialization.
@@ -74,8 +75,7 @@ namespace openPubSub
         /// @param T
         /// The method addPubSubTransportLayer is supposed to be used only
         /// when constructing the openPubSub::Server object
-        template<class T>
-        void addPubSubTransportLayer(const T transportLayer)
+        void addPubSubTransportLayer(const UA_PubSubTransportLayer transportLayer)
         {
             mp_config->pubsubTransportLayers = \
                     (UA_PubSubTransportLayer *)UA_malloc(sizeof(UA_PubSubTransportLayer));
@@ -98,7 +98,7 @@ namespace openPubSub
         void run();
         bool isRunning();
     };
-    void init(Server &server);
+    void initServer(Server &server);
 }
 
 #endif // OPENPUBSUB_SERVER_H
