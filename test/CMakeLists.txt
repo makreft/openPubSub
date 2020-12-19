@@ -4,7 +4,7 @@ set(This openPubSubTests)
 
 set(Sources
     publisherTests.cpp
-    subscriberTests.cpp)
+    )
 
 find_library(openPubSub REQUIRED)
 

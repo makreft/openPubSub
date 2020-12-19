@@ -33,7 +33,7 @@ if ( BUILD_TESTS )
 endif()
 
 set( Sources
-    openPubSub/server.cpp openPubSub/util.cpp openPubSub/client.cpp)
+    openPubSub/server.cpp openPubSub/util.cpp )
 
 add_library( openPubSub STATIC ${Sources} )
 
@@ -41,22 +41,13 @@ add_executable( tutorial_connection
     examples/tutorial_pubsub_connection.c )
 add_executable( server_playground
     examples/server_playground.cpp)
-add_executable( client_playground
-    examples/client_playground.cpp)
-add_executable( client_playgroundII
-    examples/client_playgroundII.cpp)
 add_executable( pubsub
     examples/pubsub.cpp )
-add_executable( sub
-    examples/sub.cpp )
 add_executable(helloWorld
     examples/helloWorld.cpp )
 
 target_link_libraries( tutorial_connection  PUBLIC open62541 )
 target_link_libraries( openPubSub           PUBLIC open62541 )
 target_link_libraries( server_playground    PUBLIC openPubSub )
-target_link_libraries( client_playground    PUBLIC openPubSub )
-target_link_libraries( client_playgroundII  PUBLIC openPubSub )
 target_link_libraries( pubsub               PUBLIC openPubSub )
-target_link_libraries( sub                  PUBLIC openPubSub )
 target_link_libraries( helloWorld           PUBLIC open62541 )

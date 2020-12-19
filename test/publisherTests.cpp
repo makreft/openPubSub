@@ -16,7 +16,7 @@ TEST(openPubSubTests, checkIfServerIsConfigured)
 
 TEST(openPubSubTests, checkIfServerIsConfiguredWithDefault)
 {
-    //if UA_ServerConfig_setDefault(p_config) is called,
+    // if UA_ServerConfig_setDefault(p_config) is called,
     // endpointsSize must be greater than 0.
     EXPECT_TRUE(server.mp_config->endpointsSize > 0);
 }
@@ -24,4 +24,5 @@ TEST(openPubSubTests, checkIfServerIsConfiguredWithDefault)
 TEST(openPubSubTests, checkIfServerShutsDown)
 {
     server.stopServer();
+    EXPECT_FALSE(server.isRunning());
 }
