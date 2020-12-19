@@ -1,12 +1,12 @@
-#include <string>
-#include <open62541/types_generated.h>
-#include <open62541/types.h>
 #ifndef OPENPUBSUB_UTIL_H
 #define OPENPUBSUB_UTIL_H
 
+#include <string>
+#include <open62541/types_generated.h>
+#include <open62541/types.h>
+
 namespace openPubSub
 {
-
     class ua_exception : public std::exception
     {
     public:
@@ -31,14 +31,16 @@ namespace openPubSub
         explicit string(const ::UA_String *str);
         ~string();
 
-        ::UA_String *String;
+        ///@param value it might not seem obvious why we chose value to hold
+        ///the string. But when thinking about a use case of it, it seems more
+        ///pleasant to write: string str.value, instead of: string str.String or
+        ///even worse: string str.ua_string.
+        ::UA_String *value;
 
         explicit operator std::string() const;
         bool operator==(const string &rhs) const;
         bool operator!=(const string &rhs) const;
     };
-
 }
-
 
 #endif //OPENPUBSUB_UTIL_H

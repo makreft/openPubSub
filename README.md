@@ -15,7 +15,7 @@ path /home/user/install/open62541.
 ```bash
 > git clone https://github.com/makreft/openPubSub.git
 > cd openPubSub
-> git submodule update --init --recursive
+> git submodule update --initialize --recursive
 > cd external/open62541
 > mkdir build; cd build
 > cmake ..
@@ -84,7 +84,7 @@ error: "error while loading shared libraries: libmbedx509.so.1: cannot open
 int main()
 {
     openPubSub::Server serv;
-    openPubSub::init(serv);
+    openPubSub::initialize(serv);
     serv.run();
 }
 ```

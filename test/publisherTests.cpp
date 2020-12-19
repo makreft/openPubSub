@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "../openPubSub/publisher.h"
+#include "../openPubSub/server.h"
 
 openPubSub::Server server("UDP");
 
@@ -19,4 +19,9 @@ TEST(openPubSubTests, checkIfServerIsConfiguredWithDefault)
     //if UA_ServerConfig_setDefault(p_config) is called,
     // endpointsSize must be greater than 0.
     EXPECT_TRUE(server.mp_config->endpointsSize > 0);
+}
+
+TEST(openPubSubTests, checkIfServerShutsDown)
+{
+    server.stopServer();
 }

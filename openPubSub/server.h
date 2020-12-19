@@ -1,23 +1,24 @@
-#ifndef OPENPUBSUB_H
-#define OPENPUBSUB_H
-#if defined (__cplusplus)
-extern "C" {
-#endif
-#include <open62541/server.h>
-#include <open62541/server_config_default.h>
-#include <open62541/plugin/pubsub.h>
-#include <open62541/plugin/pubsub_udp.h>
+#ifndef OPENPUBSUB_SERVER_H
+#define OPENPUBSUB_SERVER_H
+
+// open62541
 #include <open62541/plugin/log.h>
 #include <open62541/plugin/log_stdout.h>
+#include <open62541/plugin/pubsub.h>
+#include <open62541/plugin/pubsub_udp.h>
+#include <open62541/server.h>
+#include <open62541/server_config_default.h>
 #include <open62541/server_pubsub.h>
-#if defined (__cplusplus)
-}
-#endif
+
+// C standard lib
 #include <signal.h>
 #include <stdio.h>
+
 // C++ standard lib
-#include <memory>
 #include <cstring>
+#include <memory>
+
+// openPubSub
 #include "util.h"
 
 namespace openPubSub
@@ -32,8 +33,6 @@ namespace openPubSub
     class Server
     {
     private:
-        /// @param m_running is the Server running?.
-        UA_Boolean m_running;
 
         UA_NodeId m_connectionID;
         UA_NodeId m_publishedDataSetID;
@@ -47,6 +46,7 @@ namespace openPubSub
         std::string m_transportUri;
         std::string m_networkUrl;
     public:
+        // should mp_server and mp_config be private?
         /// Member pointer of the server.
         UA_Server *mp_server;
         /// Member pointer of the server config.
@@ -94,13 +94,11 @@ namespace openPubSub
         void setNetworkAddressUrl(const std::string &networkAddressUrl = \
                 "opc.udp://127.0.0.1:4840/");
 
-        /// Call run() at after everything is configured.
+        /// Call run() after everything is configured.
         void run();
         bool isRunning();
-
     };
     void init(Server &server);
-
 }
 
-#endif // OPENPUBSUB_H
+#endif // OPENPUBSUB_SERVER_H
