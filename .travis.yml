@@ -1,6 +1,5 @@
-dist: trusty
-sudo: required
 language: cpp
+dist: bionic
 compiler: gcc-9
 addons:
   apt:
@@ -12,10 +11,10 @@ addons:
       - cmake
       - python3
       - python3-pip
-# Handle git submodules yourself
 git:
+    # Handle git submodules yourself
     submodules: false
-# Use sed to replace the SSH URL with the public URL, then initialize submodules
+# Used to replace the SSH URL with the public URL, then initialize submodules
 before_install:
     - export CC=gcc-9
     - export CXX=g++-9
@@ -25,13 +24,12 @@ before_install:
     - git submodule update --init --recursive
     - cd external/open62541
 
-
     # Replace <user> and <token> with your GitHub username and access token respectively
 script:
   - mkdir build
   - cd build
   - cmake ..
-  - cmake .. -DCMAKE_INSTALL_PREFIX=/home/travis/install/open62541 -DUA_BUILD_TOOLS=ON -DUA_ENABLE_DISCOVERY_MULTICAST=ON -DUA_ENABLE_HARDENING=ON -DUA_ENABLE_NODESET_COMPILER_DESCRIPTIONS=ON -DUA_ENABLE_PUBSUB=ON -DUA_ENABLE_PUBSUB_ETH_UADP=ON -DUA_ENABLE_SUBSCRIPTIONS=ON -DUA_LOGLEVEL=300 -DUA_NAMESPACE_ZERO=FULL -DBUILD_SHARED_LIBS=TRUE -DUA_ENABLE_PUBSUB_INFORMATIONMODEL=ON
+  - cmake .. -DCMAKE_INSTALL_PREFIX=$HOME/install/open62541 -DUA_BUILD_TOOLS=ON -DUA_ENABLE_DISCOVERY_MULTICAST=ON -DUA_ENABLE_HARDENING=ON -DUA_ENABLE_NODESET_COMPILER_DESCRIPTIONS=ON -DUA_ENABLE_PUBSUB=ON -DUA_ENABLE_PUBSUB_ETH_UADP=ON -DUA_ENABLE_SUBSCRIPTIONS=ON -DUA_LOGLEVEL=300 -DUA_NAMESPACE_ZERO=FULL -DBUILD_SHARED_LIBS=TRUE -DUA_ENABLE_PUBSUB_INFORMATIONMODEL=ON
   - make install -j2
   - cd /home/travis/build/makreft/openPubSub/
   - ls
