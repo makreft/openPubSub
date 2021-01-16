@@ -37,4 +37,4 @@ script:
   - cd build
   - cmake ..
   - make
-  - ./test/openPubSubTests
+  - ./test/ops_tests

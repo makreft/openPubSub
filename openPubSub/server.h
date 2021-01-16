@@ -19,7 +19,7 @@
 #include <memory>
 
 // ops
-#include "util.h"
+#include "util/util.h"
 
 // ops = openPubSub?
 namespace openPubSub

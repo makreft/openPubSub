@@ -1,4 +1,5 @@
 #include "../openPubSub/server.h"
+#include "../openPubSub/ua_pubsub/ua_pubsub.h"
 #include <vector>
 
 int main()
