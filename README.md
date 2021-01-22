@@ -2,7 +2,8 @@
 [![Build Status](https://travis-ci.com/makreft/openPubSub.svg?branch=main)](https://travis-ci.com/makreft/openPubSub)
 
 # Goal of this Repo
-the goal is to write a wrapper of open62541 PubSub implementation in C++
+the goal is to write a simple interface for the OPC UA pubsub mechanism (open62541 implementation)
+in order to provide an easy way of publishing and subscribing to topics.
 
 # Documentation (in development)
 
