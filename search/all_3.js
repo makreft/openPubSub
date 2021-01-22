@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['run_5',['run',['../classopenPubSub_1_1Server.html#a40f7704fa24578228be68aafee6a20e3',1,'openPubSub::Server']]]
+  ['openpubsub_19',['openPubSub',['../namespaceopenPubSub.html',1,'']]],
+  ['openpubsub_2eh_20',['openPubSub.h',['../openPubSub_8h.html',1,'']]]
 ];

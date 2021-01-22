@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['mp_5fconfig_2',['mp_config',['../classopenPubSub_1_1Server.html#a1a69f188e4da1c3d393631e220560d0e',1,'openPubSub::Server']]],
-  ['mp_5fserver_3',['mp_server',['../classopenPubSub_1_1Server.html#aba971dd80d0aadedb54df89cfe19f2a4',1,'openPubSub::Server']]]
+  ['initserver_6',['initServer',['../namespaceopenPubSub.html#ad8489073db4843cf334eb004e5bc9c5a',1,'openPubSub']]],
+  ['isrunning_7',['isRunning',['../classopenPubSub_1_1Server.html#a1164a33e4c0bfb376ee612a72f3e71ea',1,'openPubSub::Server']]]
 ];

@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['transportlayernotfound_9',['transportlayerNotFound',['../structopenPubSub_1_1transportlayerNotFound.html',1,'openPubSub']]],
-  ['typebase_10',['TypeBase',['../classTypeBase.html',1,'']]]
+  ['run_22',['run',['../classopenPubSub_1_1Server.html#a40f7704fa24578228be68aafee6a20e3',1,'openPubSub::Server']]]
 ];
