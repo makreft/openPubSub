@@ -23,31 +23,6 @@
 // ops
 #include "util/util.h"
 
-template<typename T> class UA_EXPORT TypeBase {
-    protected:
-    std::unique_ptr<T> _d; // shared pointer - there is no copy on change
-    public:
-    TypeBase(T *t) : _d(t) {}
-    T &get() const {
-        return *(_d.get());
-    }
-    // Reference and pointer for parameter passing
-    operator T &() const {
-        return get();
-    }
-
-    operator T *() const {
-        return _d.get();
-    }
-    const T *constRef() const {
-        return _d.get();
-    }
-
-    T   *ref() const {
-        return _d.get();
-    }
-
-};
 // ops = openPubSub?
 namespace openPubSub
 {

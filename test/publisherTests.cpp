@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include "../openPubSub/openPubSub.h"
 
-openPubSub::Server server("UDP");
+openPubSub::Server server;
 
 TEST(openPubSubTests, checkIfServerIsRunning)
 {
