@@ -1,4 +1,4 @@
-#include "server.h"
+#include "openPubSub.h"
 
 namespace openPubSub
 {
@@ -23,7 +23,11 @@ namespace openPubSub
         UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_SERVER, "received ctrl-c");
         _running = false;
     }
-    Server::Server(string transportLayer)
+    Publisher::Publisher()
+    {
+        this->addPubSubTransportLayer(UA_PubSubTransportLayerUDPMP());
+    }
+    Server::Server()
     {
         _running=UA_TRUE;
         mp_server = UA_Server_new();
@@ -31,15 +35,6 @@ namespace openPubSub
         UA_ServerConfig_setDefault(mp_config);
         setNetworkAddressUrl();
         setTransportProfileUri();
-        if (transportLayer == "UDP")
-        {
-            this->addPubSubTransportLayer(UA_PubSubTransportLayerUDPMP());
-        }
-        else if (transportLayer == "MQTT")
-        {
-            //TODO: implement MQTT
-            this->addPubSubTransportLayer(UA_PubSubTransportLayerUDPMP());
-        }
     }
     Server::~Server()
     {
@@ -51,7 +46,7 @@ namespace openPubSub
         if (retVal != UA_STATUSCODE_GOOD)
             throw ua_exception(retVal);
     }
-    void Server::addPubSubConnection(string nameOfPubSubConnection)
+    void Server::addPubSubConnection(string nameOfPubSubConnection, int publisherID)
     {
         UA_PubSubConnectionConfig connectionConfig;
         memset(&connectionConfig, 0, sizeof(connectionConfig));
@@ -63,7 +58,7 @@ namespace openPubSub
         connectionConfig.enabled = UA_TRUE;
         UA_Variant_setScalar(&connectionConfig.address, &networkAddressUrl,
                              &UA_TYPES[UA_TYPES_NETWORKADDRESSURLDATATYPE]);
-        connectionConfig.publisherId.numeric = 2234;
+        connectionConfig.publisherId.numeric = publisherID;
         UA_Server_addPubSubConnection(mp_server, &connectionConfig,
                                       &m_connectionID);
     }
@@ -92,13 +87,14 @@ namespace openPubSub
                                   &dataSetFieldConfig,
                                   &m_dataSetFieldID);
     }
-    void Server::addWriterGroup(string nameOfWriterGroup)
+    void Server::addWriterGroup(string nameOfWriterGroup, int publishingInterval,
+                                int writerGroupId)
     {
         memset(&m_writerGroupConfig, 0, sizeof(UA_WriterGroupConfig));
         m_writerGroupConfig.name = *nameOfWriterGroup.value;
-        m_writerGroupConfig.publishingInterval = 100;
+        m_writerGroupConfig.publishingInterval = publishingInterval;
         m_writerGroupConfig.enabled = UA_FALSE;
-        m_writerGroupConfig.writerGroupId = 100;
+        m_writerGroupConfig.writerGroupId = writerGroupId;
         m_writerGroupConfig.encodingMimeType = UA_PUBSUB_ENCODING_UADP;
         m_writerGroupConfig.messageSettings.encoding = UA_EXTENSIONOBJECT_DECODED;
         m_writerGroupConfig.messageSettings.content.decoded.type = \

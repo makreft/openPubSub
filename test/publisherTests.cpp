@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "../openPubSub/server.h"
+#include "../openPubSub/openPubSub.h"
 
 openPubSub::Server server("UDP");
 
