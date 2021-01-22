@@ -9,6 +9,15 @@ in order to provide an easy way of publishing and subscribing to topics.
 
 You can find a more complete documentation [here](https://makreft.github.io/openPubSub/)
 
+Or build Doxygen docs with:
+```bash
+> mkdir build && cd build
+> cmake ..
+> make docs
+> cd _build/html
+> # open index.html
+```
+
 
 # Installing open62541
 Note: copy pasting of the following will result in installing open62541 to the
