@@ -25,5 +25,5 @@ Table of Contents
     :maxdepth: 3
 
 
-    openPubSub/server
+    ../openPubSub/openPubSub
 

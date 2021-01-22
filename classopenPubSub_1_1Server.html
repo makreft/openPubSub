@@ -74,28 +74,33 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;server.h&gt;</code></p>
+<p><code>#include &lt;openPubSub.h&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for openPubSub::Server:</div>
+<div class="dyncontent">
+<div class="center"><img src="classopenPubSub_1_1Server__inherit__graph.png" border="0" usemap="#aopenPubSub_1_1Server_inherit__map" alt="Inheritance graph"/></div>
+<center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a630c9fb5fe8495878c414a599a112f5e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classopenPubSub_1_1Server.html#a630c9fb5fe8495878c414a599a112f5e">Server</a> (string transportLayer=&quot;UDP&quot;)</td></tr>
-<tr class="separator:a630c9fb5fe8495878c414a599a112f5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab92d67f241227a5af3af3c1c748784e8"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classopenPubSub_1_1Server.html#ab92d67f241227a5af3af3c1c748784e8">Server</a> ()</td></tr>
+<tr class="separator:ab92d67f241227a5af3af3c1c748784e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0b95c1c00b64392192271f5888582027"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classopenPubSub_1_1Server.html#a0b95c1c00b64392192271f5888582027">~Server</a> ()</td></tr>
 <tr class="separator:a0b95c1c00b64392192271f5888582027"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac7961f6211de09d5ef4c6a7b4d30e0ff"><td class="memItemLeft" align="right" valign="top"><a id="ac7961f6211de09d5ef4c6a7b4d30e0ff"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>stopServer</b> ()</td></tr>
 <tr class="separator:ac7961f6211de09d5ef4c6a7b4d30e0ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a86e960820188e527fcad33f2f5eff310"><td class="memItemLeft" align="right" valign="top"><a id="a86e960820188e527fcad33f2f5eff310"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>addPubSubConnection</b> (string nameOfPubSubConnection)</td></tr>
-<tr class="separator:a86e960820188e527fcad33f2f5eff310"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2b84cc5560fa14a3d0ac933d3e120848"><td class="memItemLeft" align="right" valign="top"><a id="a2b84cc5560fa14a3d0ac933d3e120848"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>addPubSubConnection</b> (string nameOfPubSubConnection, int publisherID)</td></tr>
+<tr class="separator:a2b84cc5560fa14a3d0ac933d3e120848"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ace4072ac798c1a9c100b137956d568c9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classopenPubSub_1_1Server.html#ace4072ac798c1a9c100b137956d568c9">addPublishedDataSet</a> (string nameOfPublishedDS)</td></tr>
 <tr class="separator:ace4072ac798c1a9c100b137956d568c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3ccd9fca77d29328f9b380d62df81cb6"><td class="memItemLeft" align="right" valign="top"><a id="a3ccd9fca77d29328f9b380d62df81cb6"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>addDataSetField</b> (string nameOfDSField)</td></tr>
 <tr class="separator:a3ccd9fca77d29328f9b380d62df81cb6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6ff1439b0e55a782ec87d282be740232"><td class="memItemLeft" align="right" valign="top"><a id="a6ff1439b0e55a782ec87d282be740232"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>addWriterGroup</b> (string nameOfWriterGroup)</td></tr>
-<tr class="separator:a6ff1439b0e55a782ec87d282be740232"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a89da9dd7187aed4902e6531862bf3c8d"><td class="memItemLeft" align="right" valign="top"><a id="a89da9dd7187aed4902e6531862bf3c8d"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>addWriterGroup</b> (string nameOfWriterGroup, int publishingInterval, int writerGroupId)</td></tr>
+<tr class="separator:a89da9dd7187aed4902e6531862bf3c8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a12c8027e1a0707828672f6990b480c9d"><td class="memItemLeft" align="right" valign="top"><a id="a12c8027e1a0707828672f6990b480c9d"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>addDataSetWriter</b> (string nameOfDSWriter)</td></tr>
 <tr class="separator:a12c8027e1a0707828672f6990b480c9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -115,6 +120,33 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>isRunning</b> ()</td>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
+<tr class="memitem:aec5542f6e8ad8d70c8ae53be4132df01"><td class="memItemLeft" align="right" valign="top"><a id="aec5542f6e8ad8d70c8ae53be4132df01"></a>
+UA_NodeId&#160;</td><td class="memItemRight" valign="bottom"><b>m_connectionID</b></td></tr>
+<tr class="separator:aec5542f6e8ad8d70c8ae53be4132df01"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa18c6c2526436098f2e8efe4768b508a"><td class="memItemLeft" align="right" valign="top"><a id="aa18c6c2526436098f2e8efe4768b508a"></a>
+UA_NodeId&#160;</td><td class="memItemRight" valign="bottom"><b>m_publishedDataSetID</b></td></tr>
+<tr class="separator:aa18c6c2526436098f2e8efe4768b508a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a63b967e54099638426c6973fdb1c3f48"><td class="memItemLeft" align="right" valign="top"><a id="a63b967e54099638426c6973fdb1c3f48"></a>
+UA_NodeId&#160;</td><td class="memItemRight" valign="bottom"><b>m_dataSetFieldID</b></td></tr>
+<tr class="separator:a63b967e54099638426c6973fdb1c3f48"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad94f6519e35f6a0e5c1844cedd6158f5"><td class="memItemLeft" align="right" valign="top"><a id="ad94f6519e35f6a0e5c1844cedd6158f5"></a>
+UA_NodeId&#160;</td><td class="memItemRight" valign="bottom"><b>m_dataSetWriterID</b></td></tr>
+<tr class="separator:ad94f6519e35f6a0e5c1844cedd6158f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab23191158dc0b9302a71c22a583486c8"><td class="memItemLeft" align="right" valign="top"><a id="ab23191158dc0b9302a71c22a583486c8"></a>
+UA_NodeId&#160;</td><td class="memItemRight" valign="bottom"><b>m_writerGroupID</b></td></tr>
+<tr class="separator:ab23191158dc0b9302a71c22a583486c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abe95658cb72961d7951c3c7a72bebffe"><td class="memItemLeft" align="right" valign="top"><a id="abe95658cb72961d7951c3c7a72bebffe"></a>
+UA_WriterGroupConfig&#160;</td><td class="memItemRight" valign="bottom"><b>m_writerGroupConfig</b></td></tr>
+<tr class="separator:abe95658cb72961d7951c3c7a72bebffe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a003562df850d58299ba3444983782a6e"><td class="memItemLeft" align="right" valign="top"><a id="a003562df850d58299ba3444983782a6e"></a>
+UA_DataSetWriterConfig&#160;</td><td class="memItemRight" valign="bottom"><b>m_dataSetWriterConfig</b></td></tr>
+<tr class="separator:a003562df850d58299ba3444983782a6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a08bc41d46a47415f927d69fd9bc8f322"><td class="memItemLeft" align="right" valign="top"><a id="a08bc41d46a47415f927d69fd9bc8f322"></a>
+std::string&#160;</td><td class="memItemRight" valign="bottom"><b>m_transportUri</b></td></tr>
+<tr class="separator:a08bc41d46a47415f927d69fd9bc8f322"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a28b9786cf0a77a22ff30e1024189bcde"><td class="memItemLeft" align="right" valign="top"><a id="a28b9786cf0a77a22ff30e1024189bcde"></a>
+std::string&#160;</td><td class="memItemRight" valign="bottom"><b>m_networkUrl</b></td></tr>
+<tr class="separator:a28b9786cf0a77a22ff30e1024189bcde"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aba971dd80d0aadedb54df89cfe19f2a4"><td class="memItemLeft" align="right" valign="top"><a id="aba971dd80d0aadedb54df89cfe19f2a4"></a>
 UA_Server *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classopenPubSub_1_1Server.html#aba971dd80d0aadedb54df89cfe19f2a4">mp_server</a></td></tr>
 <tr class="memdesc:aba971dd80d0aadedb54df89cfe19f2a4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Member pointer of the server. <br /></td></tr>
@@ -132,28 +164,19 @@ UA_ServerConfig *&#160;</td><td class="memItemRight" valign="bottom"><a class="e
 <li>After shutdown of the server, clean up the configuration (free memory) </li>
 </ol>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a630c9fb5fe8495878c414a599a112f5e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a630c9fb5fe8495878c414a599a112f5e">&#9670;&nbsp;</a></span>Server()</h2>
+<a id="ab92d67f241227a5af3af3c1c748784e8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab92d67f241227a5af3af3c1c748784e8">&#9670;&nbsp;</a></span>Server()</h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">openPubSub::Server::Server </td>
           <td>(</td>
-          <td class="paramtype">string&#160;</td>
-          <td class="paramname"><em>transportLayer</em> = <code>&quot;UDP&quot;</code></td><td>)</td>
+          <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">explicit</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -289,7 +312,7 @@ UA_ServerConfig *&#160;</td><td class="memItemRight" valign="bottom"><a class="e
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li>/Users/runner/work/openPubSub/openPubSub/openPubSub/server.h</li>
+<li>/Users/runner/work/openPubSub/openPubSub/openPubSub/openPubSub.h</li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

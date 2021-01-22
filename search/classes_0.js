@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['server_9',['Server',['../classopenPubSub_1_1Server.html',1,'openPubSub']]]
+  ['publisher_12',['Publisher',['../classopenPubSub_1_1Publisher.html',1,'openPubSub']]]
 ];
