@@ -7,6 +7,12 @@
 
 namespace openPubSub
 {
+    struct transportlayerNotFound : public std::exception {
+        const char * what () const throw () {
+            return "PubSub Transportlayer not found";
+        }
+    };
+
     class ua_exception : public std::exception
     {
     public:
@@ -21,6 +27,7 @@ namespace openPubSub
         {
             return UA_StatusCode_name(code);
         }
+
     };
 
     struct string

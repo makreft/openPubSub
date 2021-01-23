@@ -11,14 +11,22 @@ TEST(openPubSubTests, checkIfServerIsRunning)
 TEST(openPubSubTests, checkIfServerIsConfigured)
 {
     UA_ServerConfig *a = NULL;
-    EXPECT_NE(a, server.mp_config);
+    EXPECT_NE(a, server.getUAServerConfig());
 }
 
 TEST(openPubSubTests, checkIfServerIsConfiguredWithDefault)
 {
     // if UA_ServerConfig_setDefault(p_config) is called,
     // endpointsSize must be greater than 0.
-    EXPECT_TRUE(server.mp_config->endpointsSize > 0);
+    UA_Server *ua_server = UA_Server_new();
+    UA_ServerConfig *ua_conf = UA_Server_getConfig(ua_server);
+    UA_ServerConfig_setDefault(ua_conf);
+    EXPECT_EQ(*server.getUAServerConfig()->applicationDescription.applicationUri.data,
+              *ua_conf->applicationDescription.applicationUri.data);
+    EXPECT_EQ(*server.getUAServerConfig()->applicationDescription.productUri.data,
+              *ua_conf->applicationDescription.productUri.data);
+    EXPECT_EQ(*server.getUAServerConfig()->applicationDescription.applicationName.text.data,
+              *ua_conf->applicationDescription.applicationName.text.data);
 }
 
 TEST(openPubSubTests, checkIfServerShutsDown)

@@ -10,6 +10,7 @@ int main()
     std::vector<openPubSub::Server> test;
     int pubsubID1 = 888;
     int pubsubID2 = 999;
+    UA_ServerConfig* conf = serv.getUAServerConfig();
 
     serv.addPubSubConnection("my PubSub Connection", pubsubID1);
     serv.addPublishedDataSet("My PDS");
