@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['initserver_6',['initServer',['../namespaceopenPubSub.html#ad8489073db4843cf334eb004e5bc9c5a',1,'openPubSub']]],
-  ['isrunning_7',['isRunning',['../classopenPubSub_1_1Server.html#a1164a33e4c0bfb376ee612a72f3e71ea',1,'openPubSub::Server']]]
+  ['getuaserver_6',['getUAServer',['../classopenPubSub_1_1Server.html#aa464ef8ea887fd8a491430e26dd4f41e',1,'openPubSub::Server']]],
+  ['getuaserverconfig_7',['getUAServerConfig',['../classopenPubSub_1_1Server.html#a48a0a3a61b235a6f1f4dd64dfa88a98b',1,'openPubSub::Server']]]
 ];

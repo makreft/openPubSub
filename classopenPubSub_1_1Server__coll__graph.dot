@@ -3,5 +3,5 @@ digraph "openPubSub::Server"
  // LATEX_PDF_SIZE
   edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
   node [fontname="Helvetica",fontsize="10",shape=record];
-  Node1 [label="{openPubSub::Server\n|+ m_connectionID\l+ m_publishedDataSetID\l+ m_dataSetFieldID\l+ m_dataSetWriterID\l+ m_writerGroupID\l+ m_writerGroupConfig\l+ m_dataSetWriterConfig\l+ m_transportUri\l+ m_networkUrl\l+ mp_server\l+ mp_config\l|+ Server()\l+ ~Server()\l+ stopServer()\l+ addPubSubConnection()\l+ addPublishedDataSet()\l+ addDataSetField()\l+ addWriterGroup()\l+ addDataSetWriter()\l+ addPubSubTransportLayer()\l+ setTransportProfileUri()\l+ setNetworkAddressUrl()\l+ run()\l+ isRunning()\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip=" "];
+  Node1 [label="{openPubSub::Server\n||+ Server()\l+ ~Server()\l+ stopServer()\l+ addPubSubConnection()\l+ addPublishedDataSet()\l+ addDataSetField()\l+ addWriterGroup()\l+ addDataSetWriter()\l+ addPubSubTransportLayer()\l+ setTransportProfileUri()\land 6 more...\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip=" "];
 }
