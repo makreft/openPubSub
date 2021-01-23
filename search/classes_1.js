@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['server_31',['Server',['../classopenPubSub_1_1Server.html',1,'openPubSub']]]
+  ['transportlayernotfound_30',['transportlayerNotFound',['../structopenPubSub_1_1transportlayerNotFound.html',1,'openPubSub']]]
 ];

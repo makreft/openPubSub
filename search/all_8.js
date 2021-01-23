@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['what_28',['what',['../structopenPubSub_1_1transportlayerNotFound.html#afe81620250f1c234a77af7b82a68eed0',1,'openPubSub::transportlayerNotFound']]]
+  ['_7eserver_28',['~Server',['../classopenPubSub_1_1Server.html#a0b95c1c00b64392192271f5888582027',1,'openPubSub::Server']]]
 ];

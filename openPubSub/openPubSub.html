@@ -167,19 +167,6 @@
 
 </div>
 <dl class="cpp class">
-<dt id="_CPPv4N10openPubSub9PublisherE">
-<span id="_CPPv3N10openPubSub9PublisherE"></span><span id="_CPPv2N10openPubSub9PublisherE"></span><span id="openPubSub::Publisher"></span><span class="target" id="classopenPubSub_1_1Publisher"></span><em class="property">class </em><code class="sig-name descname">Publisher</code> : <em class="property">public</em> <a class="reference internal" href="#_CPPv410openPubSub" title="openPubSub">openPubSub</a>::<a class="reference internal" href="#_CPPv4N10openPubSub6ServerE" title="openPubSub::Server">Server</a><a class="headerlink" href="#_CPPv4N10openPubSub9PublisherE" title="Permalink to this definition">¶</a><br /></dt>
-<dd><em>#include &lt;openPubSub.h&gt;</em><div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric">Public Functions</p>
-<dl class="cpp function">
-<dt id="_CPPv4N10openPubSub9Publisher9PublisherEv">
-<span id="_CPPv3N10openPubSub9Publisher9PublisherEv"></span><span id="_CPPv2N10openPubSub9Publisher9PublisherEv"></span><span id="openPubSub::Publisher::Publisher"></span><span class="target" id="classopenPubSub_1_1Publisher_1a798254b33f76a02488214b4ec92b5557"></span><code class="sig-name descname">Publisher</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N10openPubSub9Publisher9PublisherEv" title="Permalink to this definition">¶</a><br /></dt>
-<dd></dd></dl>
-
-</div>
-</dd></dl>
-
-<dl class="cpp class">
 <dt id="_CPPv4N10openPubSub6ServerE">
 <span id="_CPPv3N10openPubSub6ServerE"></span><span id="_CPPv2N10openPubSub6ServerE"></span><span id="openPubSub::Server"></span><span class="target" id="classopenPubSub_1_1Server"></span><em class="property">class </em><code class="sig-name descname">Server</code><a class="headerlink" href="#_CPPv4N10openPubSub6ServerE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><em>#include &lt;openPubSub.h&gt;</em><p>The <a class="reference internal" href="#classopenPubSub_1_1Server"><span class="std std-ref">Server</span></a> expects that all configurations are done during initialization. As soon as the <a class="reference internal" href="#classopenPubSub_1_1Server_1a40f7704fa24578228be68aafee6a20e3"><span class="std std-ref">run()</span></a> method is called, the server cannot be modified. Steps for configuration (taken from the open62541 documentation):<ol class="lowerroman simple">
@@ -189,7 +176,6 @@
 <li><p>After shutdown of the server, clean up the configuration (free memory) </p></li>
 </ol>
 </p>
-<p>Subclassed by <a class="reference internal" href="#classopenPubSub_1_1Publisher"><span class="std std-ref">openPubSub::Publisher</span></a></p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
 <dl class="cpp function">
@@ -248,8 +234,8 @@
 <dd></dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4N10openPubSub6Server23addPubSubTransportLayerEK23UA_PubSubTransportLayer">
-<span id="_CPPv3N10openPubSub6Server23addPubSubTransportLayerEK23UA_PubSubTransportLayer"></span><span id="_CPPv2N10openPubSub6Server23addPubSubTransportLayerEK23UA_PubSubTransportLayer"></span><span id="openPubSub::Server::addPubSubTransportLayer__UA_PubSubTransportLayerC"></span><span class="target" id="classopenPubSub_1_1Server_1a0c814947aaf1b296030006a92ff19eee"></span>void <code class="sig-name descname">addPubSubTransportLayer</code><span class="sig-paren">(</span><em class="property">const</em> UA_PubSubTransportLayer <em>transportLayer</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N10openPubSub6Server23addPubSubTransportLayerEK23UA_PubSubTransportLayer" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N10openPubSub6Server23addPubSubTransportLayerEv">
+<span id="_CPPv3N10openPubSub6Server23addPubSubTransportLayerEv"></span><span id="_CPPv2N10openPubSub6Server23addPubSubTransportLayerEv"></span><span id="openPubSub::Server::addPubSubTransportLayer"></span><span class="target" id="classopenPubSub_1_1Server_1ad3469c29e32e5107c5108d55f99b5813"></span>void <code class="sig-name descname">addPubSubTransportLayer</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N10openPubSub6Server23addPubSubTransportLayerEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p><dl class="simple">
 <dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">transportLayer</span></code>: define what kind of transport layer is supposed to be used by the server </p></li>
