@@ -23,10 +23,7 @@ namespace openPubSub
         UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_SERVER, "received ctrl-c");
         _running = false;
     }
-    Publisher::Publisher()
-    {
-        this->addPubSubTransportLayer(UA_PubSubTransportLayerUDPMP());
-    }
+
     Server::Server()
     {
         _running=UA_TRUE;
@@ -48,6 +45,7 @@ namespace openPubSub
     }
     void Server::addPubSubConnection(string nameOfPubSubConnection, int publisherID)
     {
+        this->addPubSubTransportLayer();
         UA_PubSubConnectionConfig connectionConfig;
         memset(&connectionConfig, 0, sizeof(connectionConfig));
         connectionConfig.name = *nameOfPubSubConnection.value;

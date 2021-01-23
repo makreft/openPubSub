@@ -83,7 +83,7 @@ public:
     /// @param T
     /// The method addPubSubTransportLayer is supposed to be used only
     /// when constructing the openPubSub::Server object
-    void addPubSubTransportLayer(const UA_PubSubTransportLayer transportLayer)
+    void addPubSubTransportLayer()
     {
         mp_config->pubsubTransportLayers = \
                 (UA_PubSubTransportLayer *)UA_calloc(2, sizeof(UA_PubSubTransportLayer));
@@ -92,7 +92,7 @@ public:
             UA_Server_delete(mp_server);
             throw transportlayerNotFound();
         }
-        mp_config -> pubsubTransportLayers[0] = transportLayer;
+        mp_config -> pubsubTransportLayers[0] = UA_PubSubTransportLayerUDPMP();
         mp_config -> pubsubTransportLayersSize++;
     }
     /// @param transportProfileUri the passed std::string will be
@@ -112,13 +112,6 @@ public:
     bool isRunning();
 };
     void initServer(Server &server);
-
-class Publisher : public Server
-{
-
-public:
-    Publisher();
-};
 }
 
 #endif // OPENPUBSUB_H

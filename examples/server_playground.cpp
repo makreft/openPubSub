@@ -4,7 +4,6 @@
 
 int main()
 {
-    openPubSub::Publisher pub;
     openPubSub::Server serv;
     openPubSub::initServer(serv);
     //obs::init<obs::Server> server;
@@ -25,5 +24,5 @@ int main()
     //serv.publish("mytopic", nodePub);
     ////=====
     //serv.subscribe("mytopic", nodeSub)
-    pub.run();
+    serv.run();
 }
