@@ -2,23 +2,12 @@
 #define OPENPUBSUB_H
 
 // open62541
-#include <open62541/plugin/log.h>
-#include <open62541/plugin/log_stdout.h>
-#include <open62541/plugin/pubsub.h>
-#include <open62541/plugin/pubsub_udp.h>
-#include <open62541/server.h>
-#include <open62541/server_config_default.h>
 #include <open62541/server_pubsub.h>
 
 // C standard lib
-#include <signal.h>
-#include <stdio.h>
 
 // C++ standard lib
-#include <cstring>
 #include <memory>
-#include <vector>
-#include <exception>
 
 // ops
 #include "util/util.h"
@@ -29,6 +18,8 @@ namespace openPubSub
 class Server
 {
 private:
+    /// PIMPL: only for implementation purposes High-Level usage is provided by
+    /// getter and setter functionality
     struct Impl;
     std::unique_ptr<Impl> mImpl;
 

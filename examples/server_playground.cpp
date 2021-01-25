@@ -7,7 +7,6 @@ int main()
     openPubSub::Server serv;
     openPubSub::initServer(serv);
     //obs::init<obs::Server> server;
-    std::vector<openPubSub::Server> test;
     int pubsubID1 = 888;
     int pubsubID2 = 999;
     UA_ServerConfig* conf = serv.getUAServerConfig();

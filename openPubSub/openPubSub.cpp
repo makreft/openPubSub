@@ -1,4 +1,11 @@
 #include "openPubSub.h"
+#include <signal.h>
+#include <open62541/plugin/log.h>
+#include <open62541/plugin/log_stdout.h>
+#include <open62541/plugin/pubsub.h>
+#include <open62541/plugin/pubsub_udp.h>
+#include <open62541/server.h>
+#include <open62541/server_config_default.h>
 
 namespace openPubSub
 {
@@ -10,7 +17,6 @@ namespace openPubSub
     {
         UA_NodeId m_connectionID;
         UA_NodeId m_publishedDataSetID;
-        UA_NodeId m_dataSetFieldID;
         UA_NodeId m_dataSetWriterID;
         UA_NodeId m_writerGroupID;
 
@@ -18,7 +24,10 @@ namespace openPubSub
         UA_DataSetWriterConfig m_dataSetWriterConfig;
 
         std::string m_transportUri = "http://opcfoundation.org/UA-Profile/Transport/pubsub-udp-uadp";
-        std::string m_networkUrl = "opc.udp://127.0.0.1:4840/";
+        //multicast: opc.udp://224.0.0.22:4840/
+        //unicast: opc.udp://127.0.0.1:4840/
+
+        std::string m_networkUrl = "opc.udp://224.0.5.1:4840";
 
         UA_Server *mp_server;
         UA_ServerConfig *mp_config;
@@ -101,6 +110,7 @@ namespace openPubSub
     }
     void Server::addDataSetField(string nameOfDSField)
     {
+        UA_NodeId dataSetField;
         UA_DataSetFieldConfig dataSetFieldConfig;
         memset(&dataSetFieldConfig, 0, sizeof(UA_DataSetFieldConfig));
         dataSetFieldConfig.dataSetFieldType = UA_PUBSUB_DATASETFIELD_VARIABLE;
@@ -112,7 +122,7 @@ namespace openPubSub
                 UA_ATTRIBUTEID_VALUE;
         UA_Server_addDataSetField(mImpl->mp_server, mImpl->m_publishedDataSetID,
                                   &dataSetFieldConfig,
-                                  &mImpl->m_dataSetFieldID);
+                                  &dataSetField);
     }
     void Server::addWriterGroup(string nameOfWriterGroup, int publishingInterval,
                                 int writerGroupId)
