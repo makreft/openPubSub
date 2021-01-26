@@ -17,6 +17,8 @@
 #include <memory>
 #include <experimental/propagate_const>
 
+namespace openPubSub
+{
 
     class Subscriber
     {
@@ -37,6 +39,8 @@
         void stopSubcription();
     };
 
+    ///initializes the signal stuff
+    void init(Subscriber &subscriber);
 
-
+}
 #endif //OPS_SUBSCRIPTION_H

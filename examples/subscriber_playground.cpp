@@ -2,7 +2,7 @@
 
 int main()
 {
-    Subscriber sub;
+    openPubSub::Subscriber sub;
+    openPubSub::init(sub);
     sub.run();
-
 }

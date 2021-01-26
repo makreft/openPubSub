@@ -1,5 +1,8 @@
 
 #include "subscription.h"
+    namespace openPubSub
+    {
+
 
     Subscriber *__subscriber;
     static void stopHandler()
@@ -143,4 +146,5 @@ void Subscriber::run()
     UA_StatusCode retval = UA_STATUSCODE_GOOD;
     while(mImpl->m_running && retval == UA_STATUSCODE_GOOD)
         retval = listen();
+}
 }
