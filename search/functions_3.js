@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['run_36',['run',['../classopenPubSub_1_1Server.html#a40f7704fa24578228be68aafee6a20e3',1,'openPubSub::Server']]]
+  ['removedatasetwriter_42',['removeDataSetWriter',['../classopenPubSub_1_1Server.html#ab4321eb66dcbd0bd41f713dc95e5b0e2',1,'openPubSub::Server']]],
+  ['removepubsubconnection_43',['removePubSubConnection',['../classopenPubSub_1_1Server.html#abb92fd68914e30d9e9a053c510cfb066',1,'openPubSub::Server']]],
+  ['run_44',['run',['../classopenPubSub_1_1Server.html#adddeca174cff821d02909d979e892b18',1,'openPubSub::Server']]]
 ];

@@ -1,5 +1,8 @@
 var searchData=
 [
-  ['getuaserver_32',['getUAServer',['../classopenPubSub_1_1Server.html#aa464ef8ea887fd8a491430e26dd4f41e',1,'openPubSub::Server']]],
-  ['getuaserverconfig_33',['getUAServerConfig',['../classopenPubSub_1_1Server.html#a48a0a3a61b235a6f1f4dd64dfa88a98b',1,'openPubSub::Server']]]
+  ['getconnectionident_35',['getConnectionIdent',['../classopenPubSub_1_1Server.html#a6cb202c47a368582d732e35b387f3dd6',1,'openPubSub::Server']]],
+  ['getdatasetwriterconfig_36',['getDataSetWriterConfig',['../classopenPubSub_1_1Server.html#aa8591c149037784240111220eb3e30c9',1,'openPubSub::Server']]],
+  ['getpubsubconnectionconfig_37',['getPubSubConnectionConfig',['../classopenPubSub_1_1Server.html#a8580cb96773ec608c71604e6e0258325',1,'openPubSub::Server']]],
+  ['getuaserver_38',['getUAServer',['../classopenPubSub_1_1Server.html#a0f24654212dac7cd2e0e6a4850d1d661',1,'openPubSub::Server']]],
+  ['getuaserverconfig_39',['getUAServerConfig',['../classopenPubSub_1_1Server.html#a2af7ef581f96ab43a29baa779d65aa52',1,'openPubSub::Server']]]
 ];
