@@ -3,5 +3,5 @@ digraph "openPubSub::Server"
  // LATEX_PDF_SIZE
   edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
   node [fontname="Helvetica",fontsize="10",shape=record];
-  Node1 [label="{openPubSub::Server\n||+ Server()\l+ ~Server()\l+ addVariableNode()\l+ addVariableNode()\l+ addVariableNode()\l+ addObjectNode()\l+ stopServer()\l+ addReaderGroup()\l+ addPubSubConnection()\l+ addPublishedDataSet()\land 12 more...\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip=" "];
+  Node1 [label="{openPubSub::Server\n||+ Server()\l+ ~Server()\l+ addVariableNode()\l+ addVariableNode()\l+ addVariableNode()\l+ addObjectNode()\l+ stopServer()\l+ addReaderGroup()\l+ addPubSubConnection()\l+ addPublishedDataSet()\land 9 more...\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip=" "];
 }
