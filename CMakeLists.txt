@@ -3,7 +3,7 @@ cmake_minimum_required( VERSION 3.9.2 )
 project( ops C CXX )
 
 option( BUILD_TESTS "Turn on build for tests" ON )
-
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 set( CMAKE_CXX_STANDARD 17 )
 set( CMAKE_C_STANDARD 99 )
 
@@ -78,3 +78,5 @@ if (DOXYGEN_FOUND)
 else (DOXYGEN_FOUND)
     message("Doxygen need to be installed to generate the doxygen documentation")
 endif (DOXYGEN_FOUND)
+
+

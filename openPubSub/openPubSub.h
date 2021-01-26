@@ -24,8 +24,41 @@ private:
     std::unique_ptr<Impl> mImpl;
 
 public:
-    Server();
-    ~Server();
+    /// The standard constructor will create everything that is UA_default
+    /// for custom handling, interface functions are provided (get* or set*).
+    Server(void);
+    ~Server(void);
+    void stopServer(void);
+
+    //==========================================================================
+    //============Connection Handling===========================================
+    //==========================================================================
+    ///The server that creates the PubSub Connection with addPubSubConnection
+    ///is the Host --> Publisher of the data.
+    ///@param networkAddressUrl:
+    ////usually the default is multicast: opc.udp://224.0.0.22:4840/
+    void addPubSubConnection(UA_NetworkAddressUrlDataType* networkAddressUrl);
+    /// The PublishedDataSet (PDS) and PubSubConnection are the toplevel entities and
+    /// can exist alone. The PDS contains the collection of the published fields. All
+    /// other PubSub elements are directly or indirectly linked with the PDS or
+    /// connection. Returns the publishedDataSetId, that is needed for adding DS fields
+    /// to the PublishedDataSet.
+    void addPublishedDataSet(void);
+    /// The DataSetField (DSF) is part of the PDS and describes exactly one published
+    /// field. all fields are added to the beginning of the list.
+    void addDataSetField(void);
+    void addWriterGroup(void);
+    /// A DataSetWriter (DSW) is the glue between the WG and the PDS. The DSW is
+    /// linked to exactly one PDS and contains additional information for the
+    /// message generation.
+    void addDataSetWriter(void);
+    void run(void);
+    bool isRunning(void);
+
+    //==========================================================================
+    //=================InformationSpace modelling===============================
+    //==========================================================================
+
     /// @param UA_DataType: This interface has been implemented for some
     /// UA_DataTypes, should be more readable with a template for the future.
     void addVariableNode(UA_NodeId variableNodeId, const UA_NodeId folderId,
@@ -38,36 +71,27 @@ public:
                          char *nodeDisplayName, char *browseName,
                          UA_DateTime UA_DataType, bool setAccessLevelMask);
     void addObjectNode(char * publisherName, UA_NodeId folderId);
-    void stopServer();
-    //TODO:
-    //void writeDataToTopic(char *);
-    //void timerCallback(UA_Server *server, void *data);
-    UA_StatusCode addReaderGroup();
-    ///The server that creates the PubSub Connection with addPubSubConnection
-    ///is the Host --> Publisher of the data.
-    void addPubSubConnection(UA_NetworkAddressUrlDataType* networkAddressUrl);
-    /// The PublishedDataSet (PDS) and PubSubConnection are the toplevel entities and
-    /// can exist alone. The PDS contains the collection of the published fields. All
-    /// other PubSub elements are directly or indirectly linked with the PDS or
-    /// connection. Returns the publishedDataSetId, that is needed for adding DS fields
-    /// to the PublishedDataSet.
-    void addPublishedDataSet();
-    /// The DataSetField (DSF) is part of the PDS and describes exactly one published
-    /// field. all fields are added to the beginning of the list.
-    void addDataSetField();
-    void addWriterGroup();
-    /// A DataSetWriter (DSW) is the glue between the WG and the PDS. The DSW is
-    /// linked to exactly one PDS and contains additional information for the
-    /// message generation.
-    void addDataSetWriter();
-    void run();
-    bool isRunning();
-    UA_ServerConfig * getUAServerConfig();
-    UA_Server * getUAServer();
-    void setCustomServerConfig(UA_ServerConfig *serverConfig);
+    UA_StatusCode addReaderGroup(void);
 
-    void adddReaderGroup();
+    //==========================================================================
+    //================Interface to Internals====================================
+    //==========================================================================
+
+    UA_ServerConfig * getUAServerConfig(void);
+    UA_Server * getUAServer(void);
+    void setCustomServerConfig(UA_ServerConfig *serverConfig);
+    UA_NodeId getConnectionIdent(void);
+    /// check connection, 0 if successful
+    ///@param config: the PSCConfig will be copied to this value
+    UA_StatusCode getPubSubConnectionConfig(UA_PubSubConnectionConfig * config);
+    /// remove connection, 0 if successful
+    UA_StatusCode removePubSubConnection(void);
+    ///@param config: the DSWConfig will be copied to this value
+    UA_StatusCode getDataSetWriterConfig(UA_DataSetWriterConfig * config);
+
+    UA_StatusCode removeDataSetWriter(void);
 };
+    ///initializes the signal stuff
     void init(Server &server);
 }
 #endif // OPENPUBSUB_H

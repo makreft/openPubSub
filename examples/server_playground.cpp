@@ -20,8 +20,6 @@ int main()
     serv.addDataSetField();
     serv.addWriterGroup();
     serv.addDataSetWriter();
-
-
     serv.run();
 }
 //void
