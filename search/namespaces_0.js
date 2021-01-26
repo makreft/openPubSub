@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['openpubsub_20',['openPubSub',['../namespaceopenPubSub.html',1,'']]]
+  ['openpubsub_24',['openPubSub',['../namespaceopenPubSub.html',1,'']]]
 ];
