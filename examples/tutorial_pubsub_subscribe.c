@@ -16,7 +16,7 @@
 #include <open62541/server_config_default.h>
 #include <open62541/types_generated.h>
 
-#include "ua_pubsub.h"
+#include "../openPubSub/ua_pubsub/ua_pubsub.h"
 
 #ifdef UA_ENABLE_PUBSUB_ETH_UADP
 #include <open62541/plugin/pubsub_ethernet.h>

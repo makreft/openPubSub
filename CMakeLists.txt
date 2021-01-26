@@ -8,6 +8,8 @@ set( CMAKE_CXX_STANDARD 17 )
 set( CMAKE_C_STANDARD 99 )
 
 add_subdirectory(openPubSub)
+find_library(ops_server REQUIRED)
+find_library(ua_pubsub REQUIRED)
 
 if (MSVC)
     add_compile_options( /W4 )
@@ -23,7 +25,41 @@ endif()
 add_executable( server_playground
     examples/server_playground.cpp)
 
-target_link_libraries(server_playground ops_server)
+add_executable( subscriber_playground
+    examples/subscriber_playground.cpp)
+
+add_executable( subscriber_standalone
+    examples/subscriber.cpp)
+
+add_executable( read_server_speed
+    examples/read_server_speed.cpp)
+
+add_executable( read_client_speed
+    examples/read_client_speed.cpp)
+
+add_executable( tutorial_pubsub_subscribe
+    examples/tutorial_pubsub_subscribe.c)
+
+add_executable( tutorial_pubsub_publish
+    examples/tutorial_pubsub_publish.c)
+
+set( CMAKE_PREFIX_PATH $ENV{HOME}/install/open62541 )
+add_library( open62541 SHARED IMPORTED REQUIRED COMPONENTS Events FullNamespace)
+set_target_properties( open62541 PROPERTIES IMPORTED_LOCATION ${CMAKE_PREFIX_PATH}/lib/libopen62541.so )
+target_include_directories( open62541 INTERFACE ${CMAKE_PREFIX_PATH}/include )
+set(INCLUDE_INSTALL_DIR $ENV{HOME}/install/open62541/include)
+set(LIB_INSTALL_DIR  $ENV{HOME}/install/open6254/lib)
+target_link_libraries(server_playground ops_server )
+target_link_libraries(subscriber_playground ops_server )
+target_link_libraries(subscriber_standalone ops_server )
+target_link_libraries( read_server_speed ops_server )
+target_link_libraries( read_client_speed ops_server )
+target_link_libraries( tutorial_pubsub_publish ops_server )
+target_link_libraries( tutorial_pubsub_subscribe open62541::open62541 ops_server )
+
+
+
+#===DOCS=============
 find_package(Doxygen)
 
 if (DOXYGEN_FOUND)

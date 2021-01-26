@@ -3,10 +3,10 @@
 
 #include <string>
 #include <open62541/types_generated.h>
-#include <open62541/types.h>
 
 namespace openPubSub
 {
+
     struct transportlayerNotFound : public std::exception {
         const char * what () const throw () {
             return "PubSub Transportlayer not found";

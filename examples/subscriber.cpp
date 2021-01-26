@@ -19,7 +19,7 @@
 #include <open62541/server.h>
 #include <open62541/server_config_default.h>
 
-#include "ua_pubsub/ua_pubsub_networkmessage.h"
+#include "../openPubSub/ua_pubsub/ua_pubsub_networkmessage.h"
 
 #include <signal.h>
 
@@ -107,4 +107,35 @@ subscriberListen(UA_PubSubChannel *psc) {
     cleanup:
     UA_NetworkMessage_clear(&networkMessage);
     return retval;
+}
+
+int main(int argc, char **argv) {
+    signal(SIGINT, stopHandler);
+    signal(SIGTERM, stopHandler);
+
+    UA_PubSubTransportLayer udpLayer = UA_PubSubTransportLayerUDPMP();
+
+    UA_PubSubConnectionConfig connectionConfig;
+    memset(&connectionConfig, 0, sizeof(connectionConfig));
+    connectionConfig.name = UA_STRING("UADP Connection 1");
+    connectionConfig.transportProfileUri =
+        UA_STRING("http://opcfoundation.org/UA-Profile/Transport/pubsub-udp-uadp");
+    connectionConfig.enabled = UA_TRUE;
+
+    UA_NetworkAddressUrlDataType networkAddressUrl =
+        {UA_STRING_NULL , UA_STRING("opc.udp://224.0.0.22:4840/")};
+    UA_Variant_setScalar(&connectionConfig.address, &networkAddressUrl,
+                         &UA_TYPES[UA_TYPES_NETWORKADDRESSURLDATATYPE]);
+
+    UA_PubSubChannel *psc =
+        udpLayer.createPubSubChannel(&connectionConfig);
+    psc->regist(psc, NULL, NULL);
+
+    UA_StatusCode retval = UA_STATUSCODE_GOOD;
+    while(running && retval == UA_STATUSCODE_GOOD)
+        retval = subscriberListen(psc);
+
+    psc->close(psc);
+
+    return 0;
 }
