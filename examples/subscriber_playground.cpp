@@ -1,12 +1,8 @@
-#include "../openPubSub/openPubSub.h"
-#include <iostream>
+#include "../openPubSub/subscription.h"
 
 int main()
 {
-    openPubSub::Server server;
-    openPubSub::init(server);
-    server.addReaderGroup();
-    //UA_DataSet server.subscribe("topic");
-    server.run();
-    std::cout << "test\n";
+    Subscriber sub;
+    sub.run();
+
 }

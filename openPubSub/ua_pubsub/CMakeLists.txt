@@ -6,7 +6,10 @@ set(ua_pubsub_source_files
     ua_pubsub_networkmessage.h
     ua_types_encoding_binary.c
     ua_types_encoding_binary.h
-    ua_util_internal.h)
+    ua_util_internal.h
+    ua_server_internal.h)
+
+
 
 add_library(ua_pubsub ${ua_pubsub_source_files})
 set( CMAKE_PREFIX_PATH $ENV{HOME}/install/open62541 )
