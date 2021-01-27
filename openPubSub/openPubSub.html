@@ -189,8 +189,8 @@
 <dd></dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4N10openPubSub6Server19addPubSubConnectionEP28UA_NetworkAddressUrlDataType">
-<span id="_CPPv3N10openPubSub6Server19addPubSubConnectionEP28UA_NetworkAddressUrlDataType"></span><span id="_CPPv2N10openPubSub6Server19addPubSubConnectionEP28UA_NetworkAddressUrlDataType"></span><span id="openPubSub::Server::addPubSubConnection__UA_NetworkAddressUrlDataTypeP"></span><span class="target" id="classopenPubSub_1_1Server_1a44b8e3effa9e07e9782547355a7931e9"></span>void <code class="sig-name descname">addPubSubConnection</code><span class="sig-paren">(</span>UA_NetworkAddressUrlDataType *<em>networkAddressUrl</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N10openPubSub6Server19addPubSubConnectionEP28UA_NetworkAddressUrlDataType" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N10openPubSub6Server19addPubSubConnectionEP28UA_NetworkAddressUrlDataTypePcKi">
+<span id="_CPPv3N10openPubSub6Server19addPubSubConnectionEP28UA_NetworkAddressUrlDataTypePcKi"></span><span id="_CPPv2N10openPubSub6Server19addPubSubConnectionEP28UA_NetworkAddressUrlDataTypePcKi"></span><span id="openPubSub::Server::addPubSubConnection__UA_NetworkAddressUrlDataTypeP.cP.iC"></span><span class="target" id="classopenPubSub_1_1Server_1ac6aa0102c3e3b7073069e8a124023394"></span>void <code class="sig-name descname">addPubSubConnection</code><span class="sig-paren">(</span>UA_NetworkAddressUrlDataType *<em>networkAddressUrl</em>, char *<em>connectionName</em>, <em class="property">const</em> int <em>pubId</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N10openPubSub6Server19addPubSubConnectionEP28UA_NetworkAddressUrlDataTypePcKi" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The server that creates the PubSub Connection with addPubSubConnection is the Host –&gt; Publisher of the data. <dl class="simple">
 <dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">networkAddressUrl</span></code>: </p></li>
@@ -201,14 +201,14 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4N10openPubSub6Server19addPublishedDataSetEv">
-<span id="_CPPv3N10openPubSub6Server19addPublishedDataSetEv"></span><span id="_CPPv2N10openPubSub6Server19addPublishedDataSetEv"></span><span id="openPubSub::Server::addPublishedDataSet__void"></span><span class="target" id="classopenPubSub_1_1Server_1a6a21f6e52ec7482600a591786d8afdf6"></span>void <code class="sig-name descname">addPublishedDataSet</code><span class="sig-paren">(</span>void<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N10openPubSub6Server19addPublishedDataSetEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N10openPubSub6Server19addPublishedDataSetEPc">
+<span id="_CPPv3N10openPubSub6Server19addPublishedDataSetEPc"></span><span id="_CPPv2N10openPubSub6Server19addPublishedDataSetEPc"></span><span id="openPubSub::Server::addPublishedDataSet__cP"></span><span class="target" id="classopenPubSub_1_1Server_1ae0684e03ba16abf55b219e28e5a5653f"></span>void <code class="sig-name descname">addPublishedDataSet</code><span class="sig-paren">(</span>char *<em>pdsName</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N10openPubSub6Server19addPublishedDataSetEPc" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The PublishedDataSet (PDS) and PubSubConnection are the toplevel entities and can exist alone. The PDS contains the collection of the published fields. All other PubSub elements are directly or indirectly linked with the PDS or connection. Returns the publishedDataSetId, that is needed for adding DS fields to the PublishedDataSet. </p>
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4N10openPubSub6Server15addDataSetFieldEv">
-<span id="_CPPv3N10openPubSub6Server15addDataSetFieldEv"></span><span id="_CPPv2N10openPubSub6Server15addDataSetFieldEv"></span><span id="openPubSub::Server::addDataSetField__void"></span><span class="target" id="classopenPubSub_1_1Server_1a82a48c6d35e74351f649f8b3f53f2516"></span>void <code class="sig-name descname">addDataSetField</code><span class="sig-paren">(</span>void<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N10openPubSub6Server15addDataSetFieldEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N10openPubSub6Server15addDataSetFieldEPc">
+<span id="_CPPv3N10openPubSub6Server15addDataSetFieldEPc"></span><span id="_CPPv2N10openPubSub6Server15addDataSetFieldEPc"></span><span id="openPubSub::Server::addDataSetField__cP"></span><span class="target" id="classopenPubSub_1_1Server_1a2bcfa28e84ac189e6ef2368659541d94"></span>void <code class="sig-name descname">addDataSetField</code><span class="sig-paren">(</span>char *<em>fieldName</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N10openPubSub6Server15addDataSetFieldEPc" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The DataSetField (DSF) is part of the PDS and describes exactly one published field. all fields are added to the beginning of the list. </p>
 </dd></dl>
 
@@ -256,8 +256,8 @@
 <dd></dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4N10openPubSub6Server13addObjectNodeEPc9UA_NodeId">
-<span id="_CPPv3N10openPubSub6Server13addObjectNodeEPc9UA_NodeId"></span><span id="_CPPv2N10openPubSub6Server13addObjectNodeEPc9UA_NodeId"></span><span id="openPubSub::Server::addObjectNode__cP.UA_NodeId"></span><span class="target" id="classopenPubSub_1_1Server_1a802b7674a049958ee38a8aea466fa9a3"></span>void <code class="sig-name descname">addObjectNode</code><span class="sig-paren">(</span>char *<em>publisherName</em>, UA_NodeId <em>folderId</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N10openPubSub6Server13addObjectNodeEPc9UA_NodeId" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N10openPubSub6Server13addObjectNodeEPcP9UA_NodeId">
+<span id="_CPPv3N10openPubSub6Server13addObjectNodeEPcP9UA_NodeId"></span><span id="_CPPv2N10openPubSub6Server13addObjectNodeEPcP9UA_NodeId"></span><span id="openPubSub::Server::addObjectNode__cP.UA_NodeIdP"></span><span class="target" id="classopenPubSub_1_1Server_1a854a7dd681de75231442ea4d7134c604"></span>void <code class="sig-name descname">addObjectNode</code><span class="sig-paren">(</span>char *<em>publisherName</em>, UA_NodeId *<em>folderId</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N10openPubSub6Server13addObjectNodeEPcP9UA_NodeId" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
@@ -318,7 +318,8 @@
 <dl class="cpp function">
 <dt id="_CPPv4N10openPubSub6Server19removeDataSetWriterEv">
 <span id="_CPPv3N10openPubSub6Server19removeDataSetWriterEv"></span><span id="_CPPv2N10openPubSub6Server19removeDataSetWriterEv"></span><span id="openPubSub::Server::removeDataSetWriter__void"></span><span class="target" id="classopenPubSub_1_1Server_1ab4321eb66dcbd0bd41f713dc95e5b0e2"></span>UA_StatusCode <code class="sig-name descname">removeDataSetWriter</code><span class="sig-paren">(</span>void<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N10openPubSub6Server19removeDataSetWriterEv" title="Permalink to this definition">¶</a><br /></dt>
-<dd></dd></dl>
+<dd><p>removeDataSetWriter </p>
+</dd></dl>
 
 </div>
 <div class="breathe-sectiondef docutils container">
