@@ -8,7 +8,11 @@ add_library( open62541 SHARED IMPORTED REQUIRED )
 set_target_properties( open62541 PROPERTIES IMPORTED_LOCATION ${CMAKE_PREFIX_PATH}/lib/libopen62541.so )
 target_include_directories( open62541 INTERFACE ${CMAKE_PREFIX_PATH}/include )
 
-set(ops_server_src_files openPubSub.cpp)
+set(ops_server_src_files openPubSub.cpp
+    #UATypes.cpp
+    #UATypes.h
+    #VariableNode.h
+    )
 add_library(ops_server ${ops_server_src_files})
 
 set(ops_subscription_src_files subscription.cpp)

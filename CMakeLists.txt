@@ -41,21 +41,33 @@ add_executable( read_client_speed
 add_executable( tutorial_pubsub_publish
     examples/tutorial_pubsub_publish.c)
 
+add_executable( ops_server_speed
+    examples/ops_server_speed.cpp)
 
+add_executable( esp32_information_model
+    examples/microcontroller_information_model.cpp)
+
+add_executable( rasp_information_model
+    examples/sensor_information_model.cpp)
 
 set( CMAKE_PREFIX_PATH $ENV{HOME}/install/open62541 )
 add_library( open62541 SHARED IMPORTED REQUIRED COMPONENTS Events FullNamespace)
 set_target_properties( open62541 PROPERTIES IMPORTED_LOCATION ${CMAKE_PREFIX_PATH}/lib/libopen62541.so )
 target_include_directories( open62541 INTERFACE ${CMAKE_PREFIX_PATH}/include )
-set(INCLUDE_INSTALL_DIR $ENV{HOME}/install/open62541/include)
-set(LIB_INSTALL_DIR  $ENV{HOME}/install/open6254/lib)
+set( INCLUDE_INSTALL_DIR $ENV{HOME}/install/open62541/include )
+set( LIB_INSTALL_DIR  $ENV{HOME}/install/open6254/lib )
 target_link_libraries( server_playground ops_server )
-target_link_libraries( subscriber_playground ops_server ops_subscription)
+target_link_libraries( subscriber_playground ops_server ops_subscription )
 target_link_libraries( subscriber_standalone ops_server )
 target_link_libraries( read_server_speed ops_server )
 target_link_libraries( read_client_speed ops_server )
 target_link_libraries( tutorial_pubsub_publish ops_server )
+target_link_libraries( ops_server_speed ops_server )
 
+target_link_libraries( esp32_information_model
+    ops_server open62541)
+target_link_libraries( rasp_information_model
+    ops_server open62541)
 
 #===DOCS=============
 find_package(Doxygen)

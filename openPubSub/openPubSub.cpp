@@ -12,6 +12,8 @@ extern "C" {
 }
 #endif
 
+// left here to build the future
+//#include "VariableNode.h"
 
 namespace openPubSub
 {
@@ -33,13 +35,18 @@ namespace openPubSub
         UA_Boolean m_running;
         UA_NodeId connectionIdent, publishedDataSetIdent, writerGroupIdent;
         UA_NodeId dataSetWriterIdent;
+        /*
+         * TODO: Think of a data structure so that
+         * multiple DataSets, Fields and so on can be
+         * saved and called.
+         */
 
         UA_WriterGroupConfig m_writerGroupConfig;
         UA_DataSetWriterConfig m_dataSetWriterConfig;
         UA_PubSubConnectionConfig m_pubSubConnectionConfig;
         UA_NetworkAddressUrlDataType transportProfile = {UA_STRING_NULL, \
            UA_STRING("http://opcfoundation.org/UA-Profile/Transport/pubsub-udp-uadp")};
-
+        UA_NodeId sampleTypeId = {1, UA_NODEIDTYPE_NUMERIC, {1001}};
         UA_Server *mp_server;
         UA_ServerConfig *mp_config;
     };
@@ -50,6 +57,7 @@ namespace openPubSub
         mImpl->m_running = false;
     }
     void init(Server &server)
+
     {
         __server = &server;
         signal(SIGINT, reinterpret_cast<__sighandler_t>(stopHandler));
@@ -103,29 +111,30 @@ namespace openPubSub
 //============PubSub Connection Handling========================================
 //==============================================================================
 
-    void Server::addPubSubConnection(UA_NetworkAddressUrlDataType* networkAddressUrl){
+    void Server::addPubSubConnection(UA_NetworkAddressUrlDataType *networkAddressUrl,
+                                char *connectionName, const int pubId) {
         /* Details about the connection configuration and handling are located
          * in the pubsub connection tutorial */
         UA_PubSubConnectionConfig connectionConfig;
         memset(&connectionConfig, 0, sizeof(connectionConfig));
-        connectionConfig.name = UA_STRING("UADP Connection 1");
+        connectionConfig.name = UA_STRING(connectionName);
         connectionConfig.transportProfileUri = mImpl->transportProfile.url;
         connectionConfig.enabled = UA_TRUE;
         UA_Variant_setScalar(&connectionConfig.address, networkAddressUrl,
                              &UA_TYPES[UA_TYPES_NETWORKADDRESSURLDATATYPE]);
         /* Changed to static publisherId from random generation to identify
          * the publisher on Subscriber side */
-        connectionConfig.publisherId.numeric = 2234;
+        connectionConfig.publisherId.numeric = pubId;
         UA_Server_addPubSubConnection(mImpl->mp_server, &connectionConfig, &mImpl->connectionIdent);
     }
 
-    void Server::addPublishedDataSet(void){
+    void Server::addPublishedDataSet(char *pdsName) {
         /* The PublishedDataSetConfig contains all necessary public
         * informations for the creation of a new PublishedDataSet */
         UA_PublishedDataSetConfig publishedDataSetConfig;
         memset(&publishedDataSetConfig, 0, sizeof(UA_PublishedDataSetConfig));
         publishedDataSetConfig.publishedDataSetType = UA_PUBSUB_DATASET_PUBLISHEDITEMS;
-        publishedDataSetConfig.name = UA_STRING("Demo PDS");
+        publishedDataSetConfig.name = UA_STRING(pdsName);
         /* Create new PublishedDataSet based on the PublishedDataSetConfig. */
         UA_Server_addPublishedDataSet(mImpl->mp_server, &publishedDataSetConfig,
                                       &mImpl->publishedDataSetIdent);
@@ -133,13 +142,15 @@ namespace openPubSub
     // DataSetField
     // * The DataSetField (DSF) is part of the PDS and describes exactly one published
     // * field. */
-    void Server::addDataSetField(void) {
+
+    void Server::addDataSetField(char *fieldName) {
         /* Add a field to the previous created PublishedDataSet */
+
         UA_NodeId dataSetFieldIdent;
         UA_DataSetFieldConfig dataSetFieldConfig;
         memset(&dataSetFieldConfig, 0, sizeof(UA_DataSetFieldConfig));
         dataSetFieldConfig.dataSetFieldType = UA_PUBSUB_DATASETFIELD_VARIABLE;
-        dataSetFieldConfig.field.variable.fieldNameAlias = UA_STRING("Server localtime");
+        dataSetFieldConfig.field.variable.fieldNameAlias = UA_STRING(fieldName);
         dataSetFieldConfig.field.variable.promotedField = UA_FALSE;
         dataSetFieldConfig.field.variable.publishParameters.publishedVariable =
             UA_NODEID_NUMERIC(0, UA_NS0ID_SERVER_SERVERSTATUS_CURRENTTIME);
@@ -261,15 +272,15 @@ namespace openPubSub
 
 
     }
-    void Server::addObjectNode(char * publisherName, UA_NodeId folderId)
+    void Server::addObjectNode(char * publisherName, UA_NodeId *folderId)
     {
         UA_ObjectAttributes oAttr = UA_ObjectAttributes_default;
+        oAttr.displayName = UA_LOCALIZEDTEXT("en-US", publisherName);
         UA_Server_addObjectNode(mImpl->mp_server, UA_NODEID_NULL,
                                 UA_NODEID_NUMERIC(0, UA_NS0ID_OBJECTSFOLDER),
                                 UA_NODEID_NUMERIC(0, UA_NS0ID_ORGANIZES),
-                                UA_QUALIFIEDNAME(1, publisherName),
-                                UA_NODEID_NUMERIC(0, UA_NS0ID_BASEDATAVARIABLETYPE),
-                                oAttr, NULL, &folderId);
+                                UA_QUALIFIEDNAME(1, publisherName), UA_NODEID_NUMERIC(0, UA_NS0ID_BASEOBJECTTYPE),
+                                oAttr, NULL, folderId);
     }
 
     UA_StatusCode Server::addReaderGroup(void)

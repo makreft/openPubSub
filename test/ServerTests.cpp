@@ -51,7 +51,7 @@ TEST(openPubSubTests, checkServerPubSubConnection)
     UA_PubSubConnectionConfig pubsubconconf;
     openPubSub::Server server;
     openPubSub::init(server);
-    server.addPubSubConnection(&networkAddressUrl);
+    server.addPubSubConnection(&networkAddressUrl, "UADP Connection 1", 2234);
     EXPECT_EQ(0, server.getPubSubConnectionConfig(&pubsubconconf));
     EXPECT_EQ(0, server.removePubSubConnection());
 }
@@ -62,9 +62,9 @@ TEST(openPubSubTests, checkServerPublishedDataSet)
     UA_DataSetWriterConfig config;
     openPubSub::Server server;
     openPubSub::init(server);
-    server.addPubSubConnection(&networkAddressUrl);
-    server.addPublishedDataSet();
-    server.addDataSetField();
+    server.addPubSubConnection(&networkAddressUrl, "UADP Connection 1", 2234);
+    server.addPublishedDataSet("Default PDS");
+    server.addDataSetField("Server localtime");
     server.addWriterGroup();
     server.addDataSetWriter();
     UA_StatusCode code =server.getDataSetWriterConfig(&config);

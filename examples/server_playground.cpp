@@ -15,9 +15,9 @@ int main()
         {UA_STRING_NULL , UA_STRING("opc.udp://224.0.0.22:4840/")};
 
     UA_NodeId publishThisVar = UA_NODEID_NUMERIC(0, UA_NS0ID_SERVERSTATUSTYPE_CURRENTTIME);
-    serv.addPubSubConnection(&networkAddressUrl);
-    serv.addPublishedDataSet();
-    serv.addDataSetField();
+    serv.addPubSubConnection(&networkAddressUrl, "UADP Connection 1", 2234);
+    serv.addPublishedDataSet( "Default PDS");
+    serv.addDataSetField("Server localtime");
     serv.addWriterGroup();
     serv.addDataSetWriter();
     serv.run();

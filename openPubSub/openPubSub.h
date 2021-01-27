@@ -12,7 +12,7 @@
 // ops
 #include "util/util.h"
 
-// ops = openPubSub?
+
 namespace openPubSub
 {
 class Server
@@ -37,16 +37,18 @@ public:
     ///is the Host --> Publisher of the data.
     ///@param networkAddressUrl:
     ////usually the default is multicast: opc.udp://224.0.0.22:4840/
-    void addPubSubConnection(UA_NetworkAddressUrlDataType* networkAddressUrl);
+    void addPubSubConnection(UA_NetworkAddressUrlDataType *networkAddressUrl,
+                             char *connectionName, const int pubId);
     /// The PublishedDataSet (PDS) and PubSubConnection are the toplevel entities and
     /// can exist alone. The PDS contains the collection of the published fields. All
     /// other PubSub elements are directly or indirectly linked with the PDS or
     /// connection. Returns the publishedDataSetId, that is needed for adding DS fields
     /// to the PublishedDataSet.
-    void addPublishedDataSet(void);
+    void addPublishedDataSet(char *pdsName);
     /// The DataSetField (DSF) is part of the PDS and describes exactly one published
     /// field. all fields are added to the beginning of the list.
-    void addDataSetField(void);
+
+    void addDataSetField(char *fieldName);
     void addWriterGroup(void);
     /// A DataSetWriter (DSW) is the glue between the WG and the PDS. The DSW is
     /// linked to exactly one PDS and contains additional information for the
@@ -70,7 +72,7 @@ public:
     void addVariableNode(UA_NodeId variableNodeId, const UA_NodeId folderId,
                          char *nodeDisplayName, char *browseName,
                          UA_DateTime UA_DataType, bool setAccessLevelMask);
-    void addObjectNode(char * publisherName, UA_NodeId folderId);
+    void addObjectNode(char * publisherName, UA_NodeId *folderId);
     UA_StatusCode addReaderGroup(void);
 
     //==========================================================================
@@ -89,6 +91,7 @@ public:
     ///@param config: the DSWConfig will be copied to this value
     UA_StatusCode getDataSetWriterConfig(UA_DataSetWriterConfig * config);
 
+    /// removeDataSetWriter
     UA_StatusCode removeDataSetWriter(void);
 };
     ///initializes the signal stuff
