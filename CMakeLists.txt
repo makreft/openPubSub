@@ -41,8 +41,8 @@ add_executable( read_client_speed
 add_executable( tutorial_pubsub_publish
     examples/tutorial_pubsub_publish.c)
 
-add_executable( ops_server_speed
-    examples/ops_server_speed.cpp)
+#add_executable( ops_server_speed
+#    examples/ops_server_speed.cpp)
 
 add_executable( esp32_information_model
     examples/microcontroller_information_model.cpp)
@@ -62,7 +62,7 @@ target_link_libraries( subscriber_standalone ops_server )
 target_link_libraries( read_server_speed ops_server )
 target_link_libraries( read_client_speed ops_server )
 target_link_libraries( tutorial_pubsub_publish ops_server )
-target_link_libraries( ops_server_speed ops_server )
+#target_link_libraries( ops_server_speed ops_server )
 
 target_link_libraries( esp32_information_model
     ops_server open62541)
