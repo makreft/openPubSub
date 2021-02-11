@@ -2,10 +2,89 @@
 #include "../openPubSub/ua_pubsub/ua_pubsub.h"
 #include <open62541/server_config_default.h>
 #include <time.h>
+#include <fstream>
+#include <iostream>
 
+#define CLK 5
+#define DBIT 6 //SO
+#define CS 7
+
+#include <wiringPi.h>
+#include <stdlib.h>
+#include <stdio.h>
+
+int Thermal_Couple_Read()
+{
+    int value = 0;
+    //init sensor
+    digitalWrite(CS, LOW);
+    delay(2);
+    digitalWrite(CS, HIGH);
+    delay(200);
+    /* Read the chip and return the raw temperature value
+     * Bring CS pin low to allow us to read the data from
+     * the conversion process
+     */
+    digitalWrite(CS, LOW);
+    /* Cycle the clock for dummy bit 15 */
+    digitalWrite(CLK, HIGH);
+    // delay(1);
+    digitalWrite(CLK, LOW);
+    
+    /* Read bits 14-3 from MAX6675 for the Temp.
+     * Loop for each bit reading the value and storing
+     * the final value in 'temp'
+     */
+    int i;
+    for(i = 14; i >= 0; i--)
+    {
+    digitalWrite(CLK, HIGH);
+    //delay(1);
+    value += digitalRead(DBIT) << i;
+    digitalWrite(CLK, LOW);
+    }
+    // check bit D2 if HIGH no sensor
+    if ((value & 0x04) == 0x04) return -1;
+    // shift rigth three places
+    return value >> 3;
+}
+UA_NodeId SENSOR_VALUE_ID;
+UA_Int32 SENSOR_VALUE = 0;
+float Ctemp, Ftemp;
+
+
+void max6675_callback(UA_Server *server, void *data)
+{
+    SENSOR_VALUE = Thermal_Couple_Read();
+    if (SENSOR_VALUE == -1)
+    {
+        printf("No sensor connected.");
+    }
+    //else
+    //{
+    //    Ctemp = SENSOR_VALUE * 0.25;
+    //    printf("Temp in °C: %4.2f \n", Ctemp);
+    //}
+    UA_Variant tmpVari; //Temperature Variant
+    UA_Variant_init(&tmpVari);
+    UA_Variant_setScalar(&tmpVari, &SENSOR_VALUE, &UA_TYPES[UA_TYPES_FLOAT]);
+    UA_Server_writeValue(server, SENSOR_VALUE_ID, tmpVari);
+}
 
 int main()
 {
+    if(wiringPiSetup() == -1)
+    {
+        printf("wiringpi setup failed \n");
+        exit(1);
+    }
+    pinMode(CLK, OUTPUT);
+    pinMode(DBIT, INPUT);
+    pinMode(CS, OUTPUT);
+
+    digitalWrite(CS, HIGH);
+    digitalWrite(CLK, LOW);
+
 
     openPubSub::Server serv;
     openPubSub::init(serv);
@@ -14,13 +93,38 @@ int main()
     UA_NetworkAddressUrlDataType networkAddressUrl =
         {UA_STRING_NULL , UA_STRING("opc.udp://224.0.0.22:4840/")};
 
-    UA_NodeId publishThisVar = UA_NODEID_NUMERIC(0, UA_NS0ID_SERVERSTATUSTYPE_CURRENTTIME);
+    //1. Adding PubSub Connection onto the Server
     serv.addPubSubConnection(&networkAddressUrl, "UADP Connection 1", 2234);
-    serv.addPublishedDataSet( "Default PDS");
-    serv.addDataSetField("Server localtime");
+
+    //2. Adding a DataSet for the Temperature
+    serv.addPublishedDataSet("DataSet Temperature");
+
+    //3. Adding an Object Node
+    UA_NodeId folderId;
+    serv.addObjectNode("Publisher1", &folderId);
+    //4. Adding a UA_TYPES_INT32 Variable Node
+    serv.addInt32VariableNode(SENSOR_VALUE_ID, folderId, SENSOR_VALUE);
+    //5. Adding a Int32 DataSetField
+    serv.addInt32DataSetField(SENSOR_VALUE_ID);
+    //serv.addDataSetField("Server localtime");
     serv.addWriterGroup();
     serv.addDataSetWriter();
+    UA_StatusCode code;
+    UA_Server *ua_server = serv.getUAServer();
+    UA_UInt64 callbackId = 0;
+    code = UA_Server_addRepeatedCallback(ua_server, (UA_ServerCallback)max6675_callback,
+                                    NULL, 1000, &callbackId);
+    std::cout << "status code: " << code << "\n" << std::endl;
     serv.run();
+    //if(code)
+    //{    
+    //    serv.run();
+    //}
+    //else
+    //{
+    //     exit(3);
+    //}
+    return 0;
 }
 //void
 //timerCallback(UA_Server *server, void *data) {

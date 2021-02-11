@@ -49,11 +49,13 @@ public:
     /// field. all fields are added to the beginning of the list.
 
     void addDataSetField(char *fieldName);
+    void addInt32DataSetField(UA_NodeId publishedVariable);
     void addWriterGroup(void);
     /// A DataSetWriter (DSW) is the glue between the WG and the PDS. The DSW is
     /// linked to exactly one PDS and contains additional information for the
     /// message generation.
     void addDataSetWriter(void);
+    UA_StatusCode addRepeatedCallback(UA_ServerCallback callback);
     void run(void);
     bool isRunning(void);
 
@@ -66,9 +68,8 @@ public:
     void addVariableNode(UA_NodeId variableNodeId, const UA_NodeId folderId,
                          char *nodeDisplayName, char *browseName,
                          UA_Boolean UA_DataType, bool setAccessLevel);
-    void addVariableNode(UA_NodeId variableNodeId, const UA_NodeId folderId,
-                         char *nodeDisplayName, char *browseName,
-                         UA_NodeId UA_DataType, bool setAccessLevel);
+    void addInt32VariableNode(UA_NodeId variableNodeId, UA_NodeId folderId,
+                                        UA_Int32 dsInt32Val);
     void addVariableNode(UA_NodeId variableNodeId, const UA_NodeId folderId,
                          char *nodeDisplayName, char *browseName,
                          UA_DateTime UA_DataType, bool setAccessLevelMask);

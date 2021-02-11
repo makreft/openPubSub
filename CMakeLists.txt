@@ -12,6 +12,14 @@ find_library(ops_server REQUIRED)
 find_library(ua_pubsub REQUIRED)
 find_library(ops_subscription REQUIRED)
 
+# Locate libraries and headers
+find_package(WiringPi REQUIRED)
+find_package(Threads REQUIRED)
+
+# Include headers
+include_directories(${WIRINGPI_INCLUDE_DIRS})
+
+
 if (MSVC)
     add_compile_options( /W4 )
 else()
@@ -50,6 +58,9 @@ add_executable( esp32_information_model
 add_executable( rasp_information_model
     examples/sensor_information_model.cpp)
 
+add_executable( raspi_thermocouple_publisher
+    examples/raspi_thermocouple_publisher.cpp)
+
 set( CMAKE_PREFIX_PATH $ENV{HOME}/install/open62541 )
 add_library( open62541 SHARED IMPORTED REQUIRED COMPONENTS Events FullNamespace)
 set_target_properties( open62541 PROPERTIES IMPORTED_LOCATION ${CMAKE_PREFIX_PATH}/lib/libopen62541.so )
@@ -63,11 +74,17 @@ target_link_libraries( read_server_speed ops_server )
 target_link_libraries( read_client_speed ops_server )
 target_link_libraries( tutorial_pubsub_publish ops_server )
 #target_link_libraries( ops_server_speed ops_server )
+target_link_libraries(server_playground ${WIRINGPI_LIBRARIES})
+target_link_libraries(server_playground ${CMAKE_THREAD_LIBS_INIT})
 
 target_link_libraries( esp32_information_model
     ops_server open62541)
 target_link_libraries( rasp_information_model
     ops_server open62541)
+
+target_link_libraries( raspi_thermocouple_publisher
+    ops_server open62541 ${WIRINGPI_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
+
 
 #===DOCS=============
 find_package(Doxygen)
