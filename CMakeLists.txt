@@ -2,8 +2,11 @@ cmake_minimum_required( VERSION 3.9.2 )
 
 project( ops C CXX )
 
-option( BUILD_TESTS "Turn on build for tests" ON )
+option( BUILD_TESTS "Turn on to build tests" ON )
+option( BUILD_WIRINGPI "Turn on to build Raspberry Pi example" OFF)
+
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
+
 set( CMAKE_CXX_STANDARD 17 )
 set( CMAKE_C_STANDARD 99 )
 
@@ -12,12 +15,6 @@ find_library(ops_server REQUIRED)
 find_library(ua_pubsub REQUIRED)
 find_library(ops_subscription REQUIRED)
 
-# Locate libraries and headers
-find_package(WiringPi REQUIRED)
-find_package(Threads REQUIRED)
-
-# Include headers
-include_directories(${WIRINGPI_INCLUDE_DIRS})
 
 
 if (MSVC)
@@ -58,8 +55,6 @@ add_executable( esp32_information_model
 add_executable( rasp_information_model
     examples/sensor_information_model.cpp)
 
-add_executable( raspi_thermocouple_publisher
-    examples/raspi_thermocouple_publisher.cpp)
 
 set( CMAKE_PREFIX_PATH $ENV{HOME}/install/open62541 )
 add_library( open62541 SHARED IMPORTED REQUIRED COMPONENTS Events FullNamespace)
@@ -74,17 +69,24 @@ target_link_libraries( read_server_speed ops_server )
 target_link_libraries( read_client_speed ops_server )
 target_link_libraries( tutorial_pubsub_publish ops_server )
 #target_link_libraries( ops_server_speed ops_server )
-target_link_libraries(server_playground ${WIRINGPI_LIBRARIES})
-target_link_libraries(server_playground ${CMAKE_THREAD_LIBS_INIT})
 
 target_link_libraries( esp32_information_model
     ops_server open62541)
 target_link_libraries( rasp_information_model
     ops_server open62541)
 
+if ( BUILD_WIRINGPI )
+# Locate libraries and headers
+find_package(WiringPi REQUIRED)
+find_package(Threads REQUIRED)
+
+# Include headers
+include_directories(${WIRINGPI_INCLUDE_DIRS})
+add_executable( raspi_thermocouple_publisher
+    examples/raspi_thermocouple_publisher.cpp)
 target_link_libraries( raspi_thermocouple_publisher
     ops_server open62541 ${WIRINGPI_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
-
+endif()
 
 #===DOCS=============
 find_package(Doxygen)
