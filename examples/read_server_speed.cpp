@@ -11,16 +11,20 @@
 #include <time.h>
 
 static volatile UA_Boolean running = true;
-static void stopHandler(int sig) {
+
+static void stopHandler(int sig)
+{
     UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND, "received ctrl-c");
     running = false;
 }
 
-UA_StatusCode iterateNoWaitInternal(UA_Server *server) {
+UA_StatusCode iterateNoWaitInternal(UA_Server *server)
+{
     UA_StatusCode retval = UA_Server_run_startup(server);
     if(retval != UA_STATUSCODE_GOOD)
         return retval;
-    while(running) {
+    while(running)
+    {
         UA_Server_run_iterate(server, false);
     }
     retval = UA_Server_run(server, &running);
@@ -30,13 +34,12 @@ UA_StatusCode iterateNoWaitInternal(UA_Server *server) {
     return UA_STATUSCODE_GOOD;
 }
 
-static UA_StatusCode
-readCurrentNanoseconds(UA_Server *server,
+static UA_StatusCode readCurrentNanoseconds(UA_Server *server,
                        const UA_NodeId *sessionId, void *sessionContext,
                        const UA_NodeId *nodeId, void *nodeContext,
                        UA_Boolean sourceTimeStamp, const UA_NumericRange *range,
-                       UA_DataValue *dataValue) {
-
+                       UA_DataValue *dataValue)
+{
     struct timespec tnow={0,0};
     clock_gettime(CLOCK_MONOTONIC, &tnow);
 
@@ -51,8 +54,8 @@ readCurrentNanoseconds(UA_Server *server,
     return UA_STATUSCODE_GOOD;
 }
 
-static UA_StatusCode
-addCurrentNanosecondsVariable(UA_Server *server) {
+static UA_StatusCode addCurrentNanosecondsVariable(UA_Server *server)
+{
     UA_VariableAttributes attr = UA_VariableAttributes_default;
     attr.displayName = UA_LOCALIZEDTEXT("en-US", "Current Nanoseconds of the day");
     attr.accessLevel = UA_ACCESSLEVELMASK_READ;
@@ -71,7 +74,8 @@ addCurrentNanosecondsVariable(UA_Server *server) {
                                                timeDataSource, NULL, NULL);
 }
 
-int main(void) {
+int main(void)
+{
     signal(SIGINT, stopHandler);
     signal(SIGTERM, stopHandler);
 
@@ -82,13 +86,14 @@ int main(void) {
     UA_ServerConfig_setDefault(UA_Server_getConfig(server));
 
     UA_StatusCode retval = addCurrentNanosecondsVariable(server);
-    if(retval != UA_STATUSCODE_GOOD) {
+    if(retval != UA_STATUSCODE_GOOD)
+    {
         printf("ERROR: Could not add variable! %s", UA_StatusCode_name(retval));
     }
 
-
     retval = iterateNoWaitInternal(server);
-    if(retval != UA_STATUSCODE_GOOD) {
+    if(retval != UA_STATUSCODE_GOOD)
+    {
         printf("ERROR: Could not start server! %s", UA_StatusCode_name(retval));
     }
 

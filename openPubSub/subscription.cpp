@@ -67,8 +67,8 @@
         }
 
         /* Decode the message */
-        UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
-        "Message length: %lu", (unsigned long) mImpl->buffer.length);
+        //UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
+        //"Message length: %lu", (unsigned long) mImpl->buffer.length);
         memset(&mImpl->networkMessage, 0, sizeof(UA_NetworkMessage));
         size_t currentPosition = 0;
         UA_NetworkMessage_decodeBinary(&mImpl->buffer, &currentPosition, &mImpl->networkMessage);
@@ -103,7 +103,8 @@
             {
             UA_UInt32 value = *(UA_UInt32 *)dsm->data.keyFrameData.dataSetFields[i].value.data;
             UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
-            "Message content: [UInt32] \tReceived data: %u", value);
+            //"Message content: [UInt32] \tReceived data: %u", value);
+            "Temperature [°C]: %f", value*0.25);
             } else if (currentType == &UA_TYPES[UA_TYPES_DATETIME])
             {
             UA_DateTime value = *(UA_DateTime *)dsm->data.keyFrameData.dataSetFields[i].value.data;
