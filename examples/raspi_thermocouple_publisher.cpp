@@ -111,13 +111,16 @@ addMinimalPubSubConfiguration(UA_Server * server){
 static void valueUpdateCallback(UA_Server *server, void *data)
 {
 #if defined PUBSUB_CONFIG_FASTPATH_FIXED_OFFSETS || defined PUBSUB_CONFIG_FASTPATH_STATIC_VALUES
-    int sensorVal;
+    u_int32_t sensorVal;
     for (int i = 0; i < PUBSUB_CONFIG_FIELD_COUNT; ++i)
     {
-        sensorVal = Thermal_Couple_Read() * 0.25;
+        sensorVal = Thermal_Couple_Read();
+        //std::cout << "Inside valueUpdateCallback, sensorVal: " << sensorVal << "\n";
+        if (sensorVal == -1)
+            printf("Issue with sensor.");
         *valueStore[i] = sensorVal; 
-    if(*valueStore[0] > PUBSUB_CONFIG_PUBLISH_CYCLES)
-        running = false;
+    //if(*valueStore[0] > PUBSUB_CONFIG_PUBLISH_CYCLES)
+    //    running = false;
     }
 #endif
 }
@@ -126,8 +129,13 @@ int main(void) {
     signal(SIGINT, stopHandler);
     signal(SIGTERM, stopHandler);
 
-    if(wiringPiSetup() == -1)
+    int setup = wiringPiSetup();
+    if(setup == -1)
+    {
+        std::cout << "setup error" << "\n";
         exit(1);
+    }
+    std::cout << "WringPiSetup successful \n";
     pinMode(CLK, OUTPUT);
     pinMode(DBIT, INPUT);
     pinMode(CS, OUTPUT);
@@ -142,6 +150,7 @@ int main(void) {
     config->pubsubTransportLayers = (UA_PubSubTransportLayer *) UA_malloc(sizeof(UA_PubSubTransportLayer));
     if(!config->pubsubTransportLayers) {
         UA_Server_delete(server);
+        std::cout << "Tranportlayer config error \n";
         return -1;
     }
     config->pubsubTransportLayers[0] = UA_PubSubTransportLayerUDPMP();
@@ -211,9 +220,11 @@ int main(void) {
     UA_Server_setWriterGroupOperational(server, writerGroupIdent);
 
     UA_UInt64 callbackId;
+    std::cout << "Before callback \n";
     UA_Server_addRepeatedCallback(server, valueUpdateCallback, NULL, PUBSUB_CONFIG_PUBLISH_CYCLE_MS, &callbackId);
 
     UA_StatusCode retval = UA_STATUSCODE_GOOD;
+    std::cout << "UA_StatusCode: " << retval << "\n";
     retval |= UA_Server_run(server, &running);
 
     UA_Server_delete(server);
