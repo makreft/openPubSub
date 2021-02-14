@@ -189,7 +189,8 @@ int main(void) {
     dataSetWriterConfig.name = UA_STRING("Demo DataSetWriter");
     dataSetWriterConfig.dataSetWriterId = 62541;
     dataSetWriterConfig.keyFrameCount = 10;
-    UA_Server_addDataSetWriter(server, writerGroupIdent, publishedDataSetIdent, &dataSetWriterConfig, &dataSetWriterIdent);
+    UA_Server_addDataSetWriter(server, writerGroupIdent, publishedDataSetIdent,
+                               &dataSetWriterConfig, &dataSetWriterIdent);
 
 #if defined PUBSUB_CONFIG_FASTPATH_FIXED_OFFSETS || defined PUBSUB_CONFIG_FASTPATH_STATIC_VALUES
     /* Add one DataSetField with static value source to PDS */

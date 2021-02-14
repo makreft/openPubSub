@@ -33,8 +33,8 @@ struct Server::Impl
     UA_StatusCode m_status = UA_STATUSCODE_GOOD;
     int m_defaultTcpAddressValue = 4840;
     UA_Boolean m_running;
-    UA_NodeId connectionIdent, publishedDataSetIdent, writerGroupIdent;
-    UA_NodeId dataSetWriterIdent;
+    UA_NodeId m_connectionIdent, m_publishedDataSetIdent, m_writerGroupIdent;
+    UA_NodeId m_dataSetWriterIdent;
     /*
      * TODO: Think of a data structure so that
      * multiple DataSets, Fields and so on can be
@@ -110,6 +110,13 @@ void Server::run(void)
         throw ua_exception(retVal);
 }
 //==============================================================================
+//============PubSub Callback Config=============================
+//==============================================================================
+
+
+
+
+//==============================================================================
 //============PubSub Connection Handling========================================
 //==============================================================================
 
@@ -132,7 +139,7 @@ void Server::addPubSubConnection(UA_NetworkAddressUrlDataType *networkAddressUrl
     /* Changed to static publisherId from random generation to identify
      * the publisher on Subscriber side */
     connectionConfig.publisherId.numeric = pubId;
-    UA_Server_addPubSubConnection(mImpl->m_server, &connectionConfig, &mImpl->connectionIdent);
+    UA_Server_addPubSubConnection(mImpl->m_server, &connectionConfig, &mImpl->m_connectionIdent);
 }
 
 void Server::addPublishedDataSet(char *pdsName) {
@@ -144,7 +151,7 @@ void Server::addPublishedDataSet(char *pdsName) {
     publishedDataSetConfig.name = UA_STRING(pdsName);
     /* Create new PublishedDataSet based on the PublishedDataSetConfig. */
     UA_Server_addPublishedDataSet(mImpl->m_server, &publishedDataSetConfig,
-                                  &mImpl->publishedDataSetIdent);
+                                  &mImpl->m_publishedDataSetIdent);
 }
 // DataSetField
 // * The DataSetField (DSF) is part of the PDS and describes exactly one published
@@ -162,7 +169,7 @@ void Server::addDataSetField(char *fieldName) {
     dataSetFieldConfig.field.variable.publishParameters.publishedVariable =
         UA_NODEID_NUMERIC(0, UA_NS0ID_SERVER_SERVERSTATUS_CURRENTTIME);
     dataSetFieldConfig.field.variable.publishParameters.attributeId = UA_ATTRIBUTEID_VALUE;
-    UA_Server_addDataSetField(mImpl->m_server, mImpl->publishedDataSetIdent,
+    UA_Server_addDataSetField(mImpl->m_server, mImpl->m_publishedDataSetIdent,
                               &dataSetFieldConfig, &dataSetFieldIdent);
 }
 
@@ -177,7 +184,7 @@ void Server::addInt32DataSetField(UA_NodeId publishedVariable)
     dataSetFieldConfig.field.variable.promotedField = UA_FALSE;
     dataSetFieldConfig.field.variable.publishParameters.publishedVariable = publishedVariable;
     dataSetFieldConfig.field.variable.publishParameters.attributeId = UA_ATTRIBUTEID_VALUE;
-    UA_Server_addDataSetField(mImpl->m_server, mImpl->publishedDataSetIdent,
+    UA_Server_addDataSetField(mImpl->m_server, mImpl->m_publishedDataSetIdent,
                               &dataSetFieldConfig, &fInt32);
 }
 
@@ -209,9 +216,9 @@ void Server::addWriterGroup(void)
         (UA_UadpNetworkMessageContentMask) UA_UADPNETWORKMESSAGECONTENTMASK_WRITERGROUPID |
         (UA_UadpNetworkMessageContentMask) UA_UADPNETWORKMESSAGECONTENTMASK_PAYLOADHEADER);
     writerGroupConfig.messageSettings.content.decoded.data = writerGroupMessage;
-    UA_Server_addWriterGroup(mImpl->m_server, mImpl->connectionIdent, &writerGroupConfig,
-                             &mImpl->writerGroupIdent);
-    UA_Server_setWriterGroupOperational(mImpl->m_server, mImpl->writerGroupIdent);
+    UA_Server_addWriterGroup(mImpl->m_server, mImpl->m_connectionIdent, &writerGroupConfig,
+                             &mImpl->m_writerGroupIdent);
+    UA_Server_setWriterGroupOperational(mImpl->m_server, mImpl->m_writerGroupIdent);
     UA_UadpWriterGroupMessageDataType_delete(writerGroupMessage);
 }
 
@@ -224,16 +231,16 @@ void Server::addWriterGroup(void)
 // * with an existing PublishedDataSet and be contained within a WriterGroup. */
 void Server::addDataSetWriter(void) {
     /* We need now a DataSetWriter within the WriterGroup. This means we must
-     * create a new DataSetWriterConfig and add call the addWriterGroup function. */
-    //UA_NodeId dataSetWriterIdent;
+     * create a new DataSetWriterConfig and call the addWriterGroup function. */
+    //UA_NodeId m_dataSetWriterIdent;
     UA_DataSetWriterConfig dataSetWriterConfig;
     memset(&dataSetWriterConfig, 0, sizeof(UA_DataSetWriterConfig));
     dataSetWriterConfig.name = UA_STRING("Demo DataSetWriter");
     dataSetWriterConfig.dataSetWriterId = 62541;
     dataSetWriterConfig.keyFrameCount = 10;
-    UA_Server_addDataSetWriter(mImpl->m_server, mImpl->writerGroupIdent,
-                               mImpl->publishedDataSetIdent, &dataSetWriterConfig,
-                               &mImpl->dataSetWriterIdent);
+    UA_Server_addDataSetWriter(mImpl->m_server, mImpl->m_writerGroupIdent,
+                               mImpl->m_publishedDataSetIdent, &dataSetWriterConfig,
+                               &mImpl->m_dataSetWriterIdent);
 }
 
 //==============================================================================
@@ -308,7 +315,7 @@ void Server::addObjectNode(char *publisherName, UA_NodeId *folderId)
 
 UA_StatusCode Server::addReaderGroup(void)
 {
-    UA_NodeId connectionIdentifier;
+    UA_NodeId m_connectionIdentifier;
     UA_NodeId readerGroupIdentifier;
     if (mImpl->m_server == NULL)
         return UA_STATUSCODE_BADINTERNALERROR;
@@ -318,7 +325,7 @@ UA_StatusCode Server::addReaderGroup(void)
     memset(&readerGroupConfig, 0, sizeof(UA_ReaderGroupConfig));
     readerGroupConfig.name = UA_STRING("ReaderGroup1");
     //readerGroupConfig.rtLevel = UA_PUBSUB_RT_FIXED_SIZE;
-    retval |= UA_Server_addReaderGroup(mImpl->m_server, connectionIdentifier,
+    retval |= UA_Server_addReaderGroup(mImpl->m_server, m_connectionIdentifier,
                                        &readerGroupConfig,
                                        &readerGroupIdentifier);
     return retval;
@@ -345,30 +352,30 @@ UA_StatusCode Server::getPubSubConnectionConfig(UA_PubSubConnectionConfig * conf
 {
     return (UA_Server_getPubSubConnectionConfig(
         mImpl->m_server,
-        mImpl->connectionIdent,
+        mImpl->m_connectionIdent,
         config));
 }
 
 UA_NodeId Server::getConnectionIdent(void)
 {
-    return mImpl->connectionIdent;
+    return mImpl->m_connectionIdent;
 }
 
 UA_StatusCode Server::removePubSubConnection(void)
 {
     return UA_Server_removePubSubConnection(mImpl->m_server,
-                                    mImpl->connectionIdent);
+                                    mImpl->m_connectionIdent);
 }
 
 UA_StatusCode Server::getDataSetWriterConfig(UA_DataSetWriterConfig *config)
 {
     return UA_Server_getDataSetWriterConfig(mImpl->m_server,
-                                            mImpl->dataSetWriterIdent, config);
+                                            mImpl->m_dataSetWriterIdent, config);
 }
 
 UA_StatusCode Server::removeDataSetWriter(void)
 {
     return UA_Server_removeDataSetWriter(mImpl->m_server,
-                                         mImpl->dataSetWriterIdent);
+                                         mImpl->m_dataSetWriterIdent);
 }
 }// namespace openPubSub
