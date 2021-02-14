@@ -3,7 +3,7 @@ cmake_minimum_required( VERSION 3.9.2 )
 project( ops C CXX )
 
 option( BUILD_TESTS "Turn on to build tests" ON )
-option( BUILD_WIRINGPI "Turn on to build Raspberry Pi example" OFF)
+#option( BUILD_WIRINGPI "Turn on to build Raspberry Pi example" ON )
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
@@ -75,7 +75,6 @@ target_link_libraries( esp32_information_model
 target_link_libraries( rasp_information_model
     ops_server open62541)
 
-if ( BUILD_WIRINGPI )
 # Locate libraries and headers
 find_package(WiringPi REQUIRED)
 find_package(Threads REQUIRED)
@@ -86,7 +85,6 @@ add_executable( raspi_thermocouple_publisher
     examples/raspi_thermocouple_publisher.cpp)
 target_link_libraries( raspi_thermocouple_publisher
     ops_server open62541 ${WIRINGPI_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
-endif()
 
 #===DOCS=============
 find_package(Doxygen)

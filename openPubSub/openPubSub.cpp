@@ -33,8 +33,8 @@ struct Server::Impl
     UA_StatusCode m_status = UA_STATUSCODE_GOOD;
     int m_defaultTcpAddressValue = 4840;
     UA_Boolean m_running;
-    UA_NodeId connectionIdent, publishedDataSetIdent, writerGroupIdent;
-    UA_NodeId dataSetWriterIdent;
+    UA_NodeId m_connectionIdent, m_publishedDataSetIdent, m_writerGroupIdent;
+    UA_NodeId m_dataSetWriterIdent;
     /*
      * TODO: Think of a data structure so that
      * multiple DataSets, Fields and so on can be
@@ -47,8 +47,8 @@ struct Server::Impl
     UA_NetworkAddressUrlDataType transportProfile = {UA_STRING_NULL, \
        UA_STRING("http://opcfoundation.org/UA-Profile/Transport/pubsub-udp-uadp")};
     UA_NodeId sampleTypeId = {1, UA_NODEIDTYPE_NUMERIC, {1001}};
-    UA_Server *mp_server;
-    UA_ServerConfig *mp_config;
+    UA_Server *m_server;
+    UA_ServerConfig *m_config;
 
     UA_UInt64 callbackId = 0;
 };
@@ -77,45 +77,52 @@ Server::Server()
     : mImpl(std::make_unique<Impl>())
 {
     mImpl->m_running = UA_TRUE;
-    mImpl->mp_server = UA_Server_new();
-    mImpl->mp_config = UA_Server_getConfig(mImpl->mp_server);
-    mImpl->m_status  = UA_ServerConfig_setMinimal(mImpl->mp_config,
+    mImpl->m_server = UA_Server_new();
+    mImpl->m_config = UA_Server_getConfig(mImpl->m_server);
+    mImpl->m_status  = UA_ServerConfig_setMinimal(mImpl->m_config,
                                                  mImpl->m_defaultTcpAddressValue,
                                                  NULL);
-    //mImpl->m_status = UA_ServerConfig_setDefault(mImpl->mp_config);
-    mImpl->mp_config->pubsubTransportLayers = \
+    //mImpl->m_status = UA_ServerConfig_setDefault(mImpl->m_config);
+    mImpl->m_config->pubsubTransportLayers = \
             (UA_PubSubTransportLayer *)UA_calloc(2, sizeof(UA_PubSubTransportLayer));
-    if(!mImpl->mp_config->pubsubTransportLayers)
+    if(!mImpl->m_config->pubsubTransportLayers)
     {
-        UA_Server_delete(mImpl->mp_server);
+        UA_Server_delete(mImpl->m_server);
         throw transportlayerNotFound();
     }
-    mImpl -> mp_config -> pubsubTransportLayers[0] = UA_PubSubTransportLayerUDPMP();
-    mImpl -> mp_config -> pubsubTransportLayersSize++;
+    mImpl -> m_config -> pubsubTransportLayers[0] = UA_PubSubTransportLayerUDPMP();
+    mImpl -> m_config -> pubsubTransportLayersSize++;
 #ifdef UA_ENABLE_PUBSUB_ETH_UADP
-        mImpl -> mp_config ->pubsubTransportLayers[1] = UA_PubSubTransportLayerEthernet();
-        mImpl -> mp_config ->pubsubTransportLayersSize++;
+        mImpl -> m_config ->pubsubTransportLayers[1] = UA_PubSubTransportLayerEthernet();
+        mImpl -> m_config ->pubsubTransportLayersSize++;
 #endif
 }
 
 Server::~Server(void)
 {
-    UA_Server_delete(mImpl->mp_server);
+    UA_Server_delete(mImpl->m_server);
 }
 
 void Server::run(void)
 {
-    UA_StatusCode retVal = UA_Server_run(mImpl->mp_server, &mImpl->m_running);
+    UA_StatusCode retVal = UA_Server_run(mImpl->m_server, &mImpl->m_running);
     if (retVal != UA_STATUSCODE_GOOD)
         throw ua_exception(retVal);
 }
+//==============================================================================
+//============PubSub Callback Config=============================
+//==============================================================================
+
+
+
+
 //==============================================================================
 //============PubSub Connection Handling========================================
 //==============================================================================
 
 UA_StatusCode Server::addRepeatedCallback(UA_ServerCallback callback)
 {
-    UA_StatusCode code = UA_Server_addRepeatedCallback(mImpl->mp_server, (UA_ServerCallback)callback, NULL, 1000, &mImpl->callbackId);
+    UA_StatusCode code = UA_Server_addRepeatedCallback(mImpl->m_server, (UA_ServerCallback)callback, NULL, 1000, &mImpl->callbackId);
     return code;
 }
 void Server::addPubSubConnection(UA_NetworkAddressUrlDataType *networkAddressUrl,
@@ -132,7 +139,7 @@ void Server::addPubSubConnection(UA_NetworkAddressUrlDataType *networkAddressUrl
     /* Changed to static publisherId from random generation to identify
      * the publisher on Subscriber side */
     connectionConfig.publisherId.numeric = pubId;
-    UA_Server_addPubSubConnection(mImpl->mp_server, &connectionConfig, &mImpl->connectionIdent);
+    UA_Server_addPubSubConnection(mImpl->m_server, &connectionConfig, &mImpl->m_connectionIdent);
 }
 
 void Server::addPublishedDataSet(char *pdsName) {
@@ -143,8 +150,8 @@ void Server::addPublishedDataSet(char *pdsName) {
     publishedDataSetConfig.publishedDataSetType = UA_PUBSUB_DATASET_PUBLISHEDITEMS;
     publishedDataSetConfig.name = UA_STRING(pdsName);
     /* Create new PublishedDataSet based on the PublishedDataSetConfig. */
-    UA_Server_addPublishedDataSet(mImpl->mp_server, &publishedDataSetConfig,
-                                  &mImpl->publishedDataSetIdent);
+    UA_Server_addPublishedDataSet(mImpl->m_server, &publishedDataSetConfig,
+                                  &mImpl->m_publishedDataSetIdent);
 }
 // DataSetField
 // * The DataSetField (DSF) is part of the PDS and describes exactly one published
@@ -162,7 +169,7 @@ void Server::addDataSetField(char *fieldName) {
     dataSetFieldConfig.field.variable.publishParameters.publishedVariable =
         UA_NODEID_NUMERIC(0, UA_NS0ID_SERVER_SERVERSTATUS_CURRENTTIME);
     dataSetFieldConfig.field.variable.publishParameters.attributeId = UA_ATTRIBUTEID_VALUE;
-    UA_Server_addDataSetField(mImpl->mp_server, mImpl->publishedDataSetIdent,
+    UA_Server_addDataSetField(mImpl->m_server, mImpl->m_publishedDataSetIdent,
                               &dataSetFieldConfig, &dataSetFieldIdent);
 }
 
@@ -177,7 +184,7 @@ void Server::addInt32DataSetField(UA_NodeId publishedVariable)
     dataSetFieldConfig.field.variable.promotedField = UA_FALSE;
     dataSetFieldConfig.field.variable.publishParameters.publishedVariable = publishedVariable;
     dataSetFieldConfig.field.variable.publishParameters.attributeId = UA_ATTRIBUTEID_VALUE;
-    UA_Server_addDataSetField(mImpl->mp_server, mImpl->publishedDataSetIdent,
+    UA_Server_addDataSetField(mImpl->m_server, mImpl->m_publishedDataSetIdent,
                               &dataSetFieldConfig, &fInt32);
 }
 
@@ -209,9 +216,9 @@ void Server::addWriterGroup(void)
         (UA_UadpNetworkMessageContentMask) UA_UADPNETWORKMESSAGECONTENTMASK_WRITERGROUPID |
         (UA_UadpNetworkMessageContentMask) UA_UADPNETWORKMESSAGECONTENTMASK_PAYLOADHEADER);
     writerGroupConfig.messageSettings.content.decoded.data = writerGroupMessage;
-    UA_Server_addWriterGroup(mImpl->mp_server, mImpl->connectionIdent, &writerGroupConfig,
-                             &mImpl->writerGroupIdent);
-    UA_Server_setWriterGroupOperational(mImpl->mp_server, mImpl->writerGroupIdent);
+    UA_Server_addWriterGroup(mImpl->m_server, mImpl->m_connectionIdent, &writerGroupConfig,
+                             &mImpl->m_writerGroupIdent);
+    UA_Server_setWriterGroupOperational(mImpl->m_server, mImpl->m_writerGroupIdent);
     UA_UadpWriterGroupMessageDataType_delete(writerGroupMessage);
 }
 
@@ -224,16 +231,16 @@ void Server::addWriterGroup(void)
 // * with an existing PublishedDataSet and be contained within a WriterGroup. */
 void Server::addDataSetWriter(void) {
     /* We need now a DataSetWriter within the WriterGroup. This means we must
-     * create a new DataSetWriterConfig and add call the addWriterGroup function. */
-    //UA_NodeId dataSetWriterIdent;
+     * create a new DataSetWriterConfig and call the addWriterGroup function. */
+    //UA_NodeId m_dataSetWriterIdent;
     UA_DataSetWriterConfig dataSetWriterConfig;
     memset(&dataSetWriterConfig, 0, sizeof(UA_DataSetWriterConfig));
     dataSetWriterConfig.name = UA_STRING("Demo DataSetWriter");
     dataSetWriterConfig.dataSetWriterId = 62541;
     dataSetWriterConfig.keyFrameCount = 10;
-    UA_Server_addDataSetWriter(mImpl->mp_server, mImpl->writerGroupIdent,
-                               mImpl->publishedDataSetIdent, &dataSetWriterConfig,
-                               &mImpl->dataSetWriterIdent);
+    UA_Server_addDataSetWriter(mImpl->m_server, mImpl->m_writerGroupIdent,
+                               mImpl->m_publishedDataSetIdent, &dataSetWriterConfig,
+                               &mImpl->m_dataSetWriterIdent);
 }
 
 //==============================================================================
@@ -252,7 +259,7 @@ void Server::addVariableNode(UA_NodeId variableNodeId, const UA_NodeId folderId,
         varNodeAttr.accessLevel = UA_ACCESSLEVELMASK_READ ^ UA_ACCESSLEVELMASK_WRITE;
     UA_Variant_setScalar(&varNodeAttr.value, &UA_DataType, &UA_TYPES[UA_TYPES_BOOLEAN]);
     varNodeAttr.displayName = UA_LOCALIZEDTEXT("en-US", nodeDisplayName);
-    UA_Server_addVariableNode(mImpl->mp_server, UA_NODEID_STRING(1, browseName),
+    UA_Server_addVariableNode(mImpl->m_server, UA_NODEID_STRING(1, browseName),
                               folderId, UA_NODEID_NUMERIC(0, UA_NS0ID_HASCOMPONENT),
                               UA_QUALIFIEDNAME(1, nodeDisplayName),
                               UA_NODEID_NUMERIC(0, UA_NS0ID_BASEDATAVARIABLETYPE),
@@ -269,7 +276,7 @@ void Server::addInt32VariableNode(UA_NodeId variableNodeId, UA_NodeId folderId,
     varNodeAttr.accessLevel = UA_ACCESSLEVELMASK_READ ^ UA_ACCESSLEVELMASK_WRITE;
     UA_Variant_setScalar(&varNodeAttr.value, &dsInt32Val, &UA_TYPES[UA_TYPES_INT32]);
     varNodeAttr.displayName = UA_LOCALIZEDTEXT("en-US", "Int32");
-    UA_Server_addVariableNode(mImpl->mp_server, UA_NODEID_STRING(1, "Publisher1.Int32"),
+    UA_Server_addVariableNode(mImpl->m_server, UA_NODEID_STRING(1, "Publisher1.Int32"),
                               folderId, UA_NODEID_NUMERIC(0, UA_NS0ID_HASCOMPONENT),
                               UA_QUALIFIEDNAME(1, "Int32"),
                               UA_NODEID_NUMERIC(0, UA_NS0ID_BASEDATAVARIABLETYPE),
@@ -288,7 +295,7 @@ void Server::addVariableNode(UA_NodeId variableNodeId, const UA_NodeId folderId,
         varNodeAttr.accessLevel = UA_ACCESSLEVELMASK_READ ^ UA_ACCESSLEVELMASK_WRITE;
     UA_Variant_setScalar(&varNodeAttr.value, &UA_DataType, &UA_TYPES[UA_TYPES_DATETIME]);
     varNodeAttr.displayName = UA_LOCALIZEDTEXT("en-US", nodeDisplayName);
-    UA_Server_addVariableNode(mImpl->mp_server, UA_NODEID_STRING(1, browseName),
+    UA_Server_addVariableNode(mImpl->m_server, UA_NODEID_STRING(1, browseName),
                               folderId, UA_NODEID_NUMERIC(0, UA_NS0ID_HASCOMPONENT),
                               UA_QUALIFIEDNAME(1, nodeDisplayName),
                               UA_NODEID_NUMERIC(0, UA_NS0ID_BASEDATAVARIABLETYPE),
@@ -299,7 +306,7 @@ void Server::addObjectNode(char *publisherName, UA_NodeId *folderId)
 {
     UA_ObjectAttributes oAttr = UA_ObjectAttributes_default;
     oAttr.displayName = UA_LOCALIZEDTEXT("en-US", publisherName);
-    UA_Server_addObjectNode(mImpl->mp_server, UA_NODEID_NULL,
+    UA_Server_addObjectNode(mImpl->m_server, UA_NODEID_NULL,
                             UA_NODEID_NUMERIC(0, UA_NS0ID_OBJECTSFOLDER),
                             UA_NODEID_NUMERIC(0, UA_NS0ID_ORGANIZES),
                             UA_QUALIFIEDNAME(1, publisherName), UA_NODEID_NUMERIC(0, UA_NS0ID_BASEOBJECTTYPE),
@@ -308,9 +315,9 @@ void Server::addObjectNode(char *publisherName, UA_NodeId *folderId)
 
 UA_StatusCode Server::addReaderGroup(void)
 {
-    UA_NodeId connectionIdentifier;
+    UA_NodeId m_connectionIdentifier;
     UA_NodeId readerGroupIdentifier;
-    if (mImpl->mp_server == NULL)
+    if (mImpl->m_server == NULL)
         return UA_STATUSCODE_BADINTERNALERROR;
 
     UA_StatusCode retval = UA_STATUSCODE_GOOD;
@@ -318,7 +325,7 @@ UA_StatusCode Server::addReaderGroup(void)
     memset(&readerGroupConfig, 0, sizeof(UA_ReaderGroupConfig));
     readerGroupConfig.name = UA_STRING("ReaderGroup1");
     //readerGroupConfig.rtLevel = UA_PUBSUB_RT_FIXED_SIZE;
-    retval |= UA_Server_addReaderGroup(mImpl->mp_server, connectionIdentifier,
+    retval |= UA_Server_addReaderGroup(mImpl->m_server, m_connectionIdentifier,
                                        &readerGroupConfig,
                                        &readerGroupIdentifier);
     return retval;
@@ -330,45 +337,45 @@ UA_StatusCode Server::addReaderGroup(void)
 
 UA_ServerConfig * Server::getUAServerConfig(void)
 {
-   return mImpl->mp_config;
+   return mImpl->m_config;
 }
 void Server::setCustomServerConfig(UA_ServerConfig* serverConfig)
 {
-    mImpl->mp_config=serverConfig;
+    mImpl->m_config=serverConfig;
 }
 UA_Server *Server::getUAServer(void)
 {
-    return mImpl->mp_server;
+    return mImpl->m_server;
 }
 
 UA_StatusCode Server::getPubSubConnectionConfig(UA_PubSubConnectionConfig * config)
 {
     return (UA_Server_getPubSubConnectionConfig(
-        mImpl->mp_server,
-        mImpl->connectionIdent,
+        mImpl->m_server,
+        mImpl->m_connectionIdent,
         config));
 }
 
 UA_NodeId Server::getConnectionIdent(void)
 {
-    return mImpl->connectionIdent;
+    return mImpl->m_connectionIdent;
 }
 
 UA_StatusCode Server::removePubSubConnection(void)
 {
-    return UA_Server_removePubSubConnection(mImpl->mp_server,
-                                    mImpl->connectionIdent);
+    return UA_Server_removePubSubConnection(mImpl->m_server,
+                                    mImpl->m_connectionIdent);
 }
 
 UA_StatusCode Server::getDataSetWriterConfig(UA_DataSetWriterConfig *config)
 {
-    return UA_Server_getDataSetWriterConfig(mImpl->mp_server,
-                                            mImpl->dataSetWriterIdent, config);
+    return UA_Server_getDataSetWriterConfig(mImpl->m_server,
+                                            mImpl->m_dataSetWriterIdent, config);
 }
 
 UA_StatusCode Server::removeDataSetWriter(void)
 {
-    return UA_Server_removeDataSetWriter(mImpl->mp_server,
-                                         mImpl->dataSetWriterIdent);
+    return UA_Server_removeDataSetWriter(mImpl->m_server,
+                                         mImpl->m_dataSetWriterIdent);
 }
 }// namespace openPubSub
