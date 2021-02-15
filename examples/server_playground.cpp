@@ -2,13 +2,11 @@
 #include "../openPubSub/ua_pubsub/ua_pubsub.h"
 #include <open62541/server_config_default.h>
 
-
 int main()
 {
 
     openPubSub::Server serv;
     openPubSub::init(serv);
-
 
     serv.addPubSubConnection("opc.udp://224.0.0.22:4840/", "UADP Connection 1");
     serv.addPublishedDataSet("Server Playground PDS");
@@ -16,7 +14,7 @@ int main()
     serv.addDataSetWriter("Server Playground DataSetWriter");
     serv.addDataSetField("Server Playground DataSetField");
     serv.freezeWriterGroupConfiguration();
-    //serv.addRepeatedCallback();
+
     serv.run();
 }
 
