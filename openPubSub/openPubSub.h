@@ -29,6 +29,9 @@ public:
     Server(void);
     ~Server(void);
     void stopServer(void);
+    int m_pubSubConfigPublishCycleMS = 100;
+    int m_pubSubConfigFieldCount = 1;
+    UA_UInt32 * m_valueStore[1];
 
     //==========================================================================
     //============Connection Handling===========================================

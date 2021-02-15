@@ -46,27 +46,23 @@ TEST(openPubSubTests, checkIfServerShutsDown)
 
 TEST(openPubSubTests, checkServerPubSubConnection)
 {
-    UA_NetworkAddressUrlDataType networkAddressUrl =
-        {UA_STRING_NULL , UA_STRING("opc.udp://224.0.0.22:4840/")};
     UA_PubSubConnectionConfig pubsubconconf;
     openPubSub::Server server;
     openPubSub::init(server);
-    server.addPubSubConnection(&networkAddressUrl, "UADP Connection 1", 2234);
+    server.addPubSubConnection("opc.udp://224.0.0.22:4840/", "UADP Connection 1");
     EXPECT_EQ(0, server.getPubSubConnectionConfig(&pubsubconconf));
     EXPECT_EQ(0, server.removePubSubConnection());
 }
 TEST(openPubSubTests, checkServerPublishedDataSet)
 {
-    UA_NetworkAddressUrlDataType networkAddressUrl =
-        {UA_STRING_NULL , UA_STRING("opc.udp://224.0.0.22:4840/")};
     UA_DataSetWriterConfig config;
     openPubSub::Server server;
     openPubSub::init(server);
-    server.addPubSubConnection(&networkAddressUrl, "UADP Connection 1", 2234);
+    server.addPubSubConnection("opc.udp://224.0.0.22:4840/", "UADP Connection 1");
     server.addPublishedDataSet("Default PDS");
     server.addDataSetField("Server localtime");
-    server.addWriterGroup();
-    server.addDataSetWriter();
+    server.addWriterGroup("some");
+    server.addDataSetWriter("someelse");
     UA_StatusCode code =server.getDataSetWriterConfig(&config);
     EXPECT_EQ(0, code);
     EXPECT_EQ(0, server.removeDataSetWriter());

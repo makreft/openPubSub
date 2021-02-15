@@ -23,6 +23,18 @@ static void stopHandler(void)
 {
     __server->stopServer();
 }
+//static void valueUpdateCallback(UA_Server *server, void *data) {
+//        u_int32_t sensorVal;
+//        for (int i = 0; i <__server->m_pubSubConfigFieldCount; ++i) {
+//            sensorVal = Thermal_Couple_Read();
+//            //std::cout << "Inside valueUpdateCallback, sensorVal: " << sensorVal << "\n";
+//            if (sensorVal == -1)
+//                printf("Issue with sensor.");
+//            __server->m_valueStore[i] = sensorVal;
+//            //if(*valueStore[0] > PUBSUB_CONFIG_PUBLISH_CYCLES)
+//            //    running = false;
+//        }
+//    }
 //implementation details are hidden for high-level usage
 struct Server::Impl
 {
@@ -32,10 +44,7 @@ struct Server::Impl
     //UA_NodeId m_writerGroupID;
     UA_StatusCode m_status = UA_STATUSCODE_GOOD;
     int m_defaultTcpAddressValue = 4840;
-    int m_pubSubConfigPublishCycleMS = 100;
-    int m_pubSubConfigFieldCount = 1;
     // m_valueStore has to have same size as m_pubSubConfigFieldCount
-    UA_UInt32 * m_valueStore[1];
     UA_Boolean m_running;
     UA_NodeId m_connectionIdent, m_publishedDataSetIdent, m_writerGroupIdent,
               m_dataSetFieldIdent;
@@ -118,20 +127,19 @@ void Server::run(void)
 //============PubSub Callback Config=============================
 //==============================================================================
 
-
+UA_StatusCode Server::addRepeatedCallback(UA_ServerCallback callback)
+{
+    UA_StatusCode code = UA_Server_addRepeatedCallback(mImpl->m_server, callback,
+                                                       NULL, m_pubSubConfigPublishCycleMS,
+                                                       &mImpl->m_callbackId);
+    return code;
+}
 
 
 //==============================================================================
 //============PubSub Connection Handling========================================
 //==============================================================================
 
-UA_StatusCode Server::addRepeatedCallback(UA_ServerCallback callback)
-{
-    UA_StatusCode code = UA_Server_addRepeatedCallback(mImpl->m_server, callback,
-                                                       NULL, mImpl->m_pubSubConfigPublishCycleMS,
-                                                       &mImpl->m_callbackId);
-    return code;
-}
 void Server::addPubSubConnection(char *networkAddressUrl,
                             char *connectionName) {
     /* Details about the connection configuration and handling are located
@@ -169,12 +177,12 @@ void Server::addDataSetField(char *fieldName)
 {
     /* Add one DataSetField with static value source to PDS */
     UA_DataSetFieldConfig dataSetFieldConfig;
-    for(size_t i = 0; i < mImpl->m_pubSubConfigFieldCount; i++){
+    for(size_t i = 0; i < m_pubSubConfigFieldCount; i++){
         memset(&dataSetFieldConfig, 0, sizeof(UA_DataSetFieldConfig));
         /* Create Variant and configure as DataSetField source */
         UA_UInt32 *intValue = UA_UInt32_new();
         *intValue = (UA_UInt32) i * 1000;
-        mImpl->m_valueStore[i] = intValue;
+        m_valueStore[i] = intValue;
         UA_Variant variant;
         memset(&variant, 0, sizeof(UA_Variant));
         UA_Variant_setScalar(&variant, intValue, &UA_TYPES[UA_TYPES_UINT32]);
@@ -227,7 +235,7 @@ void Server::addWriterGroup(char* writerGroupName)
     UA_WriterGroupConfig writerGroupConfig;
     memset(&writerGroupConfig, 0, sizeof(UA_WriterGroupConfig));
     writerGroupConfig.name = UA_STRING(writerGroupName);
-    writerGroupConfig.publishingInterval = mImpl->m_pubSubConfigPublishCycleMS;
+    writerGroupConfig.publishingInterval = m_pubSubConfigPublishCycleMS;
     writerGroupConfig.enabled = UA_FALSE;
     writerGroupConfig.writerGroupId = 100;
     writerGroupConfig.encodingMimeType = UA_PUBSUB_ENCODING_UADP;
