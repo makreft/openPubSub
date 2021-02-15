@@ -99,10 +99,10 @@ int main()
     serv.addDataSetWriter("Server Playground DataSetWriter");
     serv.addDataSetField("Server Playground DataSetField");
     serv.freezeWriterGroupConfiguration();
-    serv.addRepeatedCallback(valueUpdateCallback);
     UA_Server* ua_server = serv.getUAServer();
+
     UA_UInt64 callbackId;
-    UA_Server_addRepeatedCallback(ua_server, valueUpdateCallback, NULL, 100,&callbackId);
+    UA_Server_addRepeatedCallback(ua_server, valueUpdateCallback, NULL, 100, &callbackId);
 
     serv.run();
 }
