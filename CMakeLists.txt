@@ -3,7 +3,7 @@ cmake_minimum_required( VERSION 3.9.2 )
 project( ops C CXX )
 
 option( BUILD_TESTS "Turn on to build tests" FALSE )
-option( BUILD_WIRINGPI "Turn on to build Raspberry Pi example" FALSE )
+option( BUILD_WIRINGPI "Turn on to build Raspberry Pi example" TRUE )
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
@@ -86,7 +86,11 @@ find_package(Threads REQUIRED)
 include_directories(${WIRINGPI_INCLUDE_DIRS})
 add_executable( raspi_thermocouple_publisher
     examples/raspi_thermocouple_publisher.cpp)
+add_executable( raspi_playground
+    examples/raspi_playground.cpp)
 target_link_libraries( raspi_thermocouple_publisher
+    ops_server open62541 ${WIRINGPI_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
+target_link_libraries( raspi_playground
     ops_server open62541 ${WIRINGPI_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
 endif()
 
