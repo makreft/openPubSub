@@ -37,8 +37,8 @@ public:
     ///is the Host --> Publisher of the data.
     ///@param networkAddressUrl:
     ////usually the default is multicast: opc.udp://224.0.0.22:4840/
-    void addPubSubConnection(UA_NetworkAddressUrlDataType *networkAddressUrl,
-                             char *connectionName, const int pubId);
+    void addPubSubConnection(char *networkAddressUrl,
+                             char *connectionName);
     /// The PublishedDataSet (PDS) and PubSubConnection are the toplevel entities and
     /// can exist alone. The PDS contains the collection of the published fields. All
     /// other PubSub elements are directly or indirectly linked with the PDS or
@@ -48,13 +48,19 @@ public:
     /// The DataSetField (DSF) is part of the PDS and describes exactly one published
     /// field. all fields are added to the beginning of the list.
 
+    /// Add one DataSetField with static value source to PDS
     void addDataSetField(char *fieldName);
     void addInt32DataSetField(UA_NodeId publishedVariable);
-    void addWriterGroup(void);
+    void addWriterGroup(char* writerGroupName);
     /// A DataSetWriter (DSW) is the glue between the WG and the PDS. The DSW is
     /// linked to exactly one PDS and contains additional information for the
     /// message generation.
-    void addDataSetWriter(void);
+    void addDataSetWriter(char * dataSetWriterName);
+    /// before calling the freeze method the writerGroup can be updated e.g. with
+    /// a different publishing interval.
+    void updatePublishingInterval(int publishingInterval);
+    /// freeze: don't allow changes to writerGroup after call
+    void freezeWriterGroupConfiguration();
     UA_StatusCode addRepeatedCallback(UA_ServerCallback callback);
     void run(void);
     bool isRunning(void);

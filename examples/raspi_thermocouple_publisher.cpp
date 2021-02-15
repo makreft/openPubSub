@@ -155,7 +155,6 @@ int main(void) {
     }
     config->pubsubTransportLayers[0] = UA_PubSubTransportLayerUDPMP();
     config->pubsubTransportLayersSize++;
-
     /*Add standard PubSub configuration (no difference to the std. configuration)*/
     addMinimalPubSubConfiguration(server);
 
@@ -182,6 +181,7 @@ int main(void) {
     writerGroupConfig.rtLevel = UA_PUBSUB_RT_DIRECT_VALUE_ACCESS;
 #endif
     UA_Server_addWriterGroup(server, connectionIdentifier, &writerGroupConfig, &writerGroupIdent);
+//implemented
     /* Add one DataSetWriter */
     UA_NodeId dataSetWriterIdent;
     UA_DataSetWriterConfig dataSetWriterConfig;
@@ -221,11 +221,9 @@ int main(void) {
     UA_Server_setWriterGroupOperational(server, writerGroupIdent);
 
     UA_UInt64 callbackId;
-    std::cout << "Before callback \n";
     UA_Server_addRepeatedCallback(server, valueUpdateCallback, NULL, PUBSUB_CONFIG_PUBLISH_CYCLE_MS, &callbackId);
 
     UA_StatusCode retval = UA_STATUSCODE_GOOD;
-    std::cout << "UA_StatusCode: " << retval << "\n";
     retval |= UA_Server_run(server, &running);
 
     UA_Server_delete(server);

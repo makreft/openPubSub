@@ -76,7 +76,7 @@ target_link_libraries( rasp_information_model
     ops_server open62541)
 
 
-if (BUILD_WIRINGPI)
+if(BUILD_WIRINGPI)
 
 # Locate libraries and headers
 find_package(WiringPi REQUIRED)

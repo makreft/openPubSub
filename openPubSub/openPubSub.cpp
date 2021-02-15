@@ -32,8 +32,13 @@ struct Server::Impl
     //UA_NodeId m_writerGroupID;
     UA_StatusCode m_status = UA_STATUSCODE_GOOD;
     int m_defaultTcpAddressValue = 4840;
+    int m_pubSubConfigPublishCycleMS = 100;
+    int m_pubSubConfigFieldCount = 1;
+    // m_valueStore has to have same size as m_pubSubConfigFieldCount
+    UA_UInt32 * m_valueStore[1];
     UA_Boolean m_running;
-    UA_NodeId m_connectionIdent, m_publishedDataSetIdent, m_writerGroupIdent;
+    UA_NodeId m_connectionIdent, m_publishedDataSetIdent, m_writerGroupIdent,
+              m_dataSetFieldIdent;
     UA_NodeId m_dataSetWriterIdent;
     /*
      * TODO: Think of a data structure so that
@@ -50,7 +55,7 @@ struct Server::Impl
     UA_Server *m_server;
     UA_ServerConfig *m_config;
 
-    UA_UInt64 callbackId = 0;
+    UA_UInt64 m_callbackId;
 };
 //stopServer is triggered by ctrl-c stop signal
 void Server::stopServer()
@@ -122,23 +127,26 @@ void Server::run(void)
 
 UA_StatusCode Server::addRepeatedCallback(UA_ServerCallback callback)
 {
-    UA_StatusCode code = UA_Server_addRepeatedCallback(mImpl->m_server, (UA_ServerCallback)callback, NULL, 1000, &mImpl->callbackId);
+    UA_StatusCode code = UA_Server_addRepeatedCallback(mImpl->m_server, callback,
+                                                       NULL, mImpl->m_pubSubConfigPublishCycleMS,
+                                                       &mImpl->m_callbackId);
     return code;
 }
-void Server::addPubSubConnection(UA_NetworkAddressUrlDataType *networkAddressUrl,
-                            char *connectionName, const int pubId) {
+void Server::addPubSubConnection(char *networkAddressUrl,
+                            char *connectionName) {
     /* Details about the connection configuration and handling are located
      * in the pubsub connection tutorial */
+    UA_NetworkAddressUrlDataType _networkAddressUrl = {UA_STRING_NULL , UA_STRING(networkAddressUrl)};
     UA_PubSubConnectionConfig connectionConfig;
     memset(&connectionConfig, 0, sizeof(connectionConfig));
     connectionConfig.name = UA_STRING(connectionName);
     connectionConfig.transportProfileUri = mImpl->transportProfile.url;
     connectionConfig.enabled = UA_TRUE;
-    UA_Variant_setScalar(&connectionConfig.address, networkAddressUrl,
+    UA_Variant_setScalar(&connectionConfig.address, &_networkAddressUrl,
                          &UA_TYPES[UA_TYPES_NETWORKADDRESSURLDATATYPE]);
     /* Changed to static publisherId from random generation to identify
      * the publisher on Subscriber side */
-    connectionConfig.publisherId.numeric = pubId;
+    connectionConfig.publisherId.numeric = UA_UInt32_random();
     UA_Server_addPubSubConnection(mImpl->m_server, &connectionConfig, &mImpl->m_connectionIdent);
 }
 
@@ -157,11 +165,29 @@ void Server::addPublishedDataSet(char *pdsName) {
 // * The DataSetField (DSF) is part of the PDS and describes exactly one published
 // * field. */
 
-void Server::addDataSetField(char *fieldName) {
-    /* Add a field to the previous created PublishedDataSet */
+void Server::addDataSetField(char *fieldName)
+{
+    /* Add one DataSetField with static value source to PDS */
+    UA_DataSetFieldConfig dataSetFieldConfig;
+    for(size_t i = 0; i < mImpl->m_pubSubConfigFieldCount; i++){
+        memset(&dataSetFieldConfig, 0, sizeof(UA_DataSetFieldConfig));
+        /* Create Variant and configure as DataSetField source */
+        UA_UInt32 *intValue = UA_UInt32_new();
+        *intValue = (UA_UInt32) i * 1000;
+        mImpl->m_valueStore[i] = intValue;
+        UA_Variant variant;
+        memset(&variant, 0, sizeof(UA_Variant));
+        UA_Variant_setScalar(&variant, intValue, &UA_TYPES[UA_TYPES_UINT32]);
+        UA_DataValue staticValueSource;
+        memset(&staticValueSource, 0, sizeof(staticValueSource));
+        staticValueSource.value = variant;
+        dataSetFieldConfig.field.variable.staticValueSourceEnabled = UA_TRUE;
+        dataSetFieldConfig.field.variable.staticValueSource.value = variant;
+        UA_Server_addDataSetField(mImpl->m_server, mImpl->m_publishedDataSetIdent,
+                                  &dataSetFieldConfig, &mImpl->m_dataSetFieldIdent);
+    }
 
     UA_NodeId dataSetFieldIdent;
-    UA_DataSetFieldConfig dataSetFieldConfig;
     memset(&dataSetFieldConfig, 0, sizeof(UA_DataSetFieldConfig));
     dataSetFieldConfig.dataSetFieldType = UA_PUBSUB_DATASETFIELD_VARIABLE;
     dataSetFieldConfig.field.variable.fieldNameAlias = UA_STRING(fieldName);
@@ -187,18 +213,23 @@ void Server::addInt32DataSetField(UA_NodeId publishedVariable)
     UA_Server_addDataSetField(mImpl->m_server, mImpl->m_publishedDataSetIdent,
                               &dataSetFieldConfig, &fInt32);
 }
+void Server::updatePublishingInterval(int publishingInterval)
+{
+    mImpl->m_writerGroupConfig.publishingInterval = publishingInterval;
+    UA_Server_updateWriterGroupConfig(mImpl->m_server, mImpl->m_writerGroupIdent,
+                                      &mImpl->m_writerGroupConfig);
+}
 
-void Server::addWriterGroup(void)
+void Server::addWriterGroup(char* writerGroupName)
 {
     /* Now we create a new WriterGroupConfig and add the group to the existing
      * PubSubConnection. */
     UA_WriterGroupConfig writerGroupConfig;
     memset(&writerGroupConfig, 0, sizeof(UA_WriterGroupConfig));
-    writerGroupConfig.name = UA_STRING("Int32 WriterGroup");
-    writerGroupConfig.publishingInterval = 500;
+    writerGroupConfig.name = UA_STRING(writerGroupName);
+    writerGroupConfig.publishingInterval = mImpl->m_pubSubConfigPublishCycleMS;
     writerGroupConfig.enabled = UA_FALSE;
     writerGroupConfig.writerGroupId = 100;
-    writerGroupConfig.maxEncapsulatedDataSetMessageCount = 3;
     writerGroupConfig.encodingMimeType = UA_PUBSUB_ENCODING_UADP;
     writerGroupConfig.messageSettings.encoding = UA_EXTENSIONOBJECT_DECODED;
     writerGroupConfig.messageSettings.content.decoded.type = &UA_TYPES[UA_TYPES_UADPWRITERGROUPMESSAGEDATATYPE];
@@ -206,20 +237,18 @@ void Server::addWriterGroup(void)
      * message- and transport settings extension objects. These extension
      * objects are defined by the standard. e.g.
      * UadpWriterGroupMessageDataType */
-    UA_UadpWriterGroupMessageDataType *writerGroupMessage = UA_UadpWriterGroupMessageDataType_new();
+    UA_UadpWriterGroupMessageDataType writerGroupMessage;
+    UA_UadpWriterGroupMessageDataType_init(&writerGroupMessage);
     /* Change message settings of writerGroup to send PublisherId,
      * WriterGroupId in GroupHeader and DataSetWriterId in PayloadHeader
      * of NetworkMessage */
-    writerGroupMessage->networkMessageContentMask = (UA_UadpNetworkMessageContentMask) (
-        UA_UADPNETWORKMESSAGECONTENTMASK_PUBLISHERID |
-        (UA_UadpNetworkMessageContentMask) UA_UADPNETWORKMESSAGECONTENTMASK_GROUPHEADER |
-        (UA_UadpNetworkMessageContentMask) UA_UADPNETWORKMESSAGECONTENTMASK_WRITERGROUPID |
-        (UA_UadpNetworkMessageContentMask) UA_UADPNETWORKMESSAGECONTENTMASK_PAYLOADHEADER);
-    writerGroupConfig.messageSettings.content.decoded.data = writerGroupMessage;
-    UA_Server_addWriterGroup(mImpl->m_server, mImpl->m_connectionIdent, &writerGroupConfig,
-                             &mImpl->m_writerGroupIdent);
-    UA_Server_setWriterGroupOperational(mImpl->m_server, mImpl->m_writerGroupIdent);
-    UA_UadpWriterGroupMessageDataType_delete(writerGroupMessage);
+    writerGroupMessage.networkMessageContentMask = (UA_UadpNetworkMessageContentMask) ((UA_UadpNetworkMessageContentMask) UA_UADPNETWORKMESSAGECONTENTMASK_PUBLISHERID |
+                                                   (UA_UadpNetworkMessageContentMask) UA_UADPNETWORKMESSAGECONTENTMASK_GROUPHEADER |
+                                                   (UA_UadpNetworkMessageContentMask) UA_UADPNETWORKMESSAGECONTENTMASK_WRITERGROUPID |
+                                                   (UA_UadpNetworkMessageContentMask) UA_UADPNETWORKMESSAGECONTENTMASK_PAYLOADHEADER);
+    writerGroupConfig.messageSettings.content.decoded.data = &writerGroupMessage;
+    writerGroupConfig.rtLevel = UA_PUBSUB_RT_DIRECT_VALUE_ACCESS;
+    UA_Server_addWriterGroup(mImpl->m_server,mImpl->m_connectionIdent, &writerGroupConfig, &mImpl->m_writerGroupIdent);
 }
 
 // * DataSetWriter
@@ -229,7 +258,8 @@ void Server::addWriterGroup(void)
 // * flags which influence the creation of DataSet messages. These messages are
 // * encapsulated inside the network message. The DataSetWriter must be linked
 // * with an existing PublishedDataSet and be contained within a WriterGroup. */
-void Server::addDataSetWriter(void) {
+void Server::addDataSetWriter(char * dataSetWriterName)
+{
     /* We need now a DataSetWriter within the WriterGroup. This means we must
      * create a new DataSetWriterConfig and call the addWriterGroup function. */
     //UA_NodeId m_dataSetWriterIdent;
@@ -241,6 +271,11 @@ void Server::addDataSetWriter(void) {
     UA_Server_addDataSetWriter(mImpl->m_server, mImpl->m_writerGroupIdent,
                                mImpl->m_publishedDataSetIdent, &dataSetWriterConfig,
                                &mImpl->m_dataSetWriterIdent);
+}
+void Server::freezeWriterGroupConfiguration()
+{
+    UA_Server_freezeWriterGroupConfiguration(mImpl->m_server, mImpl->m_writerGroupIdent);
+    UA_Server_setWriterGroupOperational(mImpl->m_server, mImpl->m_writerGroupIdent);
 }
 
 //==============================================================================
