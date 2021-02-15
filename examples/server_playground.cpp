@@ -1,7 +1,5 @@
 #include "../openPubSub/openPubSub.h"
 #include "../openPubSub/ua_pubsub/ua_pubsub.h"
-#include <open62541/server_config_default.h>
-
 
 int main()
 {
